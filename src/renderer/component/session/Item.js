@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 function SessionItem({ url, sessionId }) {
   return (
     <li key={sessionId}>
-      <a>{url}</a>
+      <a href={url} target="_blank">{url}</a>
     </li>
   )
 }

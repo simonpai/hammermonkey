@@ -1,4 +1,5 @@
 import { app, BrowserWindow } from 'electron';
+import open from 'open';
 import Main from './main';
 
 // main //
@@ -23,9 +24,17 @@ function createWindow$() {
       win = undefined;
     });
 
-    win.webContents.openDevTools();
+    const webContents = win.webContents;
 
-    win.webContents.once('dom-ready', resolve);
+    webContents.openDevTools();
+
+    // open new window w/ external browser
+    webContents.on('new-window', (event, url) => {
+      event.preventDefault();
+      open(url);
+    });
+
+    webContents.once('dom-ready', resolve);
   });
 }
 
