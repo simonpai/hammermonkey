@@ -1,0 +1,41 @@
+{
+  "name": "hammermonkey",
+  "version": "0.1.0",
+  "description": "A TestCafe-Hammerhead implementation of userscript manager",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/simonpai/hammermonkey.git"
+  },
+  "author": "simonpai",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/simonpai/hammermonkey/issues"
+  },
+  "homepage": "https://github.com/simonpai/hammermonkey#readme",
+  "devDependencies": {
+    "ajv": "^6.5.3",
+    "babel-eslint": "^9.0.0",
+    "electron": "^2.0.5",
+    "electron-prebuilt-compile": "^2.0.7",
+    "eslint": "^5.5.0",
+    "eslint-plugin-react": "^7.11.1"
+  },
+  "dependencies": {
+    "@material-ui/core": "^3.0.1",
+    "history": "^4.7.2",
+    "internal-ip": "^3.0.1",
+    "react": "^16.4.2",
+    "react-dom": "^16.4.2",
+    "react-redux": "^5.0.7",
+    "react-router": "^4.3.1",
+    "react-router-redux": "^5.0.0-alpha.9",
+    "redux": "^4.0.0",
+    "redux-electron-ipc": "^1.1.13",
+    "redux-saga": "^0.16.0",
+    "testcafe-hammerhead": "^14.2.2"
+  }
+}
