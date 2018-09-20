@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { compose } from 'recompose';
 // import { push } from 'react-router-redux';
 // import { bindActionCreators } from 'redux';
 import { withStyles } from '@material-ui/core/styles';
@@ -51,6 +52,14 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
+const enhance = compose(
+  connect(
+    mapStateToProps,
+    mapDispatchToProps
+  ),
+  withStyles(styles)
+);
+
 function MainPage({ session, actions, classes }) {
   return (
     <div className={classes.root}>
@@ -75,7 +84,4 @@ function MainPage({ session, actions, classes }) {
   );
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(withStyles(styles)(MainPage));
+export default enhance(MainPage);
