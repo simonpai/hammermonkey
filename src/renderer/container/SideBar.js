@@ -5,27 +5,15 @@ import { compose } from 'recompose';
 // import { bindActionCreators } from 'redux';
 import { withStyles } from '@material-ui/core/styles';
 
+import Drawer from '@material-ui/core/Drawer';
+// import Toolbar from '@material-ui/core/Toolbar';
 // import Typography from '@material-ui/core/Typography';
 
-import Header from './Header';
-import SideBar from './SideBar';
-import SessionPanel from '../component/session/Panel';
 import { action } from '../store';
 
 const styles = theme => ({
-  root: {
-    flexGrow: 1,
-    zIndex: 1,
-    height: '100%',
-    overflow: 'hidden',
-    position: 'relative',
-    display: 'flex'
-  },
-  main: {
-    flexGrow: 1,
-    backgroundColor: theme.palette.background.default,
-    padding: theme.spacing.unit * 3,
-    minWidth: 0,
+  drawerPaper: {
+    position: 'relative'
   },
   toolbar: theme.mixins.toolbar
 });
@@ -55,14 +43,12 @@ const enhance = compose(
 
 function MainPage({ session, actions, classes }) {
   return (
-    <div className={classes.root}>
-      <Header />
-      <SideBar />
-      <main className={classes.main}>
-        <div className={classes.toolbar} />
-        <SessionPanel sessions={session.sessions} actions={actions.session} />
-      </main>
-    </div>
+    <Drawer variant="permanent" classes={{
+      paper: classes.drawerPaper
+    }}>
+      <div className={classes.toolbar} />
+      Drawer
+    </Drawer>
   );
 }
 
