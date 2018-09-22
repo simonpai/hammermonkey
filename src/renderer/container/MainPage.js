@@ -60,7 +60,7 @@ function MainPage({ session, actions, classes }) {
       <SideBar />
       <main className={classes.main}>
         <div className={classes.toolbar} />
-        <SessionPanel sessions={session.sessions} actions={actions.session} />
+        <SessionPanel sessions={session} actions={actions.session} />
       </main>
     </div>
   );

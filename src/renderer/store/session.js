@@ -15,9 +15,7 @@ export const ipc = {
 };
 
 // initial state //
-export const initialState = {
-  sessions: []
-};
+export const initialState = [];
 
 // reducer //
 export function reducer(state = initialState, action = {}) {
@@ -27,15 +25,13 @@ export function reducer(state = initialState, action = {}) {
       ipcr.send('session.open', action.url);
       return state;
     case OPEN_SUCCESS:
-      return {
-        sessions: [
-          ...state.sessions,
-          {
-            url: action.url,
-            sessionId: action.sessionId
-          }
-        ]
-      };
+      return [
+        ...state,
+        {
+          url: action.url,
+          sessionId: action.sessionId
+        }
+      ];
     case OPEN_FAILURE:
       // TODO
       return state;
