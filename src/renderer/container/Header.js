@@ -7,26 +7,42 @@ import { withStyles } from '@material-ui/core/styles';
 
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
+import IconButton from '@material-ui/core/IconButton';
+import Menu from '@material-ui/core/Menu';
+import MenuItem from '@material-ui/core/MenuItem';
+// import Typography from '@material-ui/core/Typography';
+import AddIcon from '@material-ui/icons/Add';
 
 import { action } from '../store';
 
 const styles = theme => ({
   appBar: {
     zIndex: theme.zIndex.drawer + 1,
+  },
+  button: {
+    margin: theme.spacing.unit,
   }
 });
 
-function mapStateToProps(state) {
-  return state;
+function mapStateToProps({ ui }) {
+  return {
+    ui
+  };
 }
 
 function mapDispatchToProps(dispatch) {
   // const user = bindActionCreators(userActions, dispatch);
   return {
     actions: {
-      session: {
-        open: url => dispatch(action.session.open(url))
+      ui: {
+        menu: {
+          newObject: {
+            open: value => dispatch(action.ui.menu.newObject.open(value))
+          }
+        },
+        dialog: {
+          open: id => dispatch(action.ui.dialog.open(id))
+        }
       }
     }
   };
@@ -40,13 +56,27 @@ const enhance = compose(
   withStyles(styles)
 );
 
-function Header({ actions, classes }) {
+function Header({ ui, actions, classes }) {
   return (
     <AppBar position="absolute" className={classes.appBar}>
       <Toolbar>
-        <Typography variant="title" color="inherit" noWrap>
-          Title
-        </Typography>
+        <IconButton
+          className={classes.button}
+          onClick={() => actions.ui.menu.newObject.open(true)}
+        >
+          <AddIcon />
+        </IconButton>
+        <Menu
+          anchorReference="anchorPosition"
+          anchorPosition={{
+            left: 24,
+            top: 64
+          }}
+          open={ui.menu.newObject}
+          onClose={() => actions.ui.menu.newObject.open(false)}
+        >
+          <MenuItem onClick={() => actions.ui.dialog.open('newSession')}>Session</MenuItem>
+        </Menu>
       </Toolbar>
     </AppBar>
   );

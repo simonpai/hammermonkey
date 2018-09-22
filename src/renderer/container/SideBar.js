@@ -11,6 +11,7 @@ import Tab from '@material-ui/core/Tab';
 // import Toolbar from '@material-ui/core/Toolbar';
 // import Typography from '@material-ui/core/Typography';
 
+import SessionList from '../component/session/List';
 import { action } from '../store';
 
 const styles = theme => ({
@@ -51,7 +52,7 @@ const enhance = compose(
   withStyles(styles)
 );
 
-function SideBar({ ui, actions, classes }) {
+function SideBar({ ui, session, actions, classes }) {
   return (
     <Drawer variant="permanent" classes={{
       paper: classes.drawerPaper
@@ -68,7 +69,7 @@ function SideBar({ ui, actions, classes }) {
               'Rules'
             ),
             (
-              'Sessions'
+              <SessionList key="sessions" sessions={session} />
             )
           ][ui.sidebar.selected || 0]
         }

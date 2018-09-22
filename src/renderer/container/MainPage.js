@@ -9,7 +9,8 @@ import { withStyles } from '@material-ui/core/styles';
 
 import Header from './Header';
 import SideBar from './SideBar';
-import SessionPanel from '../component/session/Panel';
+import NewSessionDialog, { DIALOG_ID as NEW_SESSION_DIALOG_ID } from '../component/session/NewDialog';
+
 import { action } from '../store';
 
 const styles = theme => ({
@@ -30,16 +31,26 @@ const styles = theme => ({
   toolbar: theme.mixins.toolbar
 });
 
-function mapStateToProps(state) {
-  return state;
+function mapStateToProps({ ui }) {
+  return {
+    ui: {
+      forNewSessionDialog: {
+        open: ui.dialog === NEW_SESSION_DIALOG_ID
+      }
+    }
+  };
 }
 
 function mapDispatchToProps(dispatch) {
   // const user = bindActionCreators(userActions, dispatch);
   return {
     actions: {
-      session: {
-        open: url => dispatch(action.session.open(url))
+      forNewSessionDialog: {
+        open: url => {
+          dispatch(action.ui.dialog.open());
+          dispatch(action.session.open(url));
+        },
+        cancel: () => dispatch(action.ui.dialog.open())
       }
     }
   };
@@ -53,15 +64,16 @@ const enhance = compose(
   withStyles(styles)
 );
 
-function MainPage({ session, actions, classes }) {
+function MainPage({ ui, actions, classes }) {
   return (
     <div className={classes.root}>
       <Header />
       <SideBar />
       <main className={classes.main}>
         <div className={classes.toolbar} />
-        <SessionPanel sessions={session} actions={actions.session} />
+        Body
       </main>
+      <NewSessionDialog ui={ui.forNewSessionDialog} actions={actions.forNewSessionDialog} />
     </div>
   );
 }
