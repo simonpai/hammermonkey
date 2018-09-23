@@ -2,11 +2,9 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
 // import { push } from 'react-router-redux';
-// import { bindActionCreators } from 'redux';
 import { withStyles } from '@material-ui/core/styles';
 
 // import Typography from '@material-ui/core/Typography';
-
 import Header from './Header';
 import SideBar from './SideBar';
 import NewObjectDialog, { DIALOG_ID as NEW_OBJECT_DIALOG_ID } from '../component/NewObjectDialog';
@@ -50,7 +48,6 @@ const newDialogIdMap = {
 };
 
 function mapDispatchToProps(dispatch) {
-  // const user = bindActionCreators(userActions, dispatch);
   return {
     actions: {
       forNewObjectDialog: {

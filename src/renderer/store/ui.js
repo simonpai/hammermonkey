@@ -1,11 +1,11 @@
 // action type //
-const UI_SIDEBAR_SELECT = 'ui.sidebar.select';
+const UI_SIDEBAR_SELECT_TAB = 'ui.sidebar.selectTab';
 const UI_DIALOG_OPEN = 'ui.dialog.open';
 
 // action //
 export const action = {
   sidebar: {
-    select: id => ({type: UI_SIDEBAR_SELECT, id})
+    selectTab: id => ({type: UI_SIDEBAR_SELECT_TAB, id})
   },
   dialog: {
     open: id => ({type: UI_DIALOG_OPEN, id})
@@ -15,7 +15,7 @@ export const action = {
 // initial state //
 export const initialState = {
   sidebar: {
-    selected: 0
+    selectedTab: 0
   },
   dialog: undefined
   /*
@@ -30,7 +30,7 @@ export const initialState = {
 // reducer //
 export function reducer(state = initialState, action = {}) {
   switch (action.type) {
-    case UI_SIDEBAR_SELECT:
+    case UI_SIDEBAR_SELECT_TAB:
       if (action.id < 0 || action.id > 1) {
         return state;
       }
@@ -38,7 +38,7 @@ export function reducer(state = initialState, action = {}) {
         ...state,
         sidebar: {
           ...state.sidebar,
-          selected: action.id
+          selectedTab: action.id
         }
       };
     case UI_DIALOG_OPEN:

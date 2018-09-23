@@ -34,11 +34,8 @@ function mapDispatchToProps(dispatch) {
     actions: {
       ui: {
         sidebar: {
-          select: id => dispatch(action.ui.sidebar.select(id))
+          selectTab: id => dispatch(action.ui.sidebar.selectTab(id))
         }
-      },
-      session: {
-        open: url => dispatch(action.session.open(url))
       }
     }
   };
@@ -58,7 +55,7 @@ function SideBar({ ui, session, actions, classes }) {
       paper: classes.drawerPaper
     }}>
       <div className={classes.toolbar} />
-      <Tabs value={ui.sidebar.selected} onChange={(event, id) => actions.ui.sidebar.select(id)}>
+      <Tabs value={ui.sidebar.selectedTab} onChange={(event, id) => actions.ui.sidebar.selectTab(id)}>
         <Tab label="Rules" />
         <Tab label="Sessions" />
       </Tabs>
@@ -71,7 +68,7 @@ function SideBar({ ui, session, actions, classes }) {
             (
               <SessionList key="sessions" sessions={session} />
             )
-          ][ui.sidebar.selected || 0]
+          ][ui.sidebar.selectedTab || 0]
         }
       </div>
     </Drawer>

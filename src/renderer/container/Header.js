@@ -2,7 +2,6 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
 // import { push } from 'react-router-redux';
-// import { bindActionCreators } from 'redux';
 import { withStyles } from '@material-ui/core/styles';
 
 import AppBar from '@material-ui/core/AppBar';
@@ -30,15 +29,9 @@ function mapStateToProps({ ui }) {
 }
 
 function mapDispatchToProps(dispatch) {
-  // const user = bindActionCreators(userActions, dispatch);
   return {
     actions: {
       ui: {
-        menu: {
-          newObject: {
-            open: value => dispatch(action.ui.menu.newObject.open(value))
-          }
-        },
         dialog: {
           open: id => dispatch(action.ui.dialog.open(id))
         }
