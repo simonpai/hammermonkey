@@ -3,13 +3,13 @@ import PropTypes from 'prop-types';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import CastIcon from '@material-ui/icons/Cast';
+import SessionIcon from './Icon';
 
 function SessionItem({ /*url, */sessionId }) {
   return (
     <ListItem key={sessionId} button>
       <ListItemIcon>
-        <CastIcon />
+        <SessionIcon />
       </ListItemIcon>
       <ListItemText primary={sessionId} />
     {

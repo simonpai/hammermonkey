@@ -9,6 +9,7 @@ import { withStyles } from '@material-ui/core/styles';
 
 import Header from './Header';
 import SideBar from './SideBar';
+import NewObjectDialog, { DIALOG_ID as NEW_OBJECT_DIALOG_ID } from '../component/NewObjectDialog';
 import NewSessionDialog, { DIALOG_ID as NEW_SESSION_DIALOG_ID } from '../component/session/NewDialog';
 
 import { action } from '../store';
@@ -34,6 +35,9 @@ const styles = theme => ({
 function mapStateToProps({ ui }) {
   return {
     ui: {
+      forNewObjectDialog: {
+        open: ui.dialog === NEW_OBJECT_DIALOG_ID
+      },
       forNewSessionDialog: {
         open: ui.dialog === NEW_SESSION_DIALOG_ID
       }
@@ -41,10 +45,18 @@ function mapStateToProps({ ui }) {
   };
 }
 
+const newDialogIdMap = {
+  session: NEW_SESSION_DIALOG_ID
+};
+
 function mapDispatchToProps(dispatch) {
   // const user = bindActionCreators(userActions, dispatch);
   return {
     actions: {
+      forNewObjectDialog: {
+        submit: value => dispatch(action.ui.dialog.open(newDialogIdMap[value])),
+        cancel: () => dispatch(action.ui.dialog.open())
+      },
       forNewSessionDialog: {
         open: url => {
           dispatch(action.ui.dialog.open());
@@ -73,6 +85,7 @@ function MainPage({ ui, actions, classes }) {
         <div className={classes.toolbar} />
         Body
       </main>
+      <NewObjectDialog ui={ui.forNewObjectDialog} actions={actions.forNewObjectDialog} />
       <NewSessionDialog ui={ui.forNewSessionDialog} actions={actions.forNewSessionDialog} />
     </div>
   );

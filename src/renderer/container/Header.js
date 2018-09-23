@@ -8,11 +8,10 @@ import { withStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
-import Menu from '@material-ui/core/Menu';
-import MenuItem from '@material-ui/core/MenuItem';
 // import Typography from '@material-ui/core/Typography';
 import AddIcon from '@material-ui/icons/Add';
 
+import { DIALOG_ID as NEW_OBJECT_DIALOG_ID } from '../component/NewObjectDialog';
 import { action } from '../store';
 
 const styles = theme => ({
@@ -62,21 +61,10 @@ function Header({ ui, actions, classes }) {
       <Toolbar>
         <IconButton
           className={classes.button}
-          onClick={() => actions.ui.menu.newObject.open(true)}
+          onClick={() => actions.ui.dialog.open(NEW_OBJECT_DIALOG_ID)}
         >
           <AddIcon />
         </IconButton>
-        <Menu
-          anchorReference="anchorPosition"
-          anchorPosition={{
-            left: 24,
-            top: 64
-          }}
-          open={ui.menu.newObject}
-          onClose={() => actions.ui.menu.newObject.open(false)}
-        >
-          <MenuItem onClick={() => actions.ui.dialog.open('newSession')}>Session</MenuItem>
-        </Menu>
       </Toolbar>
     </AppBar>
   );
