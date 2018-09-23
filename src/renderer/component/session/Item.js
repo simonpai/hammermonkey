@@ -5,9 +5,9 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import SessionIcon from './Icon';
 
-function SessionItem({ /*url, */sessionId }) {
+function SessionItem({ sessionId, selected, onSelect }) {
   return (
-    <ListItem key={sessionId} button>
+    <ListItem key={sessionId} button selected={selected} onClick={onSelect}>
       <ListItemIcon>
         <SessionIcon />
       </ListItemIcon>
@@ -24,8 +24,9 @@ function SessionItem({ /*url, */sessionId }) {
 }
 
 SessionItem.propTypes = {
-  // url: PropTypes.string.isRequired,
-  sessionId: PropTypes.string.isRequired
+  sessionId: PropTypes.string.isRequired,
+  selected: PropTypes.bool.isRequired,
+  onSelect: PropTypes.func.isRequired
 };
 
 export default SessionItem;

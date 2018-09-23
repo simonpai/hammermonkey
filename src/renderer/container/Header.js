@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import { compose } from 'recompose';
 // import { push } from 'react-router-redux';
 import { withStyles } from '@material-ui/core/styles';
-
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';

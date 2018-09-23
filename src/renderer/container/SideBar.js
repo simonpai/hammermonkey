@@ -34,7 +34,8 @@ function mapDispatchToProps(dispatch) {
     actions: {
       ui: {
         sidebar: {
-          selectTab: id => dispatch(action.ui.sidebar.selectTab(id))
+          selectTab: id => dispatch(action.ui.sidebar.selectTab(id)),
+          selectSession: id => dispatch(action.ui.sidebar.selectObject('session', id))
         }
       }
     }
@@ -50,6 +51,7 @@ const enhance = compose(
 );
 
 function SideBar({ ui, session, actions, classes }) {
+  const selectedObject = ui.sidebar.selectedObject;
   return (
     <Drawer variant="permanent" classes={{
       paper: classes.drawerPaper
@@ -66,7 +68,12 @@ function SideBar({ ui, session, actions, classes }) {
               'Rules'
             ),
             (
-              <SessionList key="sessions" sessions={session} />
+              <SessionList
+                key="sessions"
+                ids={session.ids}
+                selected={selectedObject && selectedObject.type === 'session' ? selectedObject.id : undefined}
+                onSelect={actions.ui.sidebar.selectSession}
+              />
             )
           ][ui.sidebar.selectedTab || 0]
         }

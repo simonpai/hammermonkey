@@ -7,6 +7,7 @@ import { withStyles } from '@material-ui/core/styles';
 // import Typography from '@material-ui/core/Typography';
 import Header from './Header';
 import SideBar from './SideBar';
+import Body from './Body';
 import NewObjectDialog, { DIALOG_ID as NEW_OBJECT_DIALOG_ID } from '../component/NewObjectDialog';
 import NewSessionDialog, { DIALOG_ID as NEW_SESSION_DIALOG_ID } from '../component/session/NewDialog';
 
@@ -80,7 +81,7 @@ function MainPage({ ui, actions, classes }) {
       <SideBar />
       <main className={classes.main}>
         <div className={classes.toolbar} />
-        Body
+        <Body />
       </main>
       <NewObjectDialog ui={ui.forNewObjectDialog} actions={actions.forNewObjectDialog} />
       <NewSessionDialog ui={ui.forNewSessionDialog} actions={actions.forNewSessionDialog} />

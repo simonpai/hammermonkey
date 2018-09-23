@@ -4,13 +4,15 @@ import List from '@material-ui/core/List';
 
 import SessionItem from './Item';
 
-function SessionList({ sessions }) {
+function SessionList({ ids, selected, onSelect }) {
   return (
     <List component="nav">
-      {sessions.map(session =>
+      {ids.map(id =>
         <SessionItem
-          key={session.sessionId}
-          {...session}
+          key={id}
+          sessionId={id}
+          selected={id === selected}
+          onSelect={() => onSelect(id)}
         />
       )}
     </List>
@@ -18,14 +20,11 @@ function SessionList({ sessions }) {
 }
 
 SessionList.propTypes = {
-  sessions: PropTypes.arrayOf(
-    PropTypes.shape(SessionItem.propTypes)
+  ids: PropTypes.arrayOf(
+    PropTypes.string.isRequired
   ).isRequired,
-  /*
-  actions: PropTypes.shape({
-    select: PropTypes.func.isRequired
-  }).isRequired
-  */
+  selected: PropTypes.string,
+  onSelect: PropTypes.func.isRequired
 };
 
 export default SessionList;
