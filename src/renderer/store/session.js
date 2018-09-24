@@ -3,15 +3,20 @@ import {ipcRenderer as ipcr} from 'electron';
 const OPEN_REQUEST = 'session.open.request';
 const OPEN_SUCCESS = 'session.open.success';
 const OPEN_FAILURE = 'session.open.failure';
+const URL_REQUEST = 'session.url.request';
+const URL_SUCCESS = 'session.url.success';
+const URL_FAILURE = 'session.url.failure';
 
 // action //
 export const action = {
-  open: (url) => ({type: OPEN_REQUEST, url})
+  open: () => ({type: OPEN_REQUEST}),
+  url: (sessionId, url) => ({type: URL_REQUEST, sessionId, url})
 };
 
 // ipc //
 export const ipc = {
-  'session.open': (event, url, sessionId) => ({type: OPEN_SUCCESS, url, sessionId})
+  'session.open': (event, sessionId) => ({type: OPEN_SUCCESS, sessionId}),
+  'session.url': (event, sessionId, url) => ({type: URL_SUCCESS, sessionId, url})
 };
 
 // initial state //
@@ -25,14 +30,14 @@ export function reducer(state = initialState, action = {}) {
   switch (action.type) {
     case OPEN_REQUEST:
       // TODO: create a placeholder session
-      ipcr.send('session.open', action.url);
+      ipcr.send('session.open');
       return state;
     case OPEN_SUCCESS:
       return {
+        ...state,
         map: {
           ...state.map,
           [action.sessionId]: {
-            url: action.url,
             sessionId: action.sessionId
           }
         },
@@ -42,6 +47,27 @@ export function reducer(state = initialState, action = {}) {
         ]
       };
     case OPEN_FAILURE:
+      // TODO
+      return state;
+    case URL_REQUEST:
+      if (!action.url.trim()) {
+        return state;
+      }
+      // TODO: throttle
+      ipcr.send('session.url', action.sessionId, action.url.trim());
+      return state;
+    case URL_SUCCESS:
+      return {
+        ...state,
+        map: {
+          ...state.map,
+          [action.sessionId]: {
+            ...state.map[action.sessionId],
+            url: action.url
+          }
+        }
+      };
+    case URL_FAILURE:
       // TODO
       return state;
     default:

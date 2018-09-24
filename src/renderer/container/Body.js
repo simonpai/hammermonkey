@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import { compose } from 'recompose';
 import { withStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
-import Typography from '@material-ui/core/Typography';
 
 import SessionBody from '../component/session/Body';
 import { action } from '../store';
@@ -22,10 +21,8 @@ function mapStateToProps({ ui, session }) {
 function mapDispatchToProps(dispatch) {
   return {
     actions: {
-      ui: {
-        sidebar: {
-          selectTab: id => dispatch(action.ui.sidebar.selectTab(id))
-        }
+      session: {
+        onUrlChange: (sessionId, url) => dispatch(action.session.url(sessionId, url))
       }
     }
   };
@@ -41,22 +38,16 @@ const enhance = compose(
 
 function Body({ ui, session, actions, classes }) {
   const obj = ui.sidebar.selectedObject;
-  return (
-    <Paper>
-      {(() => {
-        switch (obj && obj.type) {
-          case 'session':
-            return (
-              <SessionBody {...session.map[obj.id]} />
-            );
-          default:
-            return (
-              <Typography>Nothing</Typography>
-            );
-        }
-      })()}
-    </Paper>
-  );
+  switch (obj && obj.type) {
+    case 'session':
+      return (
+        <SessionBody {...session.map[obj.id]} {...actions.session} />
+      );
+    default:
+      return (
+        <Paper>Nothing</Paper>
+      );
+  }
 }
 
 export default enhance(Body);

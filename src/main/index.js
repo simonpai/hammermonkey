@@ -9,7 +9,7 @@ export default class Main {
     const ip = this._ip = internalIp.v4.sync();
     this._hammerhead = new Hammerhead(ip, {});
     this._emitter = new EventEmitter();
-    this._sessions = [];
+    // this._sessions = [];
 
     Object.defineProperty(this, 'events', {
       value: this._emitter
@@ -24,23 +24,27 @@ export default class Main {
     bridgeFn(this, win.webContents);
   }
 
-  accept(event, args) {
-    if (!Array.isArray(args)) {
-      return Promise.reject();
-    }
-    switch (args[0]) {
-      case 'session.open':
-        return Promise.resolve(this.open(args[1]));
-    }
-    return Promise.reject();
+  openSession() {
+    const session = this._hammerhead.openSession();
+    console.log(session);
+    this._emitter.emit('session.open', session.id);
   }
 
+  getProxyUrl(sessionId, url) {
+    console.log(sessionId, url);
+    const proxyUrl = this._hammerhead.getProxyUrl(sessionId, url);
+    console.log(url + ' => ' + proxyUrl);
+    this._emitter.emit('session.url', sessionId, proxyUrl);
+  }
+
+  /*
   open(url) {
     const result = this._hammerhead.open(url);
-    this._sessions.push(result.session);
+    // this._sessions.push(result.session);
     console.log(result.session);
     this._emitter.emit('session.open', result.url, result.session.id);
   }
+  */
 
   stop() {
     this._hammerhead.close();

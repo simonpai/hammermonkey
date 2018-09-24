@@ -13,16 +13,16 @@ import SessionIcon from './session/Icon';
 
 export const DIALOG_ID = 'newObject';
 
-function NewObjectDialog({ ui, actions }) {
+function NewObjectDialog({ open, onSubmit, onCancel }) {
   return (
     <Dialog
-      open={ui.open}
-      onClose={actions.cancel}
+      open={open}
+      onClose={onCancel}
     >
       <DialogTitle>Create a new ...</DialogTitle>
       <DialogContent>
         <List>
-          <ListItem button onClick={() => actions.submit('session')}>
+          <ListItem button onClick={() => onSubmit('session')}>
             <ListItemIcon>
               <SessionIcon />
             </ListItemIcon>
@@ -35,13 +35,9 @@ function NewObjectDialog({ ui, actions }) {
 }
 
 NewObjectDialog.propTypes = {
-  ui: PropTypes.shape({
-    open: PropTypes.bool.isRequired
-  }).isRequired,
-  actions: PropTypes.shape({
-    submit: PropTypes.func.isRequired,
-    cancel: PropTypes.func.isRequired
-  }).isRequired
+  open: PropTypes.bool.isRequired,
+  onSubmit: PropTypes.func.isRequired,
+  onCancel: PropTypes.func.isRequired
 };
 
 export default NewObjectDialog;

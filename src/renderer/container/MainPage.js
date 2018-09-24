@@ -44,16 +44,30 @@ function mapStateToProps({ ui }) {
   };
 }
 
+/*
 const newDialogIdMap = {
   session: NEW_SESSION_DIALOG_ID
 };
+*/
+
+function onNewObject(dispatch, type) {
+  switch(type) {
+    case 'session':
+      dispatch(action.session.open());
+      break;
+    default:
+  }
+}
 
 function mapDispatchToProps(dispatch) {
   return {
     actions: {
       forNewObjectDialog: {
-        submit: value => dispatch(action.ui.dialog.open(newDialogIdMap[value])),
-        cancel: () => dispatch(action.ui.dialog.open())
+        onSubmit: type => {
+          dispatch(action.ui.dialog.open())
+          onNewObject(dispatch, type);
+        },
+        onCancel: () => dispatch(action.ui.dialog.open())
       },
       forNewSessionDialog: {
         open: url => {
@@ -83,7 +97,7 @@ function MainPage({ ui, actions, classes }) {
         <div className={classes.toolbar} />
         <Body />
       </main>
-      <NewObjectDialog ui={ui.forNewObjectDialog} actions={actions.forNewObjectDialog} />
+      <NewObjectDialog {...ui.forNewObjectDialog} {...actions.forNewObjectDialog} />
       <NewSessionDialog ui={ui.forNewSessionDialog} actions={actions.forNewSessionDialog} />
     </div>
   );
