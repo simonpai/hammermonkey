@@ -7,7 +7,7 @@ export default class Session extends hammerhead.Session {
   }
 
   _getPayloadScript() {
-    return '';
+    return 'console.log(\'Hello World\')';
   }
 
   _getIframePayloadScript() {
