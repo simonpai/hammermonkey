@@ -1,3 +1,4 @@
+import { clipboard } from 'electron';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
@@ -47,6 +48,7 @@ function SessionBody({ sessionId, url, onUrlChange, classes }) {
             InputProps={{
               readOnly: true,
             }}
+            onClick={() => clipboard.writeText(url)}
           />
         </div>
         {
