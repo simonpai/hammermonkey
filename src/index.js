@@ -1,4 +1,4 @@
-import { app, BrowserWindow } from 'electron';
+import { app, BrowserWindow, screen } from 'electron';
 import open from 'open';
 import Main from './main';
 
@@ -12,11 +12,7 @@ let win;
 
 function createWindow$() {
   return new Promise((resolve) => {
-    // TODO: size
-    win = new BrowserWindow({
-      width: 800,
-      height: 600
-    });
+    win = new BrowserWindow(screen.getPrimaryDisplay().workAreaSize);
 
     win.loadFile('src/renderer/index.html');
 
