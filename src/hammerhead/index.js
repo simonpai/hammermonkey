@@ -26,9 +26,8 @@ export default class Hammerhead {
   // TODO: mitm & script injection
 
   openSession() {
-    if (!this._started || this._closed) {
-      throw new Error(this._closed ? 'Already closed.' : 'Not started yet.');
-    }
+    this._assertInteractive();
+    
     // TODO: fixed session id
     const session = new Session(this.uploadRoot); // TODO
     this.proxy.openSession(session);
@@ -41,32 +40,14 @@ export default class Hammerhead {
   // TODO: closeSession(sessionId) {}
 
   getProxyUrl(sessionId, url) {
-    if (!this._started || this._closed) {
-      throw new Error(this._closed ? 'Already closed.' : 'Not started yet.');
-    }
+    this._assertInteractive();
+
     const session = this._sessions[sessionId];
     if (!session) {
       throw new Error('Session not found: ' + sessionId);
     }
     return this.proxy.getProxyUrl(session, url);
   }
-
-  /*
-  open(url) {
-    if (!this._started || this._closed) {
-      throw new Error(this._closed ? 'Already closed.' : 'Not started yet.');
-    }
-
-    const session = new Session(this.uploadRoot); // TODO
-    this.proxy.openSession(session);
-    const newURL = this.proxy.getProxyUrl(session, url);
-    // TODO
-    return {
-      session,
-      url: newURL
-    };
-  }
-  */
 
   close() {
     if (!this._started || this._closed) {
@@ -78,6 +59,15 @@ export default class Hammerhead {
     try {
       this.proxy.close();
     } catch(err) {}
+  }
+
+  _assertInteractive() {
+    if (!this._started) {
+      throw new Error('Not started yet.');
+    }
+    if (this._closed) {
+      throw new Error('Already closed.');
+    }
   }
 
 }
