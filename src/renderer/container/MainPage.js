@@ -9,7 +9,6 @@ import Header from './Header';
 import SideBar from './SideBar';
 import Body from './Body';
 import NewObjectDialog, { DIALOG_ID as NEW_OBJECT_DIALOG_ID } from '../component/NewObjectDialog';
-import NewSessionDialog, { DIALOG_ID as NEW_SESSION_DIALOG_ID } from '../component/session/NewDialog';
 
 import { action } from '../store';
 
@@ -36,9 +35,6 @@ function mapStateToProps({ ui }) {
     ui: {
       forNewObjectDialog: {
         open: ui.dialog === NEW_OBJECT_DIALOG_ID
-      },
-      forNewSessionDialog: {
-        open: ui.dialog === NEW_SESSION_DIALOG_ID
       }
     }
   };
@@ -68,13 +64,6 @@ function mapDispatchToProps(dispatch) {
           onNewObject(dispatch, type);
         },
         onCancel: () => dispatch(action.ui.dialog.open())
-      },
-      forNewSessionDialog: {
-        open: url => {
-          dispatch(action.ui.dialog.open());
-          dispatch(action.session.open(url));
-        },
-        cancel: () => dispatch(action.ui.dialog.open())
       }
     }
   };
@@ -98,7 +87,6 @@ function MainPage({ ui, actions, classes }) {
         <Body />
       </main>
       <NewObjectDialog {...ui.forNewObjectDialog} {...actions.forNewObjectDialog} />
-      <NewSessionDialog ui={ui.forNewSessionDialog} actions={actions.forNewSessionDialog} />
     </div>
   );
 }
