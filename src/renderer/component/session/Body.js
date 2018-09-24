@@ -1,14 +1,25 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { withStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 
-function SessionBody({ sessionId, url, onUrlChange }) {
+const styles = theme => ({
+  paper: {
+    ...theme.mixins.gutters(),
+    paddingTop: theme.spacing.unit * 2,
+    paddingBottom: theme.spacing.unit * 2,
+  }
+});
+
+function SessionBody({ sessionId, url, onUrlChange, classes }) {
   return (
     <div>
-      <Paper>
-        <Typography>Session: {sessionId}</Typography>
+      <Paper className={classes.paper}>
+        <Typography variant="headline" component="h3">
+          Session: {sessionId}
+        </Typography>
         <div>
           <TextField
             label="Original URL"
@@ -49,7 +60,8 @@ function SessionBody({ sessionId, url, onUrlChange }) {
 SessionBody.propTypes = {
   sessionId: PropTypes.string.isRequired,
   url: PropTypes.string,
-  onUrlChange: PropTypes.func.isRequired
+  onUrlChange: PropTypes.func.isRequired,
+  classes: PropTypes.object
 };
 
-export default SessionBody;
+export default withStyles(styles)(SessionBody);
