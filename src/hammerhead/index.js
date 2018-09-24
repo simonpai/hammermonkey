@@ -29,7 +29,8 @@ export default class Hammerhead {
     }
 
     const session = new Session(this.uploadRoot); // TODO
-    const newURL = this.proxy.openSession(url, session);
+    this.proxy.openSession(session);
+    const newURL = this.proxy.getProxyUrl(session, url);
     // TODO
     return {
       session,
