@@ -50,9 +50,10 @@ const enhance = compose(
 function Header({ ui, actions, classes }) {
   return (
     <AppBar position="absolute" className={classes.appBar}>
-      <Toolbar>
+      <Toolbar disableGutters={true}>
         <IconButton
           className={classes.button}
+          color="inherit"
           onClick={() => actions.ui.dialog.open(NEW_OBJECT_DIALOG_ID)}
         >
           <AddIcon />

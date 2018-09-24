@@ -5,6 +5,7 @@ import { ConnectedRouter } from 'react-router-redux';
 import createHistory from 'history/createBrowserHistory';
 // import Button from '@material-ui/core/Button';
 
+import withTheme from './theme';
 import routes from './routes';
 import configureStore from './store/configure';
 
@@ -26,8 +27,10 @@ const store = configureStore(history);
 const rootElement = document.querySelector(document.currentScript.getAttribute('data-container'));
 
 ReactDOM.render(
-  <Provider store={store}>
-    <ConnectedRouter history={history}>{routes}</ConnectedRouter>
-  </Provider>,
+  withTheme(
+    <Provider store={store}>
+      <ConnectedRouter history={history}>{routes}</ConnectedRouter>
+    </Provider>
+  ),
   rootElement
 );
