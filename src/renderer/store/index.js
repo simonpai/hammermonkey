@@ -1,27 +1,29 @@
 import { combineReducers } from 'redux';
-// import createIpc, { send } from 'redux-electron-ipc';
 // import persistState from 'redux-localstorage';
-// import thunk from 'redux-thunk';
 import * as ui from './ui';
 import * as session from './session';
+import * as rule from './rule';
 
 // action //
 export const action = {
   ui: ui.action,
-  session: session.action
+  session: session.action,
+  rule: rule.action
 };
 
 // ipc //
-export const ipc = Object.assign({}, session.ipc);
+export const ipc = Object.assign({}, session.ipc, rule.ipc);
 
 // initial state //
 export const initialState = {
   ui: ui.initialState,
-  session: session.initialState
+  session: session.initialState,
+  rule: rule.initialState
 };
 
 // reducer //
 export const reducer = combineReducers({
   ui: ui.reducer,
-  session: session.reducer
+  session: session.reducer,
+  rule: rule.reducer
 });

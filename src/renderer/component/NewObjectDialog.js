@@ -10,6 +10,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 // import DialogContentText from '@material-ui/core/DialogContentText';
 
 import SessionIcon from './session/Icon';
+import RuleIcon from './rule/Icon';
 
 export const DIALOG_ID = 'newObject';
 
@@ -27,6 +28,12 @@ function NewObjectDialog({ open, onSubmit, onCancel }) {
               <SessionIcon />
             </ListItemIcon>
             <ListItemText primary="Session" />
+          </ListItem>
+          <ListItem button onClick={() => onSubmit('rule')}>
+            <ListItemIcon>
+              <RuleIcon />
+            </ListItemIcon>
+            <ListItemText primary="Rule" />
           </ListItem>
         </List>
       </DialogContent>

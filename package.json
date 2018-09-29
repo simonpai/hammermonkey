@@ -40,7 +40,7 @@
     "recompose": "^0.30.0",
     "redux": "^4.0.0",
     "redux-electron-ipc": "^1.1.13",
-    "redux-saga": "^0.16.0",
-    "testcafe-hammerhead": "^14.2.2"
+    "testcafe-hammerhead": "^14.2.2",
+    "uuid": "^3.3.2"
   }
 }

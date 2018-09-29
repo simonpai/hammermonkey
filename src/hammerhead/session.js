@@ -2,8 +2,14 @@ import hammerhead from 'testcafe-hammerhead';
 
 export default class Session extends hammerhead.Session {
 
-  constructor(uploadRoot) {
+  constructor(uploadRoot, injectable) {
     super(uploadRoot);
+    
+    if (injectable) {
+      Object.defineProperty(this, 'injectable', {
+        value: injectable
+      });
+    }
   }
 
   _getPayloadScript() {

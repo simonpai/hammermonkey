@@ -51,6 +51,9 @@ function onNewObject(dispatch, type) {
     case 'session':
       dispatch(action.session.open());
       break;
+    case 'rule':
+      dispatch(action.rule.create());
+      break;
     default:
   }
 }

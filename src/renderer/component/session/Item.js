@@ -12,13 +12,6 @@ function SessionItem({ sessionId, selected, onSelect }) {
         <SessionIcon />
       </ListItemIcon>
       <ListItemText primary={sessionId} />
-    {
-      /*
-      <li key={sessionId}>
-        <a href={url} target="_blank" rel="noopener noreferrer">{url}</a>
-      </li>
-      */
-    }
     </ListItem>
   )
 }
