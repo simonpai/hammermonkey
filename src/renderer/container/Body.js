@@ -4,7 +4,7 @@ import { compose } from 'recompose';
 import { withStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 
-import SessionBody from '../component/session/Body';
+import SessionPanel from '../component/SessionPanel';
 import { action } from '../store';
 
 const styles = theme => ({
@@ -41,7 +41,7 @@ function Body({ ui, session, actions, classes }) {
   switch (obj && obj.type) {
     case 'session':
       return (
-        <SessionBody {...session.map[obj.id]} {...actions.session} />
+        <SessionPanel {...session.map[obj.id]} {...actions.session} />
       );
     default:
       return (

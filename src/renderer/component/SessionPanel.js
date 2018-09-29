@@ -14,7 +14,7 @@ const styles = theme => ({
   }
 });
 
-function SessionBody({ sessionId, url, onUrlChange, classes }) {
+function SessionPanel({ sessionId, url, onUrlChange, classes }) {
   return (
     <div>
       <Paper className={classes.paper}>
@@ -59,11 +59,11 @@ function SessionBody({ sessionId, url, onUrlChange, classes }) {
   )
 }
 
-SessionBody.propTypes = {
+SessionPanel.propTypes = {
   sessionId: PropTypes.string.isRequired,
   url: PropTypes.string,
   onUrlChange: PropTypes.func.isRequired,
   classes: PropTypes.object
 };
 
-export default withStyles(styles)(SessionBody);
+export default withStyles(styles)(SessionPanel);

@@ -9,7 +9,7 @@ import Drawer from '@material-ui/core/Drawer';
 import Typography from '@material-ui/core/Typography';
 // import Toolbar from '@material-ui/core/Toolbar';
 
-import { SessionIcon, RuleIcon } from '../component/Icon';
+import { SessionIcon, RuleIcon } from '../component/Icons';
 import SelectableList from '../component/SelectableList';
 import { action } from '../store';
 

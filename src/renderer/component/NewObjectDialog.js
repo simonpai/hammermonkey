@@ -9,8 +9,7 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 // import DialogContentText from '@material-ui/core/DialogContentText';
 
-import SessionIcon from './session/Icon';
-import RuleIcon from './rule/Icon';
+import { SessionIcon, RuleIcon } from './Icons';
 
 export const DIALOG_ID = 'newObject';
 
