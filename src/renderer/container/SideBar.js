@@ -6,12 +6,11 @@ import { compose } from 'recompose';
 import { withStyles } from '@material-ui/core/styles';
 
 import Drawer from '@material-ui/core/Drawer';
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
+import Typography from '@material-ui/core/Typography';
 // import Toolbar from '@material-ui/core/Toolbar';
-// import Typography from '@material-ui/core/Typography';
 
-import SessionList from '../component/session/List';
+import { SessionIcon, RuleIcon } from '../component/Icon';
+import SelectableList from '../component/SelectableList';
 import { action } from '../store';
 
 const styles = theme => ({
@@ -21,10 +20,11 @@ const styles = theme => ({
   toolbar: theme.mixins.toolbar
 });
 
-function mapStateToProps({ ui, session }) {
+function mapStateToProps({ ui, session, rule }) {
   return {
     ui,
-    session
+    session,
+    rule
   };
 }
 
@@ -35,7 +35,8 @@ function mapDispatchToProps(dispatch) {
       ui: {
         sidebar: {
           selectTab: id => dispatch(action.ui.sidebar.selectTab(id)),
-          selectSession: id => dispatch(action.ui.sidebar.selectObject('session', id))
+          selectSession: id => dispatch(action.ui.sidebar.selectObject('session', id)),
+          selectRule: id => dispatch(action.ui.sidebar.selectObject('rule', id))
         }
       }
     }
@@ -50,34 +51,45 @@ const enhance = compose(
   withStyles(styles)
 );
 
-function SideBar({ ui, session, actions, classes }) {
+function SideBar({ ui, session, rule, actions, classes }) {
   const selectedObject = ui.sidebar.selectedObject;
   return (
     <Drawer variant="permanent" classes={{
       paper: classes.drawerPaper
     }}>
       <div className={classes.toolbar} />
-      <Tabs value={ui.sidebar.selectedTab} onChange={(event, id) => actions.ui.sidebar.selectTab(id)}>
-        <Tab label="Rules" />
-        <Tab label="Sessions" />
-      </Tabs>
-      <div>
-        {
-          [
-            (
-              'Rules'
-            ),
-            (
-              <SessionList
-                key="sessions"
-                ids={session.ids}
-                selected={selectedObject && selectedObject.type === 'session' ? selectedObject.id : undefined}
-                onSelect={actions.ui.sidebar.selectSession}
-              />
-            )
-          ][ui.sidebar.selectedTab || 0]
-        }
-      </div>
+      {
+        session.ids.length ? (
+          <div>
+            <Typography variant="subheading" gutterBottom>Sessions</Typography>
+            <SelectableList
+              items={session.ids.map(id => ({
+                key: id,
+                label: id,
+                Icon: SessionIcon
+              }))}
+              selected={selectedObject && selectedObject.type === 'session' ? selectedObject.id : undefined}
+              onSelect={actions.ui.sidebar.selectSession}
+            />
+          </div>
+        ) : undefined
+      }
+      {
+        rule.list.length ? (
+          <div>
+            <Typography variant="subheading" gutterBottom>Rules</Typography>
+            <SelectableList
+              items={rule.list.map(id => ({
+                key: id,
+                label: id,
+                Icon: RuleIcon
+              }))}
+              selected={selectedObject && selectedObject.type === 'rule' ? selectedObject.id : undefined}
+              onSelect={actions.ui.sidebar.selectRule}
+            />
+          </div>
+        ) : undefined
+      }
     </Drawer>
   );
 }
