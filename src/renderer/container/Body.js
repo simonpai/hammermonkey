@@ -5,16 +5,18 @@ import { withStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 
 import SessionPanel from '../component/SessionPanel';
+import RulePanel from '../component/RulePanel';
 import { action } from '../store';
 
 const styles = theme => ({
   toolbar: theme.mixins.toolbar
 });
 
-function mapStateToProps({ ui, session }) {
+function mapStateToProps({ ui, session, rule }) {
   return {
     ui,
-    session
+    session,
+    rule
   };
 }
 
@@ -23,6 +25,11 @@ function mapDispatchToProps(dispatch) {
     actions: {
       session: {
         onUrlChange: (sessionId, url) => dispatch(action.session.url(sessionId, url))
+      },
+      rule: {
+        onNameChange: (id, name) => dispatch(action.rule.update(id, { name })),
+        onContentChange: (id, content) => dispatch(action.rule.update(id, { content })),
+        onSave: (id) => dispatch(action.rule.save(id))
       }
     }
   };
@@ -36,16 +43,20 @@ const enhance = compose(
   withStyles(styles)
 );
 
-function Body({ ui, session, actions, classes }) {
+function Body({ ui, session, rule, actions, classes }) {
   const obj = ui.sidebar.selectedObject;
   switch (obj && obj.type) {
     case 'session':
       return (
         <SessionPanel {...session.map[obj.id]} {...actions.session} />
       );
+    case 'rule':
+      return (
+        <RulePanel {...rule.pool[obj.id]} {...actions.rule} />
+      );
     default:
       return (
-        <Paper>Nothing</Paper>
+        <Paper>nothing</Paper>
       );
   }
 }

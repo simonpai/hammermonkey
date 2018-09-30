@@ -32,7 +32,12 @@ export default class Main {
   getProxyUrl(sessionId, url) {
     const proxyUrl = this._hammerhead.getProxyUrl(sessionId, url);
     // console.log(url + ' => ' + proxyUrl);
-    this._emitter.emit('session.url', sessionId, proxyUrl);
+    return Promise.resolve(proxyUrl);
+  }
+
+  saveRule(id, updateTime, rule) {
+    console.log(id, updateTime, rule);
+    return Promise.resolve();
   }
 
   stop() {

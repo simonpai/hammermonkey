@@ -16,7 +16,7 @@ export const action = {
 // ipc //
 export const ipc = {
   'session.open': (event, sessionId) => ({type: OPEN_SUCCESS, sessionId}),
-  'session.url': (event, sessionId, url) => ({type: URL_SUCCESS, sessionId, url})
+  'session.url.success': (event, sessionId, url) => ({type: URL_SUCCESS, sessionId, url})
 };
 
 // initial state //

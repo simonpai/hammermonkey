@@ -14,13 +14,13 @@ export const action = {
   create: () => ({type: CREATE}),
   update: (id, obj) => ({type: UPDATE, id, obj}),
   delete: (id) => ({type: DELETE, id}),
-  save: (id, obj) => ({type: SAVE_REQUEST, id, obj}),
+  save: (id) => ({type: SAVE_REQUEST, id}),
   // delete: (id) => ({type: DELETE_REQUEST, id})
 };
 
 // ipc //
 export const ipc = {
-  'rule.sync.success': (event, id, vid) => ({type: SAVE_SUCCESS, id, vid}),
+  'rule.save.success': (event, id, updateTime) => ({type: SAVE_SUCCESS, id, updateTime}),
   // 'rule.delete': (event, sessionId, url) => ({type: URL_SUCCESS, sessionId, url})
 };
 
@@ -32,6 +32,8 @@ export const initialState = {
 
 // reducer //
 export function reducer(state = initialState, action = {}) {
+  const currentTime = Date.now();
+  const rule = action.id && state.pool[action.id];
   switch (action.type) {
     case CREATE:
       var id = uuid();
@@ -40,9 +42,12 @@ export function reducer(state = initialState, action = {}) {
         pool: {
           ...state.pool,
           [id]: {
-            pendingSaves: 0,
-            svid: undefined,
-            vid: uuid()
+            id,
+            name: '',
+            content: '',
+            updateTime: currentTime,
+            unsaved: true,
+            saving: false
           }
         },
         list: [id].concat(state.list)
@@ -53,9 +58,10 @@ export function reducer(state = initialState, action = {}) {
         pool: {
           ...state.pool,
           [action.id]: {
+            ...rule,
             ...action.obj,
-            svid: state.pool[action.id].svid,
-            vid: uuid()
+            updateTime: currentTime,
+            unsaved: true
           }
         }
       };
@@ -65,30 +71,31 @@ export function reducer(state = initialState, action = {}) {
       return {
         ...state,
         pool: restPool,
-        list: state.list.filter(id => id === action.id)
+        list: state.list.filter(id => id !== action.id)
       };
     case SAVE_REQUEST:
-      ipcr.send('rule.sync', action.id, action.obj);
+      ipcr.send('rule.save', action.id, currentTime, rule);
       return {
         ...state,
         pool: {
           ...state.pool,
           [action.id]: {
-            ...state.pool[action.id],
-            pendingSaves: state.pool[action.id].pendingSaves + 1
+            ...rule,
+            updateTime: currentTime,
+            unsaved: false,
+            saving: true
           }
         }
       };
     case SAVE_SUCCESS:
-      if (state.pool[action.id].vid === action.svid) {
+      if (rule.updateTime === action.updateTime) {
         return {
           ...state,
           pool: {
             ...state.pool,
             [action.id]: {
-              ...state.pool[action.id],
-              pendingSaves: state.pool[action.id].pendingSaves - 1,
-              svid: action.vid
+              ...rule,
+              saving: false
             }
           }
         };
