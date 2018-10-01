@@ -19,6 +19,7 @@ const styles = theme => ({
 });
 
 function RulePanel({ id, name, content, onNameChange, onContentChange, onSave, classes, ...rule }) {
+  const unsaved = !rule.savedObj || rule.savedObj.name !== name || rule.savedObj.content !== content;
   return (
     <div>
       <Paper className={classes.paper}>
@@ -29,29 +30,32 @@ function RulePanel({ id, name, content, onNameChange, onContentChange, onSave, c
           <TextField
             label="Name"
             value={name || ''}
-            onChange={event => onNameChange(id, event.target.value || undefined)}
+            onChange={event => onNameChange(id, event.target.value)}
             style={{ flexGrow: 1 }}
           />
           <Button
-            disabled={!rule.unsaved}
+            disabled={!unsaved}
             onClick={() => onSave(id)}
             variant="contained"
             color="primary"
             className={classes.saveButton}
           >
-            { rule.unsaved ? 'Save' : rule.saving ? 'Saving...' : 'Saved '}
+            { unsaved ? 'Save' : rule.saving ? 'Saving...' : 'Saved '}
           </Button>
         </div>
         <div style={{ display: 'flex' }}>
           <TextField
             label="Content"
-            style={{ flexGrow: 1, fontFamily: 'monospace' }}
+            style={{ flexGrow: 1 }}
             multiline
             rows="10"
             margin="normal"
             variant="outlined"
+            InputProps={{
+              style: { fontFamily: '"Roboto Mono", monospace' }
+            }}
             value={content || ''}
-            onChange={event => onContentChange(id, event.target.value || undefined)}
+            onChange={event => onContentChange(id, event.target.value)}
           />
         </div>
       </Paper>

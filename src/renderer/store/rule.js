@@ -46,7 +46,6 @@ export function reducer(state = initialState, action = {}) {
             name: '',
             content: '',
             updateTime: currentTime,
-            unsaved: true,
             saving: false
           }
         },
@@ -60,8 +59,7 @@ export function reducer(state = initialState, action = {}) {
           [action.id]: {
             ...rule,
             ...action.obj,
-            updateTime: currentTime,
-            unsaved: true
+            updateTime: currentTime
           }
         }
       };
@@ -82,7 +80,10 @@ export function reducer(state = initialState, action = {}) {
           [action.id]: {
             ...rule,
             updateTime: currentTime,
-            unsaved: false,
+            savedObj: {
+              name: rule.name,
+              content: rule.content
+            },
             saving: true
           }
         }
