@@ -3,13 +3,14 @@ import Session from './session';
 
 export default class Hammerhead {
 
-  constructor(ip, options) {
+  constructor(ip, assets, options) {
     options = options || {};
     this.ip = ip;
     this.port1 = options.port1 || 6464;
     this.port2 = options.port2 || (this.port1 && this.port1 + 1);
     this.uploadRoot = options.uploadRoot; // TODO
 
+    this._assets = assets;
     this._sessions = {};
   }
 
@@ -58,7 +59,7 @@ export default class Hammerhead {
 
     try {
       this.proxy.close();
-    } catch(err) {}
+    } catch(err) {} // eslint-disable-line no-empty
   }
 
   _assertInteractive() {

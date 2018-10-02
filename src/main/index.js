@@ -2,13 +2,17 @@ import EventEmitter from 'events';
 import internalIp from 'internal-ip';
 import Hammerhead from '../hammerhead';
 import bridgeFn from './bridge';
+import RuleManager from './rule';
+import AssetServer from './asset';
 
 export default class Main {
 
   constructor() {
     const ip = this._ip = internalIp.v4.sync();
-    this._hammerhead = new Hammerhead(ip, {});
     this._emitter = new EventEmitter();
+    this._rules = new RuleManager();
+    this._assets = new AssetServer(this._rules);
+    this._hammerhead = new Hammerhead(ip, this._assets, {});
 
     Object.defineProperty(this, 'events', {
       value: this._emitter
@@ -35,12 +39,15 @@ export default class Main {
     return Promise.resolve(proxyUrl);
   }
 
-  saveRule(id, updateTime, rule) {
-    console.log(id, updateTime, rule);
+  saveRule(id, rule) {
+    console.log(id, rule);
+    this._rules.update(id, rule);
     return Promise.resolve();
   }
 
   stop() {
     this._hammerhead.close();
+    this._assets.close();
   }
+
 }

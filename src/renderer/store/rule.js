@@ -44,6 +44,7 @@ export function reducer(state = initialState, action = {}) {
           [id]: {
             id,
             name: '',
+            type: 'userscript',
             content: '',
             updateTime: currentTime,
             saving: false

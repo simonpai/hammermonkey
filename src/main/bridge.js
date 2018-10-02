@@ -8,7 +8,7 @@ export default function(main, webContents) {
     main.getProxyUrl(sessionId, url)
       .then(proxyUrl => webContents.send('session.url.success', sessionId, proxyUrl)));
   ipc.on('rule.save', (event, id, updateTime, rule) => 
-    main.saveRule(id, updateTime, rule)
+    main.saveRule(id, rule)
       .then(() => webContents.send('rule.save.success', id, updateTime)));
 
   // main -> renderer //
