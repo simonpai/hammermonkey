@@ -2,8 +2,10 @@ import EventEmitter from 'events';
 import internalIp from 'internal-ip';
 import Hammerhead from '../hammerhead';
 import bridgeFn from './bridge';
-import RuleManager from './rule';
-import AssetServer from './asset';
+import RuleManager from './rule/manager';
+
+import AuxiliaryService from './module/auxiliary';
+import InjectableManager from './module/injectable';
 
 export default class Main {
 
@@ -11,8 +13,12 @@ export default class Main {
     const ip = this._ip = internalIp.v4.sync();
     this._emitter = new EventEmitter();
     this._rules = new RuleManager();
-    this._assets = new AssetServer(this._rules);
-    this._hammerhead = new Hammerhead(ip, this._assets, {});
+
+    this._hammerhead = new Hammerhead(ip, {});
+
+    const auxPort = 6565;
+    this._auxiliary = new AuxiliaryService(this._rules, {port: auxPort});
+    this._injectables = new InjectableManager(this._rules, {ip, auxPort});
 
     Object.defineProperty(this, 'events', {
       value: this._emitter
@@ -29,6 +35,7 @@ export default class Main {
 
   openSession() {
     const session = this._hammerhead.openSession();
+    this._injectables.redefineInjectable(session);
     // console.log(session);
     this._emitter.emit('session.open', session.id);
   }
@@ -40,14 +47,14 @@ export default class Main {
   }
 
   saveRule(id, rule) {
-    console.log(id, rule);
     this._rules.update(id, rule);
     return Promise.resolve();
   }
 
   stop() {
+    this._injectables.close();
+    this._auxiliary.close();
     this._hammerhead.close();
-    this._assets.close();
   }
 
 }

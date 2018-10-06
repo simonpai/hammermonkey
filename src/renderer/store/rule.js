@@ -30,6 +30,18 @@ export const initialState = {
   list: []
 };
 
+function _createRule(id, currentTime) {
+  return {
+    id,
+    name: '',
+    type: 'userscript',
+    content: '',
+    active: true,
+    updateTime: currentTime,
+    saving: false
+  };
+}
+
 // reducer //
 export function reducer(state = initialState, action = {}) {
   const currentTime = Date.now();
@@ -41,14 +53,7 @@ export function reducer(state = initialState, action = {}) {
         ...state,
         pool: {
           ...state.pool,
-          [id]: {
-            id,
-            name: '',
-            type: 'userscript',
-            content: '',
-            updateTime: currentTime,
-            saving: false
-          }
+          [id]: _createRule(id, currentTime)
         },
         list: [id].concat(state.list)
       };

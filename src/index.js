@@ -1,3 +1,4 @@
+import './polyfill';
 import { app, BrowserWindow, screen } from 'electron';
 import open from 'open';
 import Main from './main';

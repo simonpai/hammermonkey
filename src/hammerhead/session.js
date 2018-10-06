@@ -2,18 +2,14 @@ import hammerhead from 'testcafe-hammerhead';
 
 export default class Session extends hammerhead.Session {
 
-  constructor(uploadRoot, injectable) {
+  /*
+  constructor(uploadRoot) {
     super(uploadRoot);
-    
-    if (injectable) {
-      Object.defineProperty(this, 'injectable', {
-        value: injectable
-      });
-    }
   }
+  */
 
   _getPayloadScript() {
-    return 'console.log(\'Hello World\')';
+    return '';
   }
 
   _getIframePayloadScript() {
@@ -29,4 +25,5 @@ export default class Session extends hammerhead.Session {
   handlePageError(ctx, err) {
     console.error(err);
   }
+  
 }
