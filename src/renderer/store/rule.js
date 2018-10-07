@@ -27,7 +27,7 @@ export const ipc = {
 // initial state //
 export const initialState = {
   pool: {},
-  list: []
+  ids: []
 };
 
 function _createRule(id, currentTime) {
@@ -42,6 +42,10 @@ function _createRule(id, currentTime) {
   };
 }
 
+export const helpers = {
+  list: rule => rule.ids.map(id => rule.pool[id])
+};
+
 // reducer //
 export function reducer(state = initialState, action = {}) {
   const currentTime = Date.now();
@@ -55,7 +59,7 @@ export function reducer(state = initialState, action = {}) {
           ...state.pool,
           [id]: _createRule(id, currentTime)
         },
-        list: [id].concat(state.list)
+        ids: [id].concat(state.ids)
       };
     case UPDATE:
       return {
@@ -75,7 +79,7 @@ export function reducer(state = initialState, action = {}) {
       return {
         ...state,
         pool: restPool,
-        list: state.list.filter(id => id !== action.id)
+        ids: state.ids.filter(id => id !== action.id)
       };
     case SAVE_REQUEST:
       ipcr.send('rule.save', action.id, currentTime, rule);

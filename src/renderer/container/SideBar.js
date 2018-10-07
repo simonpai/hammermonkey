@@ -11,7 +11,7 @@ import Typography from '@material-ui/core/Typography';
 
 import { SessionIcon, RuleIcon } from '../component/Icons';
 import SelectableList from '../component/SelectableList';
-import { action } from '../store';
+import { action, helpers } from '../store';
 
 const styles = theme => ({
   drawerPaper: {
@@ -53,6 +53,7 @@ const enhance = compose(
 
 function SideBar({ ui, session, rule, actions, classes }) {
   const selectedObject = ui.sidebar.selectedObject;
+  const rules = helpers.rule.list(rule);
   return (
     <Drawer variant="permanent" classes={{
       paper: classes.drawerPaper
@@ -75,13 +76,13 @@ function SideBar({ ui, session, rule, actions, classes }) {
         ) : undefined
       }
       {
-        rule.list.length ? (
+        rules.length ? (
           <div>
             <Typography variant="subheading" gutterBottom>Rules</Typography>
             <SelectableList
-              items={rule.list.map(id => ({
+              items={rules.map(({id, name}) => ({
                 key: id,
-                label: id,
+                label: name || '(untitled)',
                 Icon: RuleIcon
               }))}
               selected={selectedObject && selectedObject.type === 'rule' ? selectedObject.id : undefined}

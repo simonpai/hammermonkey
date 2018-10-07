@@ -21,6 +21,11 @@ export const initialState = {
   rule: rule.initialState
 };
 
+// helpers //
+export const helpers = {
+  rule: rule.helpers
+};
+
 // reducer //
 export const reducer = combineReducers({
   ui: ui.reducer,
