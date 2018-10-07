@@ -19,7 +19,7 @@ function SessionPanel({ sessionId, url, onUrlChange, classes }) {
     <div>
       <Paper className={classes.paper}>
         <Typography variant="headline" component="h3">
-          Session: {sessionId}
+          Session {sessionId}
         </Typography>
         <div>
           <TextField

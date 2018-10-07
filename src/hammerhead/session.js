@@ -1,12 +1,13 @@
 import hammerhead from 'testcafe-hammerhead';
 
+let serial = 0;
+
 export default class Session extends hammerhead.Session {
 
-  /*
   constructor(uploadRoot) {
     super(uploadRoot);
+    this.id = '' + serial++;
   }
-  */
 
   _getPayloadScript() {
     return '';
@@ -25,5 +26,5 @@ export default class Session extends hammerhead.Session {
   handlePageError(ctx, err) {
     console.error(err);
   }
-  
+
 }
