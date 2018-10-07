@@ -14,7 +14,7 @@ const styles = theme => ({
   }
 });
 
-function SessionPanel({ sessionId, url, onUrlChange, classes }) {
+function SessionPanel({ sessionId, url, proxyUrl, onUrlChange, classes }) {
   return (
     <div>
       <Paper className={classes.paper}>
@@ -24,6 +24,7 @@ function SessionPanel({ sessionId, url, onUrlChange, classes }) {
         <div>
           <TextField
             label="Original URL"
+            value={url || ''}
             fullWidth
             margin="normal"
             onChange={event => {
@@ -42,7 +43,7 @@ function SessionPanel({ sessionId, url, onUrlChange, classes }) {
         <div>
           <TextField
             label="Proxy URL"
-            value={url || ''}
+            value={proxyUrl || ''}
             fullWidth
             margin="normal"
             InputProps={{
@@ -62,6 +63,7 @@ function SessionPanel({ sessionId, url, onUrlChange, classes }) {
 SessionPanel.propTypes = {
   sessionId: PropTypes.string.isRequired,
   url: PropTypes.string,
+  proxyUrl: PropTypes.string,
   onUrlChange: PropTypes.func.isRequired,
   classes: PropTypes.object
 };

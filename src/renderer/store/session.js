@@ -27,6 +27,7 @@ export const initialState = {
 
 // reducer //
 export function reducer(state = initialState, action = {}) {
+  const {sessionId} = action;
   switch (action.type) {
     case OPEN_REQUEST:
       // TODO: create a placeholder session
@@ -37,33 +38,43 @@ export function reducer(state = initialState, action = {}) {
         ...state,
         map: {
           ...state.map,
-          [action.sessionId]: {
-            sessionId: action.sessionId
+          [sessionId]: {
+            sessionId
           }
         },
         ids: [
           ...state.ids,
-          action.sessionId
+          sessionId
         ]
       };
     case OPEN_FAILURE:
       // TODO
       return state;
     case URL_REQUEST:
-      if (!action.url.trim()) {
+      var url = action.url.trim();
+      if (!url) {
         return state;
       }
       // TODO: throttle
-      ipcr.send('session.url', action.sessionId, action.url.trim());
-      return state;
+      ipcr.send('session.url', sessionId, url);
+      return {
+        ...state,
+        map: {
+          ...state.map,
+          [sessionId]: {
+            ...state.map[sessionId],
+            url: url
+          }
+        }
+      };
     case URL_SUCCESS:
       return {
         ...state,
         map: {
           ...state.map,
-          [action.sessionId]: {
-            ...state.map[action.sessionId],
-            url: action.url
+          [sessionId]: {
+            ...state.map[sessionId],
+            proxyUrl: action.url
           }
         }
       };
@@ -74,26 +85,3 @@ export function reducer(state = initialState, action = {}) {
       return state;
   }
 }
-
-/*
-function* open(action) {
-  try {
-    const session = yield call(bridge.open, action.url);
-    yield put({
-      type: OPEN_SUCCESS,
-      session: session
-    });
-  } catch(err) {
-    yield put({
-      type: OPEN_FAILURE,
-      message: err.message
-    });
-  }
-}
-
-export function* saga() {
-  yield all([
-    takeEvery(OPEN_REQUEST, open)
-  ]);
-}
-*/
