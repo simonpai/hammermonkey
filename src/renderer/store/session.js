@@ -56,12 +56,22 @@ export function reducer(state = initialState, action = {}) {
       // TODO
       return state;
     case URL_REQUEST:
+      // TODO: rename: shall be update
       var url = action.url.trim();
       if (!url) {
-        return state;
+        return {
+          ...state,
+          hash: {
+            ...state.hash,
+            [sessionId]: {
+              ...state.hash[sessionId],
+              url: url,
+              proxyUrl: undefined
+            }
+          }
+        };
       }
-      // TODO: throttle
-      ipcr.send('session.url', sessionId, url);
+      ipcr.send('session.url', sessionId, url.indexOf('://') < 0 ? ('http://' + url) : url);
       return {
         ...state,
         hash: {

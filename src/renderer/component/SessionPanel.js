@@ -27,17 +27,7 @@ function SessionPanel({sessionId, url, proxyUrl, onUrlChange, classes}) {
             value={url || ''}
             fullWidth
             margin="normal"
-            onChange={event => {
-              let url = event.target.value.trim();
-              if (!url) {
-                return;
-              }
-              if (url.indexOf('://') < 0) {
-                url = 'http://' + url;
-              }
-              // TODO: validate URL
-              onUrlChange(sessionId, url);
-            }}
+            onChange={event => onUrlChange(sessionId, event.target.value.trim())}
           />
         </div>
         <div>
