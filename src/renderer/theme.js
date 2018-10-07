@@ -12,10 +12,6 @@ const theme = createMuiTheme({
 
 export default function withTheme(node) {
   return (
-    <MuiThemeProvider theme={theme}>
-      {
-        node
-      }
-    </MuiThemeProvider>
+    <MuiThemeProvider theme={theme}>{node}</MuiThemeProvider>
   );
 }

@@ -5,7 +5,7 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 
-function SelectableList({ items, selected, onSelect }) {
+function SelectableList({items, selected, onSelect}) {
   return (
     <List component="nav">
       {items.map(item =>

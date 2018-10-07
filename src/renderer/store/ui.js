@@ -21,13 +21,6 @@ export const initialState = {
     selectedObject: undefined
   },
   dialog: undefined
-  /*
-  form: {
-    newSession: {
-      url: 'http://google.com'
-    }
-  }
-  */
 };
 
 // reducer //

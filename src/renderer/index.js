@@ -3,7 +3,6 @@ import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { ConnectedRouter } from 'react-router-redux';
 import createHistory from 'history/createBrowserHistory';
-// import Button from '@material-ui/core/Button';
 
 import withTheme from './theme';
 import routes from './routes';

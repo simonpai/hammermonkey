@@ -20,12 +20,8 @@ const styles = theme => ({
   toolbar: theme.mixins.toolbar
 });
 
-function mapStateToProps({ ui, session, rule }) {
-  return {
-    ui,
-    session,
-    rule
-  };
+function mapStateToProps({ui, session, rule}) {
+  return {ui, session, rule};
 }
 
 function mapDispatchToProps(dispatch) {
@@ -51,7 +47,7 @@ const enhance = compose(
   withStyles(styles)
 );
 
-function SideBar({ ui, session, rule, actions, classes }) {
+function SideBar({ui, session, rule, actions, classes}) {
   const selectedObject = ui.sidebar.selectedObject;
   const rules = helpers.rule.list(rule);
   const sessions = helpers.session.list(session);

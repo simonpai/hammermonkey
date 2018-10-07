@@ -18,7 +18,7 @@ const styles = theme => ({
   }
 });
 
-function RulePanel({ id, name, content, onNameChange, onContentChange, onSave, classes, ...rule }) {
+function RulePanel({id, name, content, onNameChange, onContentChange, onSave, classes, ...rule}) {
   const unsaved = !rule.savedObj || rule.savedObj.name !== name || rule.savedObj.content !== content;
   return (
     <div>
@@ -26,12 +26,12 @@ function RulePanel({ id, name, content, onNameChange, onContentChange, onSave, c
         <Typography variant="headline" component="h3">
           Rule: {id}
         </Typography>
-        <div style={{ display: 'flex' }}>
+        <div style={{display: 'flex'}}>
           <TextField
             label="Name"
             value={name || ''}
             onChange={event => onNameChange(id, event.target.value)}
-            style={{ flexGrow: 1 }}
+            style={{flexGrow: 1}}
           />
           <Button
             disabled={!unsaved}
@@ -40,19 +40,19 @@ function RulePanel({ id, name, content, onNameChange, onContentChange, onSave, c
             color="primary"
             className={classes.saveButton}
           >
-            { unsaved ? 'Save' : rule.saving ? 'Saving...' : 'Saved '}
+            {unsaved ? 'Save' : rule.saving ? 'Saving...' : 'Saved '}
           </Button>
         </div>
-        <div style={{ display: 'flex' }}>
+        <div style={{display: 'flex'}}>
           <TextField
             label="Content"
-            style={{ flexGrow: 1 }}
+            style={{flexGrow: 1}}
             multiline
             rows="10"
             margin="normal"
             variant="outlined"
             InputProps={{
-              style: { fontFamily: '"Roboto Mono", monospace' }
+              style: {fontFamily: '"Roboto Mono", monospace'}
             }}
             value={content || ''}
             onChange={event => onContentChange(id, event.target.value)}

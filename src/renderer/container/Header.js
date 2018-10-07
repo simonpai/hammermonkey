@@ -21,10 +21,8 @@ const styles = theme => ({
   }
 });
 
-function mapStateToProps({ ui }) {
-  return {
-    ui
-  };
+function mapStateToProps({ui}) {
+  return {ui};
 }
 
 function mapDispatchToProps(dispatch) {
@@ -47,7 +45,7 @@ const enhance = compose(
   withStyles(styles)
 );
 
-function Header({ ui, actions, classes }) {
+function Header({ui, actions, classes}) {
   return (
     <AppBar position="absolute" className={classes.appBar}>
       <Toolbar disableGutters={true}>

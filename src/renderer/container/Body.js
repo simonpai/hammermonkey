@@ -12,12 +12,8 @@ const styles = theme => ({
   toolbar: theme.mixins.toolbar
 });
 
-function mapStateToProps({ ui, session, rule }) {
-  return {
-    ui,
-    session,
-    rule
-  };
+function mapStateToProps({ui, session, rule}) {
+  return {ui, session, rule};
 }
 
 function mapDispatchToProps(dispatch) {
@@ -27,8 +23,8 @@ function mapDispatchToProps(dispatch) {
         onUrlChange: (sessionId, url) => dispatch(action.session.url(sessionId, url))
       },
       rule: {
-        onNameChange: (id, name) => dispatch(action.rule.update(id, { name })),
-        onContentChange: (id, content) => dispatch(action.rule.update(id, { content })),
+        onNameChange: (id, name) => dispatch(action.rule.update(id, {name})),
+        onContentChange: (id, content) => dispatch(action.rule.update(id, {content})),
         onSave: (id) => dispatch(action.rule.save(id))
       }
     }
@@ -43,7 +39,7 @@ const enhance = compose(
   withStyles(styles)
 );
 
-function Body({ ui, session, rule, actions, classes }) {
+function Body({ui, session, rule, actions/*, classes*/}) {
   const obj = ui.sidebar.selectedObject;
   switch (obj && obj.type) {
     case 'session':

@@ -13,7 +13,7 @@ import { SessionIcon, RuleIcon } from './Icons';
 
 export const DIALOG_ID = 'newObject';
 
-function NewObjectDialog({ open, onSubmit, onCancel }) {
+function NewObjectDialog({open, onSubmit, onCancel}) {
   return (
     <Dialog
       open={open}

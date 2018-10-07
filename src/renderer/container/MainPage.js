@@ -30,7 +30,7 @@ const styles = theme => ({
   toolbar: theme.mixins.toolbar
 });
 
-function mapStateToProps({ ui }) {
+function mapStateToProps({ui}) {
   return {
     ui: {
       forNewObjectDialog: {
@@ -39,12 +39,6 @@ function mapStateToProps({ ui }) {
     }
   };
 }
-
-/*
-const newDialogIdMap = {
-  session: NEW_SESSION_DIALOG_ID
-};
-*/
 
 function onNewObject(dispatch, type) {
   switch(type) {
@@ -80,7 +74,7 @@ const enhance = compose(
   withStyles(styles)
 );
 
-function MainPage({ ui, actions, classes }) {
+function MainPage({ui, actions, classes}) {
   return (
     <div className={classes.root}>
       <Header />

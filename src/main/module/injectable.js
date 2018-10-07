@@ -1,4 +1,4 @@
-import {render} from 'mustache';
+import { render } from 'mustache';
 
 export default class InjectableManager {
 

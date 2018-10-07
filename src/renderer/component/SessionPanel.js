@@ -14,7 +14,7 @@ const styles = theme => ({
   }
 });
 
-function SessionPanel({ sessionId, url, proxyUrl, onUrlChange, classes }) {
+function SessionPanel({sessionId, url, proxyUrl, onUrlChange, classes}) {
   return (
     <div>
       <Paper className={classes.paper}>
