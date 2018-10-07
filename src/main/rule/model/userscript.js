@@ -21,7 +21,7 @@ export default class UserscriptRule extends BaseRule {
           headers: {
             'Content-Type': 'text/javascript; charset=utf-8'
           },
-          content: this.content
+          content: '(function(){\n' + this.content + '\n})();'
         }
       ]
     };
