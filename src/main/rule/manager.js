@@ -5,7 +5,7 @@ export default class RuleManager {
 
   constructor() {
     this._emitter = new EventEmitter();
-    this._pool = {};
+    this._hash = {};
     this._ids = [];
   }
 
@@ -16,10 +16,10 @@ export default class RuleManager {
   update(id, rule) {
     rule = new (Rule[rule.type])({...rule, id});
 
-    if (!this._pool[id]) {
+    if (!this._hash[id]) {
       this._ids.splice(0, 0, id);
     }
-    this._pool[id] = rule;
+    this._hash[id] = rule;
 
     delete this._outputCache;
     this._emitter.emit('change');
@@ -52,7 +52,7 @@ export default class RuleManager {
   _sequence() {
     return this._ids
       .sequence()
-      .map(id => this._pool[id]);
+      .map(id => this._hash[id]);
   }
 
   _outputOfRule(rule) {

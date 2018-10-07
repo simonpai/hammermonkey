@@ -26,10 +26,16 @@ export const ipc = {
 
 // initial state //
 export const initialState = {
-  pool: {},
+  hash: {},
   ids: []
 };
 
+// helpers //
+export const helpers = {
+  list: rule => rule.ids.map(id => rule.hash[id])
+};
+
+// reducer //
 function _createRule(id, currentTime) {
   return {
     id,
@@ -42,21 +48,16 @@ function _createRule(id, currentTime) {
   };
 }
 
-export const helpers = {
-  list: rule => rule.ids.map(id => rule.pool[id])
-};
-
-// reducer //
 export function reducer(state = initialState, action = {}) {
   const currentTime = Date.now();
-  const rule = action.id && state.pool[action.id];
+  const rule = action.id && state.hash[action.id];
   switch (action.type) {
     case CREATE:
       var id = uuid();
       return {
         ...state,
-        pool: {
-          ...state.pool,
+        hash: {
+          ...state.hash,
           [id]: _createRule(id, currentTime)
         },
         ids: [id].concat(state.ids)
@@ -64,8 +65,8 @@ export function reducer(state = initialState, action = {}) {
     case UPDATE:
       return {
         ...state,
-        pool: {
-          ...state.pool,
+        hash: {
+          ...state.hash,
           [action.id]: {
             ...rule,
             ...action.obj,
@@ -74,19 +75,19 @@ export function reducer(state = initialState, action = {}) {
         }
       };
     case DELETE:
-      var { [action.id]: deleted, ...restPool } = state.pool; // eslint-disable-line no-unused-vars
+      var { [action.id]: deleted, ...resthash } = state.hash; // eslint-disable-line no-unused-vars
       // TODO: send to main process
       return {
         ...state,
-        pool: restPool,
+        hash: resthash,
         ids: state.ids.filter(id => id !== action.id)
       };
     case SAVE_REQUEST:
       ipcr.send('rule.save', action.id, currentTime, rule);
       return {
         ...state,
-        pool: {
-          ...state.pool,
+        hash: {
+          ...state.hash,
           [action.id]: {
             ...rule,
             updateTime: currentTime,
@@ -102,8 +103,8 @@ export function reducer(state = initialState, action = {}) {
       if (rule.updateTime === action.updateTime) {
         return {
           ...state,
-          pool: {
-            ...state.pool,
+          hash: {
+            ...state.hash,
             [action.id]: {
               ...rule,
               saving: false

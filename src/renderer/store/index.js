@@ -23,6 +23,7 @@ export const initialState = {
 
 // helpers //
 export const helpers = {
+  session: session.helpers,
   rule: rule.helpers
 };
 

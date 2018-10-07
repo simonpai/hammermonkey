@@ -54,19 +54,20 @@ const enhance = compose(
 function SideBar({ ui, session, rule, actions, classes }) {
   const selectedObject = ui.sidebar.selectedObject;
   const rules = helpers.rule.list(rule);
+  const sessions = helpers.session.list(session);
   return (
     <Drawer variant="permanent" classes={{
       paper: classes.drawerPaper
     }}>
       <div className={classes.toolbar} />
       {
-        session.ids.length ? (
+        sessions.length ? (
           <div>
             <Typography variant="subheading" gutterBottom>Sessions</Typography>
             <SelectableList
-              items={session.ids.map(id => ({
-                key: id,
-                label: 'Session ' + id,
+              items={sessions.map(({sessionId}) => ({
+                key: sessionId,
+                label: 'Session ' + sessionId,
                 Icon: SessionIcon
               }))}
               selected={selectedObject && selectedObject.type === 'session' ? selectedObject.id : undefined}

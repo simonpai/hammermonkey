@@ -48,11 +48,11 @@ function Body({ ui, session, rule, actions, classes }) {
   switch (obj && obj.type) {
     case 'session':
       return (
-        <SessionPanel {...session.map[obj.id]} {...actions.session} />
+        <SessionPanel {...session.hash[obj.id]} {...actions.session} />
       );
     case 'rule':
       return (
-        <RulePanel {...rule.pool[obj.id]} {...actions.rule} />
+        <RulePanel {...rule.hash[obj.id]} {...actions.rule} />
       );
     default:
       return (

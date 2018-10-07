@@ -21,8 +21,13 @@ export const ipc = {
 
 // initial state //
 export const initialState = {
-  map: {},
+  hash: {},
   ids: []
+};
+
+// helpers //
+export const helpers = {
+  list: session => session.ids.map(id => session.hash[id])
 };
 
 // reducer //
@@ -36,8 +41,8 @@ export function reducer(state = initialState, action = {}) {
     case OPEN_SUCCESS:
       return {
         ...state,
-        map: {
-          ...state.map,
+        hash: {
+          ...state.hash,
           [sessionId]: {
             sessionId
           }
@@ -59,10 +64,10 @@ export function reducer(state = initialState, action = {}) {
       ipcr.send('session.url', sessionId, url);
       return {
         ...state,
-        map: {
-          ...state.map,
+        hash: {
+          ...state.hash,
           [sessionId]: {
-            ...state.map[sessionId],
+            ...state.hash[sessionId],
             url: url
           }
         }
@@ -70,10 +75,10 @@ export function reducer(state = initialState, action = {}) {
     case URL_SUCCESS:
       return {
         ...state,
-        map: {
-          ...state.map,
+        hash: {
+          ...state.hash,
           [sessionId]: {
-            ...state.map[sessionId],
+            ...state.hash[sessionId],
             proxyUrl: action.url
           }
         }
