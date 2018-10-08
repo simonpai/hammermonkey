@@ -39,7 +39,7 @@ function SessionPanel({sessionId, url, proxyUrl, onUrlChange, classes}) {
             InputProps={{
               readOnly: true,
             }}
-            onClick={() => clipboard.writeText(url)}
+            onClick={() => clipboard.writeText(proxyUrl)}
           />
         </div>
         {
