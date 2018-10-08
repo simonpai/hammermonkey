@@ -43,7 +43,7 @@
     "redux": "^4.0.0",
     "redux-electron-ipc": "^1.1.13",
     "sequency": "^0.19.2",
-    "testcafe-hammerhead": "^14.2.2",
+    "testcafe-hammerhead": "^14.3.0",
     "uuid": "^3.3.2"
   }
 }
