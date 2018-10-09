@@ -41,6 +41,7 @@ app.on('ready', () => {
   createWindow$()
     .then(() => {
       main.bridge(win);
+      main.openSession();
       // TODO
       /*
       win.webContents.send('info', {
