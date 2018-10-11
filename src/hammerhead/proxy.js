@@ -1,6 +1,5 @@
 import hammerhead  from 'testcafe-hammerhead';
 import * as urlUtils from 'testcafe-hammerhead/lib/utils/url';
-// const mitm = require('./mitm');
 
 const _onRequest = hammerhead.Proxy.prototype._onRequest;
 
@@ -10,10 +9,10 @@ export default class Proxy extends hammerhead.Proxy {
     super(hostname, port1, port2);
   }
 
-  _onRequest(req, res, serverInfo) {
+  _onRequest(req, res/*, serverInfo*/) {
     const next = () => _onRequest.apply(this, arguments);
-    if (this._mitm) {
-      this._mitm(req, res, next);
+    if (this.app) {
+      this.app(req, res, next);
     } else {
       next();
     }
@@ -36,11 +35,6 @@ export default class Proxy extends hammerhead.Proxy {
       proxyProtocol: this.server1Info.protocol,
       sessionId: session.id
     });
-  }
-
-  get mitm() {
-    // return this._mitm || (this._mitm = mitm());
-    return {};
   }
 
 }

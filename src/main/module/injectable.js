@@ -2,10 +2,9 @@ import { render } from 'mustache';
 
 export default class InjectableManager {
 
-  constructor(rules, {ip, auxPort}) {
+  constructor(hammerhead, rules) {
     this._rules = rules;
-    this._ip = ip;
-    this._auxPort = auxPort;
+    this._host = hammerhead.host;
   }
 
   redefineInjectable(session) {
@@ -19,11 +18,11 @@ export default class InjectableManager {
 
   _getResource(session, type) {
     const sessionId = session.id;
-    const auxHost = this._ip + ':' + this._auxPort;
+    const host = this._host;
     return (this._rules.output.injectables || [])
       .sequence()
       .filter(inj => inj.type === type)
-      .map(({path}) => render(path, {sessionId, auxHost}))
+      .map(({path}) => render(path, {sessionId, host}))
       .toList();
   }
 

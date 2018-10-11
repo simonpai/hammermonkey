@@ -12,7 +12,7 @@ export default class UserscriptRule extends BaseRule {
       injectables: [
         {
           type: 'script',
-          path: '/{{sessionId}}/http://{{auxHost}}/asset/' + this.id
+          path: '/{{sessionId}}/http://{{host}}/asset/' + this.id
         }
       ],
       assets: [

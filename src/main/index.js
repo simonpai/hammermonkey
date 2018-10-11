@@ -4,7 +4,7 @@ import Hammerhead from '../hammerhead';
 import bridgeFn from './bridge';
 import RuleManager from './rule/manager';
 
-import AuxiliaryService from './module/auxiliary';
+import AssetManager from './module/asset';
 import InjectableManager from './module/injectable';
 
 export default class Main {
@@ -12,13 +12,11 @@ export default class Main {
   constructor() {
     const ip = this._ip = internalIp.v4.sync();
     this._emitter = new EventEmitter();
-    this._rules = new RuleManager();
+    const rules = this._rules = new RuleManager();
+    const hammerhead = this._hammerhead = new Hammerhead(ip, {});
 
-    this._hammerhead = new Hammerhead(ip, {});
-
-    const auxPort = 6565;
-    this._auxiliary = new AuxiliaryService(this._rules, {port: auxPort});
-    this._injectables = new InjectableManager(this._rules, {ip, auxPort});
+    this._assets = new AssetManager(hammerhead, rules);
+    this._injectables = new InjectableManager(hammerhead, rules);
 
     Object.defineProperty(this, 'events', {
       value: this._emitter
@@ -53,7 +51,7 @@ export default class Main {
 
   stop() {
     this._injectables.close();
-    this._auxiliary.close();
+    this._assets.close();
     this._hammerhead.close();
   }
 

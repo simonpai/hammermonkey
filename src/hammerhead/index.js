@@ -1,3 +1,5 @@
+import express from 'express';
+
 import './shim';
 import Proxy from './proxy';
 import Session from './session';
@@ -10,8 +12,10 @@ export default class Hammerhead {
     this.port1 = options.port1 || 6464;
     this.port2 = options.port2 || (this.port1 && this.port1 + 1);
     this.uploadRoot = options.uploadRoot; // TODO
+    this.host = ip + ':' + this.port1;
 
     this._sessions = {};
+    this.app = express();
   }
 
   start() {
@@ -21,7 +25,8 @@ export default class Hammerhead {
     }
     this._started = true;
 
-    /*const proxy = */this.proxy = new Proxy(this.ip, this.port1, this.port2);
+    this.proxy = new Proxy(this.ip, this.port1, this.port2);
+    this.proxy.app = this.app;
   }
 
   // TODO: mitm & script injection

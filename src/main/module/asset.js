@@ -1,17 +1,12 @@
-import express from 'express';
+export default class AssetManager {
 
-export default class AuxiliaryService {
-
-  constructor(rules, {port}) {
+  constructor(hammerhead, rules) {
     this._rules = rules;
     rules.events.on('change', () => {
       delete this._assetMapCache;
     });
-    // this._port = port;
 
-    const app = express();
-    app.get('/asset/:id', this._handleAsset.bind(this));
-    this._server = app.listen(port);
+    hammerhead.app.get('/asset/:id', this._handleAsset.bind(this));
   }
 
   get _assetMap() {
@@ -27,7 +22,7 @@ export default class AuxiliaryService {
       });
   }
 
-  _handleAsset(req, res) {
+  _handleAsset(req, res, next) {
     const id = req.params.id;
     const asset = this._assetMap[id];
     if (asset) {
@@ -35,9 +30,10 @@ export default class AuxiliaryService {
       Object.keys(headers)
         .forEach(k => res.set(k, headers[k]));
       res.send(content);
-      return;
+
+    } else {
+      next();
     }
-    res.status(404).end();
   }
 
   close() {
