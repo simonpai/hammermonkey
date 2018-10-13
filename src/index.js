@@ -3,6 +3,10 @@ import { app, BrowserWindow, screen } from 'electron';
 import open from 'open';
 import Main from './main';
 
+// fix userData path in dev mode
+app.setPath('userData', app.getPath('userData').replace(/\/Electron$/, '/' + app.getName()));
+
+
 // main //
 const main = new Main();
 main.start();
