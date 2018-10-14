@@ -5,6 +5,7 @@ const CREATE = 'rule.create';
 const UPDATE = 'rule.update';
 const DELETE = 'rule.delete';
 
+const LOAD = 'rule.load';
 const SAVE_REQUEST = 'rule.save.request';
 const SAVE_SUCCESS = 'rule.save.success';
 const SAVE_FAILURE = 'rule.save.failure';
@@ -20,6 +21,7 @@ export const action = {
 
 // ipc //
 export const ipc = {
+  'rule.load': (event, rules) => ({type: LOAD, rules}),
   'rule.save.success': (event, id, updateTime) => ({type: SAVE_SUCCESS, id, updateTime}),
   // 'rule.delete': (event, sessionId, url) => ({type: URL_SUCCESS, sessionId, url})
 };
@@ -75,15 +77,24 @@ export function reducer(state = initialState, action = {}) {
         }
       };
     case DELETE:
-      var { [action.id]: deleted, ...resthash } = state.hash; // eslint-disable-line no-unused-vars
+      var {[action.id]: deleted, ...resthash} = state.hash; // eslint-disable-line no-unused-vars
       // TODO: send to main process
       return {
         ...state,
         hash: resthash,
         ids: state.ids.filter(id => id !== action.id)
       };
+    case LOAD:
+      return action.rules.sequence()
+        .fold({hash: {}, ids: []}, (acc, rule) => {
+          const {name, content} = rule;
+          acc.hash[rule.id] = {...rule, saving: false, savedObj: {name, content}};
+          acc.ids.push(rule.id);
+          return acc;
+        });
     case SAVE_REQUEST:
-      ipcr.send('rule.save', action.id, currentTime, rule);
+      var {type, name, content} = rule;
+      ipcr.send('rule.save', action.id, currentTime, {type, name, content});
       return {
         ...state,
         hash: {
@@ -91,9 +102,9 @@ export function reducer(state = initialState, action = {}) {
           [action.id]: {
             ...rule,
             updateTime: currentTime,
-            savedObj: {
-              name: rule.name,
-              content: rule.content
+            savedObj: { // TODO: redesign this
+              name: name,
+              content: content
             },
             saving: true
           }

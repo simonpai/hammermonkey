@@ -1,5 +1,6 @@
 {
   "name": "hammermonkey",
+  "productName": "Hammermonkey",
   "version": "0.1.0",
   "description": "A TestCafe-Hammerhead implementation of userscript manager",
   "main": "src/index.js",
@@ -33,6 +34,7 @@
     "history": "^4.7.2",
     "internal-ip": "^3.0.1",
     "mustache": "^3.0.0",
+    "nedb": "^1.8.0",
     "open": "0.0.5",
     "react": "^16.4.2",
     "react-dom": "^16.4.2",

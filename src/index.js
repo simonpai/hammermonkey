@@ -9,7 +9,6 @@ app.setPath('userData', app.getPath('userData').replace(/\/Electron$/, '/' + app
 
 // main //
 const main = new Main();
-main.start();
 
 
 // renderer //
@@ -45,6 +44,7 @@ app.on('ready', () => {
   createWindow$()
     .then(() => {
       main.bridge(win);
+      main.start();
       main.openSession();
       // TODO
       /*

@@ -3,29 +3,53 @@ import * as Rule from './model';
 
 export default class RuleManager {
 
-  constructor() {
+  constructor(db) {
     this._emitter = new EventEmitter();
     this._hash = {};
     this._ids = [];
+    this._db = db;
   }
 
   get events() {
     return this._emitter;
   }
 
-  update(id, rule) {
-    rule = new (Rule[rule.type])({...rule, id});
+  load() {
+    return this._db.load()
+      // .then(v => console.log(v) || v)
+      .then(({hash = {}, ids = []}) => {
+        this._hash = hash;
+        this._ids = ids;
+        this._emitter.emit('change');
+      });
+  }
+
+  update(id, data) {
+    const rule = new (Rule[data.type])({...data, id});
 
     if (!this._hash[id]) {
       this._ids.splice(0, 0, id);
+      this._saveMeta();
     }
     this._hash[id] = rule;
+    this._db.upsert(id, data); // TODO: get this from Rule API
 
-    delete this._outputCache;
-    this._emitter.emit('change');
+    this._doChange();
   }
 
-  // TODO: delete
+  delete(id) {
+    const i = this._ids.indexOf(id);
+    if (i < 0) {
+      return;
+    }
+    this._ids.splice(i, 1);
+    delete this._hash[id];
+
+    this._db.delete(id);
+    this._doChange();
+  }
+
+  // TODO: update order
 
   get(id) {
     return this._rules[id];
@@ -37,6 +61,15 @@ export default class RuleManager {
 
   get output() {
     return this._outputCache || (this._outputCache = this._computeOutput());
+  }
+
+  _saveMeta() {
+    this._db.meta({ids: this._ids});
+  }
+
+  _doChange() {
+    delete this._outputCache;
+    this._emitter.emit('change');
   }
 
   _computeOutput() {

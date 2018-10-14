@@ -13,4 +13,5 @@ export default function(main, webContents) {
 
   // main -> renderer //
   main.events.on('session.open', webContents.send.bind(webContents, 'session.open'));
+  main.events.on('rule.load', webContents.send.bind(webContents, 'rule.load'));
 }
