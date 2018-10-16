@@ -7,9 +7,9 @@ export default function(main, webContents) {
   ipc.on('session.url', (event, sessionId, url) => 
     main.getProxyUrl(sessionId, url)
       .then(proxyUrl => webContents.send('session.url.success', sessionId, proxyUrl)));
-  ipc.on('rule.save', (event, id, updateTime, rule) => 
-    main.saveRule(id, rule)
-      .then(() => webContents.send('rule.save.success', id, updateTime)));
+  ipc.on('rule.save', (event, updateTime, rule) => 
+    main.saveRule(rule)
+      .then(() => webContents.send('rule.save.success', rule.id, updateTime)));
 
   // main -> renderer //
   main.events.on('session.open', webContents.send.bind(webContents, 'session.open'));

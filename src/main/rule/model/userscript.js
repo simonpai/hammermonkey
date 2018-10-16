@@ -2,9 +2,8 @@ import BaseRule from './base';
 
 export default class UserscriptRule extends BaseRule {
 
-  constructor({content, ...options}) {
+  constructor(options) {
     super('userscript', options);
-    this.content = content;
   }
 
   get output() {
@@ -21,7 +20,7 @@ export default class UserscriptRule extends BaseRule {
           headers: {
             'Content-Type': 'text/javascript; charset=utf-8'
           },
-          content: '(function(){\n' + this.content + '\n})();'
+          content: '(function(){\n' + this.data.content + '\n})();'
         }
       ]
     };

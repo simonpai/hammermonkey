@@ -41,9 +41,11 @@ export const helpers = {
 function _createRule(id, currentTime) {
   return {
     id,
-    name: '',
+    data: {
+      name: '',
+      content: ''
+    },
     type: 'userscript',
-    content: '',
     active: true,
     updateTime: currentTime,
     saving: false
@@ -71,7 +73,10 @@ export function reducer(state = initialState, action = {}) {
           ...state.hash,
           [action.id]: {
             ...rule,
-            ...action.obj,
+            data: {
+              ...rule.data,
+              ...action.obj
+            },
             updateTime: currentTime
           }
         }
@@ -87,14 +92,14 @@ export function reducer(state = initialState, action = {}) {
     case LOAD:
       return action.rules.sequence()
         .fold({hash: {}, ids: []}, (acc, rule) => {
-          const {name, content} = rule;
-          acc.hash[rule.id] = {...rule, saving: false, savedObj: {name, content}};
-          acc.ids.push(rule.id);
+          const {id, data} = rule;
+          acc.hash[id] = {...rule, saving: false, savedObj: data};
+          acc.ids.push(id);
           return acc;
         });
     case SAVE_REQUEST:
-      var {type, name, content} = rule;
-      ipcr.send('rule.save', action.id, currentTime, {type, name, content});
+      var {type, data, active} = rule;
+      ipcr.send('rule.save', currentTime, {id: action.id, type, data, active});
       return {
         ...state,
         hash: {
@@ -102,10 +107,7 @@ export function reducer(state = initialState, action = {}) {
           [action.id]: {
             ...rule,
             updateTime: currentTime,
-            savedObj: { // TODO: redesign this
-              name: name,
-              content: content
-            },
+            savedObj: data,
             saving: true
           }
         }

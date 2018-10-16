@@ -18,8 +18,12 @@ const styles = theme => ({
   }
 });
 
-function RulePanel({id, name, content, onNameChange, onContentChange, onSave, classes, ...rule}) {
-  const unsaved = !rule.savedObj || rule.savedObj.name !== name || rule.savedObj.content !== content;
+function equals(a, b) {
+  return a === b || (a !== undefined && b !== undefined && a.name === b.name && a.content === b.content); // TODO: ad-hoc
+}
+
+function RulePanel({id, data, onNameChange, onContentChange, onSave, classes, ...rule}) {
+  const unsaved = !equals(rule.savedObj, data);
   return (
     <div>
       <Paper className={classes.paper}>
@@ -29,7 +33,7 @@ function RulePanel({id, name, content, onNameChange, onContentChange, onSave, cl
         <div style={{display: 'flex'}}>
           <TextField
             label="Name"
-            value={name || ''}
+            value={data.name || ''}
             onChange={event => onNameChange(id, event.target.value)}
             style={{flexGrow: 1}}
           />
@@ -54,7 +58,7 @@ function RulePanel({id, name, content, onNameChange, onContentChange, onSave, cl
             InputProps={{
               style: {fontFamily: '"Roboto Mono", monospace'}
             }}
-            value={content || ''}
+            value={data.content || ''}
             onChange={event => onContentChange(id, event.target.value)}
           />
         </div>
@@ -65,8 +69,7 @@ function RulePanel({id, name, content, onNameChange, onContentChange, onSave, cl
 
 RulePanel.propTypes = {
   id: PropTypes.string.isRequired,
-  name: PropTypes.string,
-  content: PropTypes.string,
+  data: PropTypes.object,
   onNameChange: PropTypes.func.isRequired,
   onContentChange: PropTypes.func.isRequired,
   onSave: PropTypes.func.isRequired,

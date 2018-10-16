@@ -14,25 +14,33 @@ export default class RuleManager {
     return this._emitter;
   }
 
+  _constructRule(type, options) {
+    return new (Rule[type])(options);
+  }
+
   load() {
     return this._db.load()
       // .then(v => console.log(v) || v)
-      .then(({hash = {}, ids = []}) => {
+      .then(({hash = {}, meta = {}}) => {
+        Object.keys(hash).forEach(id => {
+          const {type, ...options} = hash[id];
+          hash[id] = this._constructRule(type, {id, ...options});
+        });
         this._hash = hash;
-        this._ids = ids;
+        this._ids = meta.ids || [];
         this._emitter.emit('change');
       });
   }
 
-  update(id, data) {
-    const rule = new (Rule[data.type])({...data, id});
+  update({id, type, ...options}) {
+    const rule = this._constructRule(type, {id, ...options});
 
     if (!this._hash[id]) {
       this._ids.splice(0, 0, id);
       this._saveMeta();
     }
     this._hash[id] = rule;
-    this._db.upsert(id, data); // TODO: get this from Rule API
+    this._db.upsert(id, {type, ...options}); // TODO: get this from Rule API
 
     this._doChange();
   }
@@ -64,7 +72,7 @@ export default class RuleManager {
   }
 
   _saveMeta() {
-    this._db.meta({ids: this._ids});
+    this._db.saveMeta({ids: this._ids});
   }
 
   _doChange() {

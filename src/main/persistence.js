@@ -10,11 +10,11 @@ class Collection {
 
   load() {
     return this._db.find({})
-      .then(v => console.log(v) || v)
+      // .then(v => console.log(v) || v)
       .then(docs => docs.sequence()
         .fold({hash: {}}, (acc, {_id: id, ...doc}) => {
           if (id === '_meta') {
-            Object.assign(acc, doc);
+            acc.meta = doc;
           } else {
             acc.hash[id] = {id, ...doc};
           }
@@ -32,7 +32,7 @@ class Collection {
       .then(n => n > 0);
   }
 
-  meta(meta) {
+  saveMeta(meta) {
     return this._db.update({_id: '_meta'}, {_id: '_meta', ...meta}, {upsert: true})
       .then(() => undefined);
   }

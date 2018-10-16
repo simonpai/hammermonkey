@@ -77,9 +77,9 @@ function SideBar({ui, session, rule, actions, classes}) {
           <div>
             <Typography variant="subheading" gutterBottom>Rules</Typography>
             <SelectableList
-              items={rules.map(({id, name}) => ({
+              items={rules.map(({id, data}) => ({
                 key: id,
-                label: name || '(untitled)',
+                label: data.name || '(untitled)',
                 Icon: RuleIcon
               }))}
               selected={selectedObject && selectedObject.type === 'rule' ? selectedObject.id : undefined}

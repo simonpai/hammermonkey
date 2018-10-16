@@ -52,8 +52,8 @@ export default class Main {
     return Promise.resolve(proxyUrl);
   }
 
-  saveRule(id, rule) {
-    this._rules.update(id, rule);
+  saveRule(id, type, data) {
+    this._rules.update(id, type, data);
     return Promise.resolve();
   }
 
