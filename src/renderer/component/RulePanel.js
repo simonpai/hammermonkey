@@ -6,6 +6,9 @@ import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
+import SaveIcon from '@material-ui/icons/Save';
+
+import { helpers } from '../store/rule';
 
 const styles = theme => ({
   paper: {
@@ -14,16 +17,15 @@ const styles = theme => ({
     paddingBottom: theme.spacing.unit * 2,
   },
   saveButton: {
-    marginLeft: theme.spacing.unit * 2
+    marginLeft: theme.spacing.unit * 2,
+    minWidth: 'auto',
+    width: 48
   }
 });
 
-function equals(a, b) {
-  return a === b || (a !== undefined && b !== undefined && a.name === b.name && a.content === b.content); // TODO: ad-hoc
-}
-
-function RulePanel({id, data, onNameChange, onContentChange, onSave, classes, ...rule}) {
-  const unsaved = !equals(rule.savedObj, data);
+function RulePanel({onNameChange, onContentChange, onSave, classes, ...rule}) {
+  const {id, data, saving} = rule;
+  const saved = helpers.isSaved(rule);
   return (
     <div>
       <Paper className={classes.paper}>
@@ -38,13 +40,13 @@ function RulePanel({id, data, onNameChange, onContentChange, onSave, classes, ..
             style={{flexGrow: 1}}
           />
           <Button
-            disabled={!unsaved}
+            disabled={saved || saving}
             onClick={() => onSave(id)}
             variant="contained"
             color="primary"
             className={classes.saveButton}
           >
-            {unsaved ? 'Save' : rule.saving ? 'Saving...' : 'Saved '}
+            <SaveIcon />
           </Button>
         </div>
         <div style={{display: 'flex'}}>

@@ -1,5 +1,6 @@
 import {ipcRenderer as ipcr} from 'electron';
 import uuid from 'uuid/v1';
+import equal from 'fast-deep-equal';
 
 const CREATE = 'rule.create';
 const UPDATE = 'rule.update';
@@ -34,7 +35,8 @@ export const initialState = {
 
 // helpers //
 export const helpers = {
-  list: rule => rule.ids.map(id => rule.hash[id])
+  list: ({ids, hash}) => ids.map(id => hash[id]),
+  isSaved: ({data, savedData}) => savedData !== undefined && equal(data, savedData)
 };
 
 // reducer //
@@ -93,7 +95,7 @@ export function reducer(state = initialState, action = {}) {
       return action.rules.sequence()
         .fold({hash: {}, ids: []}, (acc, rule) => {
           const {id, data} = rule;
-          acc.hash[id] = {...rule, saving: false, savedObj: data};
+          acc.hash[id] = {...rule, saving: false, savedData: data};
           acc.ids.push(id);
           return acc;
         });
@@ -107,7 +109,7 @@ export function reducer(state = initialState, action = {}) {
           [action.id]: {
             ...rule,
             updateTime: currentTime,
-            savedObj: data,
+            savedData: data,
             saving: true
           }
         }
