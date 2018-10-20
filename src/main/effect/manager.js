@@ -10,10 +10,16 @@ export default class EffectManager {
     this._emitter = new EventEmitter();
     this._processor = new Processor(this._construct.bind(this));
     this._sources = [];
+    this._settings = [];
   }
 
   get events() {
     return this._emitter;
+  }
+
+  add(settings) {
+    this._settings.push(settings);
+    this._invalidate();
   }
 
   register(source) {
@@ -38,9 +44,12 @@ export default class EffectManager {
   }
 
   _computeEffects() {
-    return this._sources
+    return this._settings
       .sequence()
-      .map(this._getEffectsFromSource.bind(this))
+      .map(this._processor.derive.bind(this._processor))
+      .plus(this._sources
+        .sequence()
+        .map(this._getEffectsFromSource.bind(this)))
       .fold({}, mergeBundle);
   }
 

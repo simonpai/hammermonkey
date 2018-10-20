@@ -8,6 +8,7 @@ import Persistence from './persistence';
 
 import AssetManager from './module/asset';
 import InjectableManager from './module/injectable';
+import ConsoleService from './module/console';
 
 export default class Main {
 
@@ -23,6 +24,7 @@ export default class Main {
 
     this._assets = new AssetManager(hammerhead, effects);
     this._injectables = new InjectableManager(hammerhead, effects);
+    this._console = new ConsoleService(hammerhead, effects);
 
     Object.defineProperty(this, 'events', {
       value: this._emitter

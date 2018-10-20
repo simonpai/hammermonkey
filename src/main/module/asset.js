@@ -36,10 +36,6 @@ export default class AssetManager {
     }
   }
 
-  close() {
-    try {
-      this._server.close();
-    } catch(err) {} // eslint-disable-line no-empty
-  }
+  close() {}
 
 }
