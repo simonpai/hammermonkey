@@ -2,6 +2,7 @@ import EventEmitter from 'events';
 import internalIp from 'internal-ip';
 import Hammerhead from '../hammerhead';
 import bridgeFn from './bridge';
+import EffectManager from './effect/manager';
 import RuleManager from './rule/manager';
 import Persistence from './persistence';
 
@@ -15,12 +16,13 @@ export default class Main {
     this._emitter = new EventEmitter();
 
     const hammerhead = this._hammerhead = new Hammerhead(ip, {});
+    const effects = this._effects = new EffectManager();
 
     const persistence = this._persistence = new Persistence();
-    const rules = this._rules = new RuleManager(persistence.rules);
+    this._rules = new RuleManager(persistence.rules, effects);
 
-    this._assets = new AssetManager(hammerhead, rules);
-    this._injectables = new InjectableManager(hammerhead, rules);
+    this._assets = new AssetManager(hammerhead, effects);
+    this._injectables = new InjectableManager(hammerhead, effects);
 
     Object.defineProperty(this, 'events', {
       value: this._emitter

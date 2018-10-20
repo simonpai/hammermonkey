@@ -6,21 +6,12 @@ export default class UserscriptRule extends BaseRule {
     super('userscript', options);
   }
 
-  get output() {
+  get effects() {
     return {
-      injectables: [
-        {
-          type: 'script',
-          path: '/{{sessionId}}/http://{{host}}/asset/' + this.id
-        }
-      ],
-      assets: [
+      userscript: [
         {
           id: this.id,
-          headers: {
-            'Content-Type': 'text/javascript; charset=utf-8'
-          },
-          content: '(function(){\n' + this.data.content + '\n})();'
+          content: this.data.content
         }
       ]
     };

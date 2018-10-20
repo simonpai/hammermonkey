@@ -4,7 +4,6 @@ import Datastore from './util/nedb';
 class Collection {
 
   constructor(filename) {
-    console.log(filename);
     this._db = new Datastore({filename, autoload: true});
   }
 

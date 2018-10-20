@@ -2,8 +2,8 @@ import { render } from 'mustache';
 
 export default class InjectableManager {
 
-  constructor(hammerhead, rules) {
-    this._rules = rules;
+  constructor(hammerhead, effects) {
+    this._effects = effects;
     this._host = hammerhead.host;
   }
 
@@ -19,7 +19,7 @@ export default class InjectableManager {
   _getResource(session, type) {
     const sessionId = session.id;
     const host = this._host;
-    return (this._rules.output.injectables || [])
+    return (this._effects.effects.injectable || [])
       .sequence()
       .filter(inj => inj.type === type)
       .map(({path}) => render(path, {sessionId, host}))

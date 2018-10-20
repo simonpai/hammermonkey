@@ -1,8 +1,8 @@
 export default class AssetManager {
 
-  constructor(hammerhead, rules) {
-    this._rules = rules;
-    rules.events.on('change', () => {
+  constructor(hammerhead, effects) {
+    this._effects = effects;
+    effects.events.on('invalidate', () => {
       delete this._assetMapCache;
     });
 
@@ -14,7 +14,7 @@ export default class AssetManager {
   }
 
   _computeAssetMap() {
-    return (this._rules.output.assets || [])
+    return (this._effects.effects.asset || [])
       .sequence()
       .fold({}, (acc, asset) => {
         acc[asset.id] = asset;

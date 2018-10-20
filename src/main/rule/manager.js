@@ -1,13 +1,16 @@
 import EventEmitter from 'events';
+import { mergeBundle } from '../util/objects';
 import * as Rule from './model';
 
 export default class RuleManager {
 
-  constructor(db) {
+  constructor(db, effects) {
     this._emitter = new EventEmitter();
     this._hash = {};
     this._ids = [];
     this._db = db;
+
+    this._effectsCache = effects.register(this);
   }
 
   get events() {
@@ -28,7 +31,9 @@ export default class RuleManager {
         });
         this._hash = hash;
         this._ids = meta.ids || [];
-        this._emitter.emit('change');
+
+        // invalidate effects
+        this._effectsCache.invalidate();
       });
   }
 
@@ -40,9 +45,12 @@ export default class RuleManager {
       this._saveMeta();
     }
     this._hash[id] = rule;
-    this._db.upsert(id, {type, ...options}); // TODO: get this from Rule API
 
-    this._doChange();
+    // persist
+    this._db.upsert(id, {type, ...options}); // TODO: get this from rule model
+
+    // invalidate effects
+    this._effectsCache.invalidate();
   }
 
   delete(id) {
@@ -53,8 +61,11 @@ export default class RuleManager {
     this._ids.splice(i, 1);
     delete this._hash[id];
 
+    // persist
     this._db.delete(id);
-    this._doChange();
+
+    // invalidate effects
+    this._effectsCache.invalidate();
   }
 
   // TODO: update order
@@ -67,27 +78,14 @@ export default class RuleManager {
     return this._sequence().toList();
   }
 
-  get output() {
-    return this._outputCache || (this._outputCache = this._computeOutput());
+  get effects() {
+    return this._sequence()
+      .map(this._effectsOfRule.bind(this))
+      .fold({}, mergeBundle);
   }
 
   _saveMeta() {
     this._db.saveMeta({ids: this._ids});
-  }
-
-  _doChange() {
-    delete this._outputCache;
-    this._emitter.emit('change');
-  }
-
-  _computeOutput() {
-    return this._sequence()
-      .map(this._outputOfRule.bind(this))
-      .flatten()
-      .fold({}, (acc, {_type, ...obj}) => {
-        (acc[_type] || (acc[_type] = [])).push(obj);
-        return acc;
-      });
   }
 
   _sequence() {
@@ -96,23 +94,9 @@ export default class RuleManager {
       .map(id => this._hash[id]);
   }
 
-  _outputOfRule(rule) {
+  _effectsOfRule(rule) {
     // cache on rule object
-    return rule._output || (rule._output = this._computeOutputOfRule(rule));
-  }
-
-  _computeOutputOfRule(rule) {
-    const {includes = [], ...output} = rule.output;
-    const inclusionPart = includes
-      .sequence()
-      .map(this._outputOfRule.bind(this))
-      .flatten();
-    const ownPart = Object.keys(output)
-      .sequence()
-      .flatMap(k => output[k]
-        .sequence()
-        .map(obj => ({...obj, _type: k})));
-    return inclusionPart.plus(ownPart).toList();
+    return rule._effects || (rule._effects = rule.effects);
   }
 
 }
