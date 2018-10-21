@@ -20,6 +20,7 @@ function mapDispatchToProps(dispatch) {
   return {
     actions: {
       session: {
+        onTabSelect: (sessionId, value) => dispatch(action.ui.session.selectTab(sessionId, value)),
         onUrlChange: (sessionId, url) => dispatch(action.session.url(sessionId, url))
       },
       rule: {
@@ -40,11 +41,11 @@ const enhance = compose(
 );
 
 function Body({ui, session, rule, actions/*, classes*/}) {
-  const primary = ui.primary;
+  const {primary} = ui;
   switch (primary && primary.type) {
     case 'session':
       return (
-        <SessionPanel {...session.hash[primary.id]} {...actions.session} />
+        <SessionPanel {...session.hash[primary.id]} {...ui.session[primary.id]} {...actions.session} />
       );
     case 'rule':
       return (

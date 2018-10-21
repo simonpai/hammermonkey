@@ -22,26 +22,29 @@ const styles = theme => ({
   },
 });
 
-function SessionPanel({sessionId, url, proxyUrl, onUrlChange, classes}) {
+function SessionPanel({sessionId, selectedTab, url, proxyUrl, onTabSelect, onUrlChange, classes}) {
   return (
     <div>
       <Paper className={classes.paper}>
         <Tabs
-          value={1}
+          value={selectedTab || 'url'}
           indicatorColor="primary"
           textColor="primary"
-          // onChange={this.handleChange.bind(this)}
+          onChange={(event, value) => onTabSelect(sessionId, value)}
           classes={{root: classes.tabs}}
         >
           <Tab
+            value="settings"
             classes={{root: classes.tab}}
             label="Settings"
           />
           <Tab
+            value="url"
             classes={{root: classes.tab}}
             label="URL"
           />
           <Tab
+            value="console"
             classes={{root: classes.tab}}
             label="Console"
           />
@@ -82,8 +85,10 @@ function SessionPanel({sessionId, url, proxyUrl, onUrlChange, classes}) {
 
 SessionPanel.propTypes = {
   sessionId: PropTypes.string.isRequired,
+  selectedTab: PropTypes.string,
   url: PropTypes.string,
   proxyUrl: PropTypes.string,
+  onTabSelect: PropTypes.func.isRequired,
   onUrlChange: PropTypes.func.isRequired,
   classes: PropTypes.object
 };
