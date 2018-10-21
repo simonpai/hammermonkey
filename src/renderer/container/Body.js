@@ -40,15 +40,15 @@ const enhance = compose(
 );
 
 function Body({ui, session, rule, actions/*, classes*/}) {
-  const obj = ui.sidebar.selectedObject;
-  switch (obj && obj.type) {
+  const primary = ui.primary;
+  switch (primary && primary.type) {
     case 'session':
       return (
-        <SessionPanel {...session.hash[obj.id]} {...actions.session} />
+        <SessionPanel {...session.hash[primary.id]} {...actions.session} />
       );
     case 'rule':
       return (
-        <RulePanel {...rule.hash[obj.id]} {...actions.rule} />
+        <RulePanel {...rule.hash[primary.id]} {...actions.rule} />
       );
     default:
       return (

@@ -30,8 +30,8 @@ function mapDispatchToProps(dispatch) {
     actions: {
       ui: {
         sidebar: {
-          selectSession: id => dispatch(action.ui.sidebar.selectObject('session', id)),
-          selectRule: id => dispatch(action.ui.sidebar.selectObject('rule', id))
+          selectSession: id => dispatch(action.ui.selectPrimary('session', id)),
+          selectRule: id => dispatch(action.ui.selectPrimary('rule', id))
         }
       }
     }
@@ -47,7 +47,7 @@ const enhance = compose(
 );
 
 function SideBar({ui, session, rule, actions, classes}) {
-  const selectedObject = ui.sidebar.selectedObject;
+  const primary = ui.primary;
   const rules = selector.rule.list(rule);
   const sessions = selector.session.list(session);
   return (
@@ -65,7 +65,7 @@ function SideBar({ui, session, rule, actions, classes}) {
                 label: 'Session ' + sessionId,
                 Icon: SessionIcon
               }))}
-              selected={selectedObject && selectedObject.type === 'session' ? selectedObject.id : undefined}
+              selected={primary && primary.type === 'session' ? primary.id : undefined}
               onSelect={actions.ui.sidebar.selectSession}
             />
           </div>
@@ -81,7 +81,7 @@ function SideBar({ui, session, rule, actions, classes}) {
                 label: data.name || '(untitled)',
                 Icon: RuleIcon
               }))}
-              selected={selectedObject && selectedObject.type === 'rule' ? selectedObject.id : undefined}
+              selected={primary && primary.type === 'rule' ? primary.id : undefined}
               onSelect={actions.ui.sidebar.selectRule}
             />
           </div>
