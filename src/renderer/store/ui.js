@@ -1,12 +1,10 @@
 // action type //
-const UI_SIDEBAR_SELECT_TAB = 'ui.sidebar.selectTab';
 const UI_SIDEBAR_SELECT_OBJECT = 'ui.sidebar.selectObject';
 const UI_DIALOG_OPEN = 'ui.dialog.open';
 
 // action //
 export const action = {
   sidebar: {
-    selectTab: id => ({type: UI_SIDEBAR_SELECT_TAB, id}),
     selectObject: (objType, id) => ({type: UI_SIDEBAR_SELECT_OBJECT, objType, id})
   },
   dialog: {
@@ -26,17 +24,6 @@ export const initialState = {
 // reducer //
 export function reducer(state = initialState, action = {}) {
   switch (action.type) {
-    case UI_SIDEBAR_SELECT_TAB:
-      if (action.id < 0 || action.id > 1) {
-        return state;
-      }
-      return {
-        ...state,
-        sidebar: {
-          ...state.sidebar,
-          selectedTab: action.id
-        }
-      };
     case UI_SIDEBAR_SELECT_OBJECT:
       return {
         ...state,

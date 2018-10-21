@@ -30,7 +30,6 @@ function mapDispatchToProps(dispatch) {
     actions: {
       ui: {
         sidebar: {
-          selectTab: id => dispatch(action.ui.sidebar.selectTab(id)),
           selectSession: id => dispatch(action.ui.sidebar.selectObject('session', id)),
           selectRule: id => dispatch(action.ui.sidebar.selectObject('rule', id))
         }
