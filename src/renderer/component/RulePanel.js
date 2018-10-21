@@ -8,7 +8,7 @@ import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import SaveIcon from '@material-ui/icons/Save';
 
-import { selectors } from '../store/rule';
+import { selector } from '../store/rule';
 
 const styles = theme => ({
   paper: {
@@ -25,7 +25,7 @@ const styles = theme => ({
 
 function RulePanel({onNameChange, onContentChange, onSave, classes, ...rule}) {
   const {id, data, saving} = rule;
-  const saved = selectors.isSaved(rule);
+  const saved = selector.isSaved(rule);
   return (
     <div>
       <Paper className={classes.paper}>

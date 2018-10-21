@@ -1,35 +1,21 @@
 import { combineReducers } from 'redux';
 // import persistState from 'redux-localstorage';
+import { flock } from './util';
 import * as ui from './ui';
 import * as session from './session';
 import * as rule from './rule';
 
 // action //
-export const action = {
-  ui: ui.action,
-  session: session.action,
-  rule: rule.action
-};
+export const action = flock('action', {ui, session, rule});
 
 // ipc //
 export const ipc = Object.assign({}, session.ipc, rule.ipc);
 
 // initial state //
-export const initialState = {
-  ui: ui.initialState,
-  session: session.initialState,
-  rule: rule.initialState
-};
+export const initialState = flock('initialState', {ui, session, rule});
 
-// selectors //
-export const selectors = {
-  session: session.selectors,
-  rule: rule.selectors
-};
+// selector //
+export const selector = flock('selector', {session, rule});
 
 // reducer //
-export const reducer = combineReducers({
-  ui: ui.reducer,
-  session: session.reducer,
-  rule: rule.reducer
-});
+export const reducer = combineReducers(flock('reducer', {ui, session, rule}));
