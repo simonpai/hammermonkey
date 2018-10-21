@@ -4,7 +4,7 @@ import { compose } from 'recompose';
 import { withStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 
-import SessionPanel from '../component/SessionPanel';
+import SessionPanel from '../component/session/Panel';
 import RulePanel from '../component/RulePanel';
 import { action } from '../store';
 
