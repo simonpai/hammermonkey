@@ -21,10 +21,10 @@ export const initialState = {
   rule: rule.initialState
 };
 
-// helpers //
-export const helpers = {
-  session: session.helpers,
-  rule: rule.helpers
+// selectors //
+export const selectors = {
+  session: session.selectors,
+  rule: rule.selectors
 };
 
 // reducer //

@@ -25,8 +25,8 @@ export const initialState = {
   ids: []
 };
 
-// helpers //
-export const helpers = {
+// selectors //
+export const selectors = {
   list: session => session.ids.map(id => session.hash[id])
 };
 

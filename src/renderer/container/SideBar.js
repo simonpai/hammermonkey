@@ -11,7 +11,7 @@ import Typography from '@material-ui/core/Typography';
 
 import { SessionIcon, RuleIcon } from '../component/Icons';
 import SelectableList from '../component/SelectableList';
-import { action, helpers } from '../store';
+import { action, selectors } from '../store';
 
 const styles = theme => ({
   drawerPaper: {
@@ -49,8 +49,8 @@ const enhance = compose(
 
 function SideBar({ui, session, rule, actions, classes}) {
   const selectedObject = ui.sidebar.selectedObject;
-  const rules = helpers.rule.list(rule);
-  const sessions = helpers.session.list(session);
+  const rules = selectors.rule.list(rule);
+  const sessions = selectors.session.list(session);
   return (
     <Drawer variant="permanent" classes={{
       paper: classes.drawerPaper

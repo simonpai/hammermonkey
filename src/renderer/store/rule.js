@@ -33,8 +33,8 @@ export const initialState = {
   ids: []
 };
 
-// helpers //
-export const helpers = {
+// selectors //
+export const selectors = {
   list: ({ids, hash}) => ids.map(id => hash[id]),
   isSaved: ({data, savedData}) => savedData !== undefined && equal(data, savedData)
 };
