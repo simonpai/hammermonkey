@@ -26,6 +26,9 @@ export default class Main {
     this._injectables = new InjectableManager(hammerhead, effects);
     this._console = new ConsoleService(hammerhead, effects);
 
+    this._console.events.on('console', (sessionId, value) => this._emitter.emit('session.console', sessionId, value));
+    this._console.events.on('error', (sessionId, value) => this._emitter.emit('session.error', sessionId, value));
+
     Object.defineProperty(this, 'events', {
       value: this._emitter
     });

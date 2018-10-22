@@ -12,6 +12,10 @@ export default function(main, webContents) {
       .then(() => webContents.send('rule.save.success', rule.id, updateTime)));
 
   // main -> renderer //
-  main.events.on('session.open', webContents.send.bind(webContents, 'session.open'));
-  main.events.on('rule.load', webContents.send.bind(webContents, 'rule.load'));
+  [
+    'session.open', 
+    'session.console',
+    'session.error',
+    'rule.load'
+  ].forEach(name => main.events.on(name, webContents.send.bind(webContents, name)));
 }

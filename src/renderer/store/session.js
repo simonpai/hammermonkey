@@ -1,4 +1,5 @@
 import {ipcRenderer as ipcr} from 'electron';
+import uuid from 'uuid/v1';
 
 const OPEN_REQUEST = 'session.open.request';
 const OPEN_SUCCESS = 'session.open.success';
@@ -6,6 +7,10 @@ const OPEN_FAILURE = 'session.open.failure';
 const URL_REQUEST = 'session.url.request';
 const URL_SUCCESS = 'session.url.success';
 const URL_FAILURE = 'session.url.failure';
+
+// const CONSOLE_SENT = 'session.console.sent';
+const CONSOLE_RECEIVED = 'session.console.received';
+const ERROR_RECEIVED = 'session.error.received';
 
 // action //
 export const action = {
@@ -16,7 +21,8 @@ export const action = {
 // ipc //
 export const ipc = {
   'session.open': (event, sessionId) => ({type: OPEN_SUCCESS, sessionId}),
-  'session.url.success': (event, sessionId, url) => ({type: URL_SUCCESS, sessionId, url})
+  'session.url.success': (event, sessionId, url) => ({type: URL_SUCCESS, sessionId, url}),
+  'session.console': (event, sessionId, value) => ({type: CONSOLE_RECEIVED, sessionId, value}),
 };
 
 // initial state //
@@ -33,6 +39,7 @@ export const selector = {
 // reducer //
 export function reducer(state = initialState, action = {}) {
   const {sessionId} = action;
+  const session = sessionId && state.hash[sessionId];
   switch (action.type) {
     case OPEN_REQUEST:
       // TODO: create a placeholder session
@@ -44,7 +51,8 @@ export function reducer(state = initialState, action = {}) {
         hash: {
           ...state.hash,
           [sessionId]: {
-            sessionId
+            sessionId,
+            consoleMsgs: []
           }
         },
         ids: [
@@ -64,7 +72,7 @@ export function reducer(state = initialState, action = {}) {
           hash: {
             ...state.hash,
             [sessionId]: {
-              ...state.hash[sessionId],
+              ...session,
               url: url,
               proxyUrl: undefined
             }
@@ -77,7 +85,7 @@ export function reducer(state = initialState, action = {}) {
         hash: {
           ...state.hash,
           [sessionId]: {
-            ...state.hash[sessionId],
+            ...session,
             url: url
           }
         }
@@ -88,7 +96,7 @@ export function reducer(state = initialState, action = {}) {
         hash: {
           ...state.hash,
           [sessionId]: {
-            ...state.hash[sessionId],
+            ...session,
             proxyUrl: action.url
           }
         }
@@ -96,6 +104,48 @@ export function reducer(state = initialState, action = {}) {
     case URL_FAILURE:
       // TODO
       return state;
+    case CONSOLE_RECEIVED:
+      if (!session) {
+        return state;
+      }
+      return {
+        ...state,
+        hash: {
+          ...state.hash,
+          [sessionId]: {
+            ...session,
+            consoleMsgs: [
+              ...session.consoleMsgs,
+              {
+                uuid: uuid(),
+                type: 'console.' + action.value.type,
+                args: action.value.args
+              }
+            ]
+          }
+        }
+      };
+    case ERROR_RECEIVED:
+      if (!session) {
+        return state;
+      }
+      return {
+        ...state,
+        hash: {
+          ...state.hash,
+          [sessionId]: {
+            ...session,
+            consoleMsgs: [
+              ...session.consoleMsgs,
+              {
+                uuid: uuid(),
+                type: 'error',
+                error: action.value
+              }
+            ]
+          }
+        }
+      };
     default:
       return state;
   }
