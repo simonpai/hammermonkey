@@ -1,6 +1,6 @@
 import './polyfill';
 import { app, BrowserWindow, screen } from 'electron';
-import open from 'open';
+import open from 'opn';
 import Main from './main';
 
 // fix userData path in dev mode
