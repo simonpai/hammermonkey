@@ -9,7 +9,7 @@ export default class Hammerhead {
   constructor(ip, options) {
     options = options || {};
     this.ip = ip;
-    this.port1 = options.port1 || 6464;
+    this.port1 = options.port1 || 8964;
     this.port2 = options.port2 || (this.port1 && this.port1 + 1);
     this.uploadRoot = options.uploadRoot; // TODO
     this.host = ip + ':' + this.port1;

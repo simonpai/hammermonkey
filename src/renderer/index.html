@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>My App</title>
+    <title>Hammermonkey</title>
     <link href="https://fonts.googleapis.com/css?family=Roboto+Mono" rel="stylesheet">
     <style>
       html, body, #app {
@@ -14,8 +14,9 @@
   </head>
   <body>
     <div id="app"></div>
-    <script src="./index.js" data-container="#app"></script>
+    <script src="./index.entry.js" data-container="#app"></script>
     <script>
+      /*
       if (process.env.BROWSER_SYNC_CLIENT_URL) {
         const current = document.currentScript;
         const script = document.createElement('script');
@@ -23,6 +24,7 @@
         script.async = true;
         current.parentNode.insertBefore(script, current);
       }
+      */
     </script>
   </body>
 </html>

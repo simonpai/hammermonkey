@@ -1,5 +1,13 @@
 {
-  "presets": ["es2016-node5", "react"],
-  "plugins": ["transform-decorators", "transform-object-rest-spread"],
-  "sourceMaps": "inline"
+  "presets": [
+    ["@babel/preset-env", {
+      "targets": {
+        "electron": "1.6.7"
+      }
+    }],
+    "@babel/preset-react"
+  ],
+  "plugins": [
+    "@babel/plugin-transform-runtime"
+  ]
 }

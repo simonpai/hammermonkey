@@ -6,10 +6,10 @@ import Main from './main';
 // fix userData path in dev mode
 app.setPath('userData', app.getPath('userData').replace(/\/Electron$/, '/' + app.getName()));
 
+const isDevelopment = !app.isPackaged;
 
 // main //
 const main = new Main();
-
 
 // renderer //
 let win;
@@ -18,7 +18,7 @@ function createWindow$() {
   return new Promise((resolve) => {
     win = new BrowserWindow(screen.getPrimaryDisplay().workAreaSize);
 
-    win.loadFile('src/renderer/index.html');
+    win.loadFile((isDevelopment ? 'src' : 'out') + '/renderer/index.html');
 
     win.on('closed', () => {
       win = undefined;
@@ -26,7 +26,9 @@ function createWindow$() {
 
     const webContents = win.webContents;
 
-    webContents.openDevTools();
+    if (isDevelopment) {
+      webContents.openDevTools();
+    }
 
     // open new window w/ external browser
     webContents.on('new-window', (event, url) => {
