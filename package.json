@@ -5,11 +5,16 @@
   "description": "A TestCafe-Hammerhead implementation of userscript manager",
   "main": "src/index.entry.js",
   "scripts": {
-    "start": "electron -r @babel/register .",
-    "clean": "rimraf out; rimraf dist",
-    "babel": "babel src --out-dir out --copy-files",
-    "pack": "npm run babel && electron-builder --dir",
-    "dist": "npm run babel && electron-builder"
+    "start": "npm run watch & electron -r @babel/register .",
+    "clean": "rimraf out && rimraf dist",
+    "compile-js": "babel src --out-dir out",
+    "compile-css": "node-sass src --output out --recursive",
+    "compile-res": "cpy '**/*' '!**/*.js' '!**/*.scss' '../out/' --cwd=src --parents",
+    "compile": "npm run compile-js && npm run compile-css && npm run compile-res",
+    "watch-css": "npm run compile-css; node-sass src --output out --recursive --watch",
+    "watch": "npm run watch-css",
+    "pack": "npm run clean; npm run compile; electron-builder --dir",
+    "dist": "npm run clean; npm run compile; electron-builder"
   },
   "repository": {
     "type": "git",
@@ -32,10 +37,12 @@
     "babel-eslint": "^9.0.0",
     "babel-plugin-transform-decorators": "^6.24.1",
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
+    "cpy-cli": "^2.0.0",
     "electron": "^3.0.5",
     "electron-builder": "^20.28.4",
     "eslint": "^5.5.0",
     "eslint-plugin-react": "^7.11.1",
+    "node-sass": "^4.9.4",
     "rimraf": "^2.6.2"
   },
   "dependencies": {
