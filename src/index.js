@@ -1,5 +1,5 @@
 import './polyfill';
-import { app, BrowserWindow, screen } from 'electron';
+import { app, BrowserWindow, screen, globalShortcut } from 'electron';
 import open from 'opn';
 import Main from './main';
 
@@ -12,15 +12,25 @@ const isDevelopment = !app.isPackaged;
 const main = new Main();
 
 // renderer //
-let win;
+let win, winReload;
+const WIN_RELOAD_KEYS = ['F5', 'CommandOrControl+R'];
 
 function createWindow$() {
   return new Promise((resolve) => {
     win = new BrowserWindow(screen.getPrimaryDisplay().workAreaSize);
-
     win.loadFile((isDevelopment ? 'src' : 'out') + '/renderer/index.html');
 
+    // register reload shortcut in dev env
+    if (isDevelopment) {
+      winReload = win.reload.bind(win);
+      WIN_RELOAD_KEYS.forEach(key => globalShortcut.register(key, winReload));
+    }
+
     win.on('closed', () => {
+      if (isDevelopment) {
+        WIN_RELOAD_KEYS.forEach(key => globalShortcut.unregister(key, winReload));
+        winReload = undefined;
+      }
       win = undefined;
     });
 
@@ -48,12 +58,6 @@ app.on('ready', () => {
       main.bridge(win);
       main.start();
       main.openSession();
-      // TODO
-      /*
-      win.webContents.send('info', {
-        test: 'test'
-      });
-      */
     })
     .catch((err) => {
       console.error(err);
