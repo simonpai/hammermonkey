@@ -22,9 +22,9 @@ export const action = {
 
 // ipc //
 export const ipc = {
-  'rule.load': (event, rules) => ({type: LOAD, rules}),
-  'rule.save.success': (event, id, updateTime) => ({type: SAVE_SUCCESS, id, updateTime}),
-  // 'rule.delete': (event, sessionId, url) => ({type: URL_SUCCESS, sessionId, url})
+  'load': (event, rules) => ({type: LOAD, rules}),
+  'save.success': (event, id, updateTime) => ({type: SAVE_SUCCESS, id, updateTime}),
+  // 'delete': (event, sessionId, url) => ({type: URL_SUCCESS, sessionId, url})
 };
 
 // initial state //

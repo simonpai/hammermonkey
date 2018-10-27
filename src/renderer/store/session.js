@@ -20,9 +20,9 @@ export const action = {
 
 // ipc //
 export const ipc = {
-  'session.open': (event, sessionId) => ({type: OPEN_SUCCESS, sessionId}),
-  'session.url.success': (event, sessionId, url) => ({type: URL_SUCCESS, sessionId, url}),
-  'session.console': (event, sessionId, value) => ({type: CONSOLE_RECEIVED, sessionId, value}),
+  'open': (event, sessionId) => ({type: OPEN_SUCCESS, sessionId}),
+  'url.success': (event, sessionId, url) => ({type: URL_SUCCESS, sessionId, url}),
+  'console': (event, sessionId, value) => ({type: CONSOLE_RECEIVED, sessionId, value}),
 };
 
 // initial state //
