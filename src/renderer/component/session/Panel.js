@@ -16,19 +16,19 @@ const styles = theme => ({
   */
 });
 
-function SessionPanel({sessionId, selectedTab, onTabSelect, classes, ...options}) {
+function SessionPanel({id, selectedTab, onTabSelect, classes, ...options}) {
   return (
     <div>
       <Paper>
-        <SessionTabs {...{sessionId, selectedTab, onTabSelect}} />
-        <SessionSections {...{sessionId, selectedTab, ...options}} />
+        <SessionTabs {...{id, selectedTab, onTabSelect}} />
+        <SessionSections {...{id, selectedTab, ...options}} />
       </Paper>
     </div>
   )
 }
 
 SessionPanel.propTypes = {
-  sessionId: PropTypes.string.isRequired,
+  id: PropTypes.string.isRequired,
   selectedTab: PropTypes.string,
   onTabSelect: PropTypes.func.isRequired,
   classes: PropTypes.object

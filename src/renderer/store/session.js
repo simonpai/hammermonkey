@@ -1,5 +1,8 @@
 import {ipcRenderer as ipcr} from 'electron';
 import uuid from 'uuid/v1';
+import {type as rootType} from './root';
+
+const {LOAD} = rootType;
 
 const OPEN_REQUEST = 'session.open.request';
 const OPEN_SUCCESS = 'session.open.success';
@@ -15,14 +18,14 @@ const ERROR_RECEIVED = 'session.error.received';
 // action //
 export const action = {
   open: () => ({type: OPEN_REQUEST}),
-  url: (sessionId, url) => ({type: URL_REQUEST, sessionId, url})
+  url: (id, url) => ({type: URL_REQUEST, id, url})
 };
 
 // ipc //
 export const ipc = {
-  'open': (event, sessionId) => ({type: OPEN_SUCCESS, sessionId}),
-  'url.success': (event, sessionId, url) => ({type: URL_SUCCESS, sessionId, url}),
-  'console': (event, sessionId, value) => ({type: CONSOLE_RECEIVED, sessionId, value}),
+  'open': (event, id) => ({type: OPEN_SUCCESS, id}),
+  'url.success': (event, id, url) => ({type: URL_SUCCESS, id, url}),
+  'console': (event, id, value) => ({type: CONSOLE_RECEIVED, id, value}),
 };
 
 // initial state //
@@ -38,9 +41,17 @@ export const selector = {
 
 // reducer //
 export function reducer(state = initialState, action = {}) {
-  const {sessionId} = action;
-  const session = sessionId && state.hash[sessionId];
+  const {id} = action;
+  const session = id && state.hash[id];
   switch (action.type) {
+    case LOAD:
+      return action.data.sessions.sequence()
+        .fold({hash: {}, ids: []}, (acc, session) => {
+          const {id} = session;
+          acc.hash[id] = {...session, consoleMsgs: []};
+          acc.ids.push(id);
+          return acc;
+        });
     case OPEN_REQUEST:
       // TODO: create a placeholder session
       ipcr.send('session.open');
@@ -50,14 +61,14 @@ export function reducer(state = initialState, action = {}) {
         ...state,
         hash: {
           ...state.hash,
-          [sessionId]: {
-            sessionId,
+          [id]: {
+            id,
             consoleMsgs: []
           }
         },
         ids: [
           ...state.ids,
-          sessionId
+          id
         ]
       };
     case OPEN_FAILURE:
@@ -71,7 +82,7 @@ export function reducer(state = initialState, action = {}) {
           ...state,
           hash: {
             ...state.hash,
-            [sessionId]: {
+            [id]: {
               ...session,
               url: url,
               proxyUrl: undefined
@@ -79,12 +90,12 @@ export function reducer(state = initialState, action = {}) {
           }
         };
       }
-      ipcr.send('session.url', sessionId, url.indexOf('://') < 0 ? ('http://' + url) : url);
+      ipcr.send('session.url', id, url.indexOf('://') < 0 ? ('http://' + url) : url);
       return {
         ...state,
         hash: {
           ...state.hash,
-          [sessionId]: {
+          [id]: {
             ...session,
             url: url
           }
@@ -95,7 +106,7 @@ export function reducer(state = initialState, action = {}) {
         ...state,
         hash: {
           ...state.hash,
-          [sessionId]: {
+          [id]: {
             ...session,
             proxyUrl: action.url
           }
@@ -112,7 +123,7 @@ export function reducer(state = initialState, action = {}) {
         ...state,
         hash: {
           ...state.hash,
-          [sessionId]: {
+          [id]: {
             ...session,
             consoleMsgs: [
               ...session.consoleMsgs,
@@ -133,7 +144,7 @@ export function reducer(state = initialState, action = {}) {
         ...state,
         hash: {
           ...state.hash,
-          [sessionId]: {
+          [id]: {
             ...session,
             consoleMsgs: [
               ...session.consoleMsgs,

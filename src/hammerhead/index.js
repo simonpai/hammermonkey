@@ -15,6 +15,7 @@ export default class Hammerhead {
     this.host = ip + ':' + this.port1;
 
     this._sessions = {};
+    this._sessionIds = [];
     this.app = express();
   }
 
@@ -29,16 +30,20 @@ export default class Hammerhead {
     this.proxy.app = this.app;
   }
 
-  // TODO: mitm & script injection
+  get sessions() {
+    return this._sessionIds.map(id => this._sessions[id]);
+  }
 
-  openSession() {
+  openSession(options) {
     this._assertInteractive();
     
-    // TODO: fixed session id
-    const session = new Session(this.uploadRoot); // TODO
+    // TODO: take options
+    const session = new Session(this.uploadRoot, options);
+    const {id} = session;
     this.proxy.openSession(session);
 
-    this._sessions[session.id] = session;
+    this._sessions[id] = session;
+    this._sessionIds.push(id);
 
     return session;
   }

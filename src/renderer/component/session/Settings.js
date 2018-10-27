@@ -12,18 +12,18 @@ const styles = theme => ({
   },
 });
 
-function SessionSettingsSection({sessionId, classes}) {
+function SessionSettingsSection({id, classes}) {
   return (
     <div className={classes.root}>
       <Typography variant="headline" component="h3">
-        Session {sessionId}
+        Session {id}
       </Typography>
     </div>
   )
 }
 
 SessionSettingsSection.propTypes = {
-  sessionId: PropTypes.string.isRequired,
+  id: PropTypes.string.isRequired,
   classes: PropTypes.object
 };
 

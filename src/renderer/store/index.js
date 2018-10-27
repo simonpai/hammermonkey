@@ -12,5 +12,3 @@ export const selector = store.selector;
 export const ipc = store.ipc;
 export const initialState = store.initialState;
 export const reducer = store.reducer;
-
-console.log('ipc', ipc);

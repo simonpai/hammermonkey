@@ -13,7 +13,7 @@ const styles = theme => ({
   },
 });
 
-function SessionUrlSection({sessionId, url, proxyUrl, onUrlChange, classes}) {
+function SessionUrlSection({id, url, proxyUrl, onUrlChange, classes}) {
   return (
     <div className={classes.root}>
       <div>
@@ -22,7 +22,7 @@ function SessionUrlSection({sessionId, url, proxyUrl, onUrlChange, classes}) {
           value={url || ''}
           fullWidth
           margin="normal"
-          onChange={event => onUrlChange(sessionId, event.target.value.trim())}
+          onChange={event => onUrlChange(id, event.target.value.trim())}
         />
       </div>
       <div>
@@ -42,7 +42,7 @@ function SessionUrlSection({sessionId, url, proxyUrl, onUrlChange, classes}) {
 }
 
 SessionUrlSection.propTypes = {
-  sessionId: PropTypes.string.isRequired,
+  id: PropTypes.string.isRequired,
   url: PropTypes.string,
   proxyUrl: PropTypes.string,
   onUrlChange: PropTypes.func.isRequired,

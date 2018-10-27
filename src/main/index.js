@@ -85,7 +85,8 @@ export default class Main {
 
   _syncToClient() {
     this._sendIpc('load', {
-      rules: this._rules.rules
+      rules: this._rules.rules,
+      sessions: this._hammerhead.sessions.map(({id, options}) => ({id, options}))
     });
   }
 

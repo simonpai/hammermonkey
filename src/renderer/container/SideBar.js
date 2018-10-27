@@ -60,9 +60,9 @@ function SideBar({ui, session, rule, actions, classes}) {
           <div>
             <Typography variant="subheading" gutterBottom>Sessions</Typography>
             <SelectableList
-              items={sessions.map(({sessionId}) => ({
-                key: sessionId,
-                label: 'Session ' + sessionId,
+              items={sessions.map(({id}) => ({
+                key: id,
+                label: 'Session ' + id,
                 Icon: SessionIcon
               }))}
               selected={primary && primary.type === 'session' ? primary.id : undefined}

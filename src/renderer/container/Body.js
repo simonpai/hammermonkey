@@ -20,8 +20,8 @@ function mapDispatchToProps(dispatch) {
   return {
     actions: {
       session: {
-        onTabSelect: (sessionId, value) => dispatch(action.ui.session.selectTab(sessionId, value)),
-        onUrlChange: (sessionId, url) => dispatch(action.session.url(sessionId, url))
+        onTabSelect: (id, value) => dispatch(action.ui.session.selectTab(id, value)),
+        onUrlChange: (id, url) => dispatch(action.session.url(id, url))
       },
       rule: {
         onNameChange: (id, name) => dispatch(action.rule.update(id, {name})),

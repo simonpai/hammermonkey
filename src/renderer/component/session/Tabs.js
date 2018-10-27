@@ -13,13 +13,13 @@ const styles = () => ({
   },
 });
 
-function SessionTabs({sessionId, selectedTab, onTabSelect, classes}) {
+function SessionTabs({id, selectedTab, onTabSelect, classes}) {
   return (
     <Tabs
       value={selectedTab || 'url'}
       indicatorColor="primary"
       textColor="primary"
-      onChange={(event, value) => onTabSelect(sessionId, value)}
+      onChange={(event, value) => onTabSelect(id, value)}
       classes={{root: classes.tabs}}
     >
       <Tab
@@ -42,7 +42,7 @@ function SessionTabs({sessionId, selectedTab, onTabSelect, classes}) {
 }
 
 SessionTabs.propTypes = {
-  sessionId: PropTypes.string.isRequired,
+  id: PropTypes.string.isRequired,
   selectedTab: PropTypes.string,
   onTabSelect: PropTypes.func.isRequired,
   classes: PropTypes.object
