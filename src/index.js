@@ -32,6 +32,7 @@ function createWindow$() {
         winReload = undefined;
       }
       win = undefined;
+      main.closeClient();
     });
 
     const webContents = win.webContents;
@@ -47,7 +48,7 @@ function createWindow$() {
     });
 
     webContents.once('dom-ready', resolve);
-  });
+  }).then(() => main.openClient(win));
 }
 
 
@@ -55,7 +56,6 @@ function createWindow$() {
 app.on('ready', () => {
   createWindow$()
     .then(() => {
-      main.bridge(win);
       main.start();
       main.openSession();
     })

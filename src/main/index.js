@@ -1,7 +1,6 @@
-import EventEmitter from 'events';
+import { ipcMain as ipc } from 'electron';
 import internalIp from 'internal-ip';
 import Hammerhead from '../hammerhead';
-import bridgeFn from './bridge';
 import EffectManager from './effect/manager';
 import RuleManager from './rule/manager';
 import Persistence from './persistence';
@@ -14,7 +13,6 @@ export default class Main {
 
   constructor() {
     const ip = this._ip = internalIp.v4.sync();
-    this._emitter = new EventEmitter();
 
     const hammerhead = this._hammerhead = new Hammerhead(ip, {});
     const effects = this._effects = new EffectManager();
@@ -26,31 +24,53 @@ export default class Main {
     this._injectables = new InjectableManager(hammerhead, effects);
     this._console = new ConsoleService(hammerhead, effects);
 
-    this._console.events.on('console', (sessionId, value) => this._emitter.emit('session.console', sessionId, value));
-    this._console.events.on('error', (sessionId, value) => this._emitter.emit('session.error', sessionId, value));
-
-    Object.defineProperty(this, 'events', {
-      value: this._emitter
-    });
+    this._console.events.on('console', (sessionId, value) => this._sendIpc('session.console', sessionId, value));
+    this._console.events.on('error', (sessionId, value) => this._sendIpc('session.error', sessionId, value));
   }
 
   start() {
     // load data from persistence
     this._rules.load()
-      .then(() => this._emitter.emit('rule.load', this._rules.rules));
+      .then(() => this._sendIpc('rule.load', this._rules.rules));
 
     this._hammerhead.start();
+
+    this._listenIpc();
   }
 
-  bridge(win) {
-    bridgeFn(this, win.webContents);
+  _listenIpc() {
+    ipc.on('session.open', this.openSession.bind(this));
+
+    // TODO: shall be updating the session model, maybe even persisting them, so they live across client lifecycle
+    ipc.on('session.url', (event, sessionId, url) => 
+      this.getProxyUrl(sessionId, url)
+        .then(proxyUrl => event.sender.send('session.url.success', sessionId, proxyUrl)));
+
+    ipc.on('rule.save', (event, updateTime, rule) => 
+      this.saveRule(rule)
+        .then(() => event.sender.send('rule.save.success', rule.id, updateTime)));
+  }
+
+  _sendIpc() {
+    if (!this._win) {
+      return;
+    }
+    this._win.webContents.send(...arguments);
+  }
+
+  openClient(win) {
+    this._win = win;
+  }
+
+  closeClient() {
+    delete this._win;
   }
 
   openSession() {
     const session = this._hammerhead.openSession();
     this._injectables.redefineInjectable(session);
     // console.log(session);
-    this._emitter.emit('session.open', session.id);
+    this._sendIpc('session.open', session.id);
   }
 
   getProxyUrl(sessionId, url) {
