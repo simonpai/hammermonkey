@@ -10,19 +10,23 @@ const isDevelopment = !app.isPackaged;
 
 // main //
 const main = new Main();
+const syncToClient = main.syncToClient.bind(main);
 
 // renderer //
 let win, winReload;
 const WIN_RELOAD_KEYS = ['F5', 'CommandOrControl+R'];
 
-function createWindow$() {
+function createWindow() {
   return new Promise((resolve) => {
     win = new BrowserWindow(screen.getPrimaryDisplay().workAreaSize);
     win.loadFile((isDevelopment ? 'src' : 'out') + '/renderer/index.html');
 
     // register reload shortcut in dev env
     if (isDevelopment) {
-      winReload = win.reload.bind(win);
+      winReload = function() {
+        win.reload();
+        win.webContents.once('dom-ready', syncToClient);
+      };
       WIN_RELOAD_KEYS.forEach(key => globalShortcut.register(key, winReload));
     }
 
@@ -54,7 +58,7 @@ function createWindow$() {
 
 // life cycle //
 app.on('ready', () => {
-  createWindow$()
+  createWindow()
     .then(() => {
       main.start();
       main.openSession();
@@ -72,7 +76,7 @@ app.on('window-all-closed', () => {
 
 app.on('activate', () => {
   if (win === undefined) {
-    createWindow$()
+    createWindow()
       .catch((err) => {
         console.error(err);
       });

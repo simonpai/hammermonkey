@@ -29,13 +29,21 @@ export default class Main {
   }
 
   start() {
-    // load data from persistence
-    this._rules.load()
-      .then(() => this._sendIpc('rule.load', this._rules.rules));
-
+    this._load();
     this._hammerhead.start();
-
     this._listenIpc();
+  }
+
+  _load() {
+    return Promise.all([
+      this._rules.load()
+    ]).then(() => {
+      this._loaded = true;
+      if (this._syncToClientRequested) {
+        delete this._syncToClientRequested;
+        this._syncToClient();
+      }
+    });
   }
 
   _listenIpc() {
@@ -60,10 +68,25 @@ export default class Main {
 
   openClient(win) {
     this._win = win;
+    this.syncToClient();
   }
 
   closeClient() {
     delete this._win;
+  }
+
+  syncToClient() {
+    if (!this._loaded) {
+      this._syncToClientRequested = true;
+    } else {
+      this._syncToClient();
+    }
+  }
+
+  _syncToClient() {
+    this._sendIpc('load', {
+      rules: this._rules.rules
+    });
   }
 
   openSession() {

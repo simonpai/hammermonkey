@@ -1,15 +1,17 @@
 import {ipcRenderer as ipcr} from 'electron';
 import uuid from 'uuid/v1';
 import equal from 'fast-deep-equal';
+import {type as rootType} from './root';
 
 const CREATE = 'rule.create';
 const UPDATE = 'rule.update';
 const DELETE = 'rule.delete';
 
-const LOAD = 'rule.load';
 const SAVE_REQUEST = 'rule.save.request';
 const SAVE_SUCCESS = 'rule.save.success';
 const SAVE_FAILURE = 'rule.save.failure';
+
+const {LOAD} = rootType;
 
 // action //
 export const action = {
@@ -22,7 +24,7 @@ export const action = {
 
 // ipc //
 export const ipc = {
-  'load': (event, rules) => ({type: LOAD, rules}),
+  // 'load': (event, rules) => ({type: LOAD, rules}),
   'save.success': (event, id, updateTime) => ({type: SAVE_SUCCESS, id, updateTime}),
   // 'delete': (event, sessionId, url) => ({type: URL_SUCCESS, sessionId, url})
 };
@@ -92,7 +94,7 @@ export function reducer(state = initialState, action = {}) {
         ids: state.ids.filter(id => id !== action.id)
       };
     case LOAD:
-      return action.rules.sequence()
+      return action.data.rules.sequence()
         .fold({hash: {}, ids: []}, (acc, rule) => {
           const {id, data} = rule;
           acc.hash[id] = {...rule, saving: false, savedData: data};
