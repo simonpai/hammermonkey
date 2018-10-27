@@ -26,12 +26,12 @@ export function combineIpc(obj) {
     .toArray());
 }
 
-export function duck(obj) {
+export function duck(obj, extra = {}) {
   return {
-    action: flock('action', obj),
-    ipc: combineIpc(flock('ipc', obj)),
+    action: Object.assign({}, flock('action', obj), extra.action),
+    selector: Object.assign({}, flock('selector', obj), extra.selector),
+    ipc: Object.assign({}, combineIpc(flock('ipc', obj), extra.ipc)),
     initialState: flock('initialState', obj),
-    selector: flock('selector', obj),
     reducer: combineReducers(flock('reducer', obj))
   };
 }
