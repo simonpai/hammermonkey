@@ -1,15 +1,18 @@
+import electron from 'electron';
 import { asSequence } from 'sequency';
 
+// unify global variable
+try {
+  window.global = window;
+} catch(e) {} // eslint-disable-line no-empty
+
+// expose DEV flag
+const DEV = global.DEV = !(electron.remote ? electron.remote.app : electron.app).isPackaged;
+
+// array.sequence()
 Array.prototype.sequence = function() {
   return asSequence(this);
 };
-
-let _global = undefined;
-try {
-  _global = window;
-} catch(e) {
-  _global = global;
-}
 
 function _inspect(f, name, mode) {
   return function() {
@@ -40,6 +43,6 @@ function inspect(target, name, descriptor) {
   }
 }
 
-Object.defineProperty(_global, 'inspect', {
-  value: inspect
+Object.defineProperty(global, 'inspect', {
+  value: DEV ? inspect : () => {}
 });
