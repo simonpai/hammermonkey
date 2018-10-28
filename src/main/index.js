@@ -27,9 +27,9 @@ class Client {
 class ModContext {
 
   constructor(main) {
-    this.effects = main._effects;
     this.hammerhead = main._hammerhead;
-    this.client = new Client(main);
+    this.effects = main._effects;
+    this.client = main._client;
     Object.freeze(this);
   }
 
@@ -42,6 +42,7 @@ export default class Main {
 
     this._hammerhead = new Hammerhead(ip, {});
     this._effects = new EffectEngine();
+    this._client = new Client(this);
 
     const modContext = new ModContext(this);
 
@@ -70,23 +71,16 @@ export default class Main {
   }
 
   _listenIpc() {
-    ipc.on('session.open', this.openSession.bind(this));
+    this._client.on('session.open', this.openSession.bind(this));
 
     // TODO: shall be updating the session model, maybe even persisting them, so they live across client lifecycle
-    ipc.on('session.url', (event, sessionId, url) => 
+    this._client.on('session.url', (event, sessionId, url) => 
       this.getProxyUrl(sessionId, url)
         .then(proxyUrl => !event.sender.isDestroyed() && event.sender.send('session.url.success', sessionId, proxyUrl)));
 
-    ipc.on('rule.save', (event, updateTime, rule) => 
+    this._client.on('rule.save', (event, updateTime, rule) => 
       this.saveRule(rule)
         .then(() => !event.sender.isDestroyed() && event.sender.send('rule.save.success', rule.id, updateTime)));
-  }
-
-  _sendIpc() {
-    if (!this._win) {
-      return;
-    }
-    this._win.webContents.send(...arguments);
   }
 
   openClient(win) {
@@ -107,7 +101,7 @@ export default class Main {
   }
 
   _syncToClient() {
-    this._sendIpc('load', {
+    this._client.send('load', {
       rules: this._rules.rules,
       sessions: this._hammerhead.sessions.map(({id, options}) => ({id, options}))
     });
@@ -117,7 +111,7 @@ export default class Main {
     const session = this._hammerhead.openSession();
     this._injectables.redefineInjectable(session);
     // console.log(session);
-    this._sendIpc('session.open', session.id);
+    this._client.send('session.open', session.id);
   }
 
   getProxyUrl(sessionId, url) {
