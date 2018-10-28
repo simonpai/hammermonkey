@@ -2,7 +2,7 @@ import express from 'express';
 
 export default class MiddlewareManager {
 
-  constructor(effects) {
+  constructor({effects}) {
     this._effects = effects;
     effects.events.on('invalidate', () => {
       delete this._middlewareCache;

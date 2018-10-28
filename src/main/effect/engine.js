@@ -4,7 +4,7 @@ import { create } from './model';
 import Processor from './processor';
 import Cache from './cache';
 
-export default class EffectManager {
+export default class EffectEngine {
 
   constructor() {
     this._emitter = new EventEmitter();

@@ -1,4 +1,3 @@
-import EventEmitter from 'events';
 import { readFileSync } from 'fs';
 import bodyParser from 'body-parser';
 // import { render } from 'mustache';
@@ -7,8 +6,8 @@ const USERSCRIPT = readFileSync(require.resolve('./userscript')).toString();
 
 export default class ConsoleService {
 
-  constructor(hammerhead, effects) {
-    this._emitter = new EventEmitter();
+  constructor({hammerhead, effects, client}) {
+    this._client = client;
 
     effects.add({
       userscript: [
@@ -30,13 +29,13 @@ export default class ConsoleService {
 
   _handleConsole(req, res) {
     const {sessionId} = req.params;
-    this._emitter.emit('console', sessionId, req.body);
+    this._client.send('session.console', sessionId, req.body);
     res.sendStatus(204);
   }
 
   _handleError(req, res) {
     const {sessionId} = req.params;
-    this._emitter.emit('error', sessionId, req.body);
+    this._client.send('error.console', sessionId, req.body);
     res.sendStatus(204);
   }
 

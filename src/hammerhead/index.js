@@ -37,7 +37,6 @@ export default class Hammerhead {
   openSession(options) {
     this._assertInteractive();
     
-    // TODO: take options
     const session = new Session(this.uploadRoot, options);
     const {id} = session;
     this.proxy.openSession(session);

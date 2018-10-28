@@ -2,7 +2,7 @@ import { render } from 'mustache';
 
 export default class InjectableManager {
 
-  constructor(hammerhead, effects) {
+  constructor({hammerhead, effects}) {
     this._effects = effects;
     this._host = hammerhead.host;
   }

@@ -1,8 +1,19 @@
+import pathAPI from 'path';
+import { app } from 'electron';
 import _Datastore from 'nedb';
 
-export default class Datastore {
+const ROOT_PATH = app.getPath('userData');
+
+class Datastore {
 
   constructor(options) {
+    const {filename} = options;
+    if (filename) {
+      options = {
+        ...options,
+        filename: pathAPI.join(ROOT_PATH, filename)
+      }
+    }
     this._db = new _Datastore(options);
   }
 
@@ -38,3 +49,46 @@ export default class Datastore {
   // TODO: ensureIndex
 
 }
+
+class Collection {
+
+  constructor(filename) {
+    this._db = new Datastore({filename, autoload: true});
+  }
+
+  load() {
+    return this._db.find({})
+      // .then(v => console.log(v) || v)
+      .then(docs => docs.sequence()
+        .fold({hash: {}}, (acc, {_id: id, ...doc}) => {
+          if (id === '_meta') {
+            acc.meta = doc;
+          } else {
+            acc.hash[id] = {id, ...doc};
+          }
+          return acc;
+        }));
+  }
+
+  upsert(id, doc) {
+    return this._db.update({_id: id}, {_id: id, ...doc}, {upsert: true})
+      .then(() => undefined);
+  }
+
+  delete(id) {
+    return this._db.remove({_id: id})
+      .then(n => n > 0);
+  }
+
+  saveMeta(meta) {
+    return this._db.update({_id: '_meta'}, {_id: '_meta', ...meta}, {upsert: true})
+      .then(() => undefined);
+  }
+
+}
+
+Datastore.Collection = Collection;
+
+export default Datastore;
+
+

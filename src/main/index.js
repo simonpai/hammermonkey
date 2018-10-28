@@ -1,31 +1,47 @@
 import { ipcMain as ipc } from 'electron';
 import internalIp from 'internal-ip';
-import Hammerhead from '../hammerhead';
-import EffectManager from './effect/manager';
-import RuleManager from './rule/manager';
-import Persistence from './persistence';
 
-import AssetManager from './module/asset';
-import InjectableManager from './module/injectable';
-import ConsoleService from './module/console';
+import Hammerhead from '../hammerhead';
+import EffectEngine from './effect/engine';
+
+import RuleManager from './rule/manager';
+import AssetManager from './mod/asset';
+import InjectableManager from './mod/injectable';
+import ConsoleService from './mod/console';
+
+class ModContext {
+
+  constructor(main) {
+    Object.defineProperty(this, 'effects', {
+      value: main._effects
+    });
+    Object.defineProperty(this, 'hammerhead', {
+      value: main._hammerhead
+    });
+    Object.defineProperty(this, 'client', {
+      value: Object.freeze({
+        on: ipc.on.bind(ipc),
+        send: main._sendIpc.bind(main)
+      })
+    });
+  }
+
+}
 
 export default class Main {
 
   constructor() {
     const ip = this._ip = internalIp.v4.sync();
 
-    const hammerhead = this._hammerhead = new Hammerhead(ip, {});
-    const effects = this._effects = new EffectManager();
+    this._hammerhead = new Hammerhead(ip, {});
+    this._effects = new EffectEngine();
 
-    const persistence = this._persistence = new Persistence();
-    this._rules = new RuleManager(persistence.rules, effects);
+    const modContext = new ModContext(this);
 
-    this._assets = new AssetManager(hammerhead, effects);
-    this._injectables = new InjectableManager(hammerhead, effects);
-    this._console = new ConsoleService(hammerhead, effects);
-
-    this._console.events.on('console', (sessionId, value) => this._sendIpc('session.console', sessionId, value));
-    this._console.events.on('error', (sessionId, value) => this._sendIpc('session.error', sessionId, value));
+    this._rules = new RuleManager(modContext);
+    this._assets = new AssetManager(modContext);
+    this._injectables = new InjectableManager(modContext);
+    this._console = new ConsoleService(modContext);
   }
 
   start() {

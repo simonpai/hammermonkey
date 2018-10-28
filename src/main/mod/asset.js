@@ -1,6 +1,6 @@
 export default class AssetManager {
 
-  constructor(hammerhead, effects) {
+  constructor({hammerhead, effects}) {
     this._effects = effects;
     effects.events.on('invalidate', () => {
       delete this._assetMapCache;
