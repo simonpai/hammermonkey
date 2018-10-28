@@ -9,21 +9,28 @@ import AssetManager from './mod/asset';
 import InjectableManager from './mod/injectable';
 import ConsoleService from './mod/console';
 
+class Client {
+  constructor(main) {
+    this._main = main;
+  }
+  on() {
+    return ipc.on(...arguments);
+  }
+  send() {
+    if (!this._main._win) {
+      return;
+    }
+    this._main._win.webContents.send(...arguments);
+  }
+}
+
 class ModContext {
 
   constructor(main) {
-    Object.defineProperty(this, 'effects', {
-      value: main._effects
-    });
-    Object.defineProperty(this, 'hammerhead', {
-      value: main._hammerhead
-    });
-    Object.defineProperty(this, 'client', {
-      value: Object.freeze({
-        on: ipc.on.bind(ipc),
-        send: main._sendIpc.bind(main)
-      })
-    });
+    this.effects = main._effects;
+    this.hammerhead = main._hammerhead;
+    this.client = new Client(main);
+    Object.freeze(this);
   }
 
 }
