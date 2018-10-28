@@ -68,11 +68,11 @@ export default class Main {
     // TODO: shall be updating the session model, maybe even persisting them, so they live across client lifecycle
     ipc.on('session.url', (event, sessionId, url) => 
       this.getProxyUrl(sessionId, url)
-        .then(proxyUrl => event.sender.send('session.url.success', sessionId, proxyUrl)));
+        .then(proxyUrl => !event.sender.isDestroyed() && event.sender.send('session.url.success', sessionId, proxyUrl)));
 
     ipc.on('rule.save', (event, updateTime, rule) => 
       this.saveRule(rule)
-        .then(() => event.sender.send('rule.save.success', rule.id, updateTime)));
+        .then(() => !event.sender.isDestroyed() && event.sender.send('rule.save.success', rule.id, updateTime)));
   }
 
   _sendIpc() {
