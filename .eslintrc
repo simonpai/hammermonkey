@@ -15,5 +15,8 @@
       jsx: true
     },
     sourceType: "module"
+  },
+  "globals": {
+    inspect: false
   }
 }
