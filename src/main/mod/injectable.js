@@ -5,9 +5,11 @@ export default class InjectableManager {
   constructor({hammerhead, effects}) {
     this._effects = effects;
     this._host = hammerhead.host;
+
+    hammerhead.events.on('session.create', this._redefineInjectable.bind(this));
   }
 
-  redefineInjectable(session) {
+  _redefineInjectable(session) {
     Object.defineProperty(session.injectable, 'userscripts', {
       get: () => this._getResource(session, 'script')
     });

@@ -109,7 +109,6 @@ export default class Main {
 
   openSession() {
     const session = this._hammerhead.openSession();
-    this._injectables.redefineInjectable(session);
     // console.log(session);
     this._client.send('session.open', session.id);
   }

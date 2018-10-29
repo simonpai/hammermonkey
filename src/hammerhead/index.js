@@ -1,4 +1,6 @@
 import express from 'express';
+import EventEmitter from 'events';
+import Events from '../main/util/events';
 
 import './shim';
 import Proxy from './proxy';
@@ -14,6 +16,7 @@ export default class Hammerhead {
     this.uploadRoot = options.uploadRoot; // TODO
     this.host = ip + ':' + this.port1;
 
+    this.events = new Events(this._emitter = new EventEmitter());
     this._sessions = {};
     this._sessionIds = [];
     this.app = express();
@@ -37,13 +40,17 @@ export default class Hammerhead {
   openSession(options) {
     this._assertInteractive();
     
+    this._emitter.emit('session.befroreCreate', options);
     const session = new Session(this.uploadRoot, options);
+    this._emitter.emit('session.create', session);
+
     const {id} = session;
     this.proxy.openSession(session);
 
     this._sessions[id] = session;
     this._sessionIds.push(id);
 
+    this._emitter.emit('session.open', session);
     return session;
   }
 
