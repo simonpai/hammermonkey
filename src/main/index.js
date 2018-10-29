@@ -1,13 +1,13 @@
 import { ipcMain as ipc } from 'electron';
 import internalIp from 'internal-ip';
 
-import Hammerhead from '../hammerhead';
-import EffectEngine from './effect/engine';
+import Hammerhead from './hammerhead';
+import EffectEngine from './effect';
 
 import SessionService from './mod/session';
-import RuleManager from './rule/manager';
-import AssetManager from './mod/asset';
-import InjectableManager from './mod/injectable';
+import RuleService from './mod/rule';
+import AssetService from './mod/asset';
+import InjectableService from './mod/injectable';
 import ConsoleService from './mod/console';
 
 class Client {
@@ -48,9 +48,9 @@ export default class Main {
     const modContext = new ModContext(this);
 
     this._sessions = new SessionService(modContext);
-    this._rules = new RuleManager(modContext);
-    this._assets = new AssetManager(modContext);
-    this._injectables = new InjectableManager(modContext);
+    this._rules = new RuleService(modContext);
+    this._assets = new AssetService(modContext);
+    this._injectables = new InjectableService(modContext);
     this._consoles = new ConsoleService(modContext);
   }
 

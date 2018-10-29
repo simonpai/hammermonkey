@@ -1,10 +1,10 @@
 import EventEmitter from 'events';
-import Events from '../util/events';
-import { mergeBundle } from '../util/objects';
-import DataStore from '../util/nedb';
+import Events from '../../util/events';
+import { mergeBundle } from '../../util/objects';
+import DataStore from '../../util/nedb';
 import * as Rule from './model';
 
-export default class RuleManager {
+export default class RuleService {
 
   constructor({effects, client}) {
     this.events = new Events(this._emitter = new EventEmitter());

@@ -1,6 +1,6 @@
 import express from 'express';
 import EventEmitter from 'events';
-import Events from '../main/util/events';
+import Events from '../util/events';
 
 import './shim';
 import Proxy from './proxy';
