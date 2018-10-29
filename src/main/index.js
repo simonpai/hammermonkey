@@ -4,6 +4,7 @@ import internalIp from 'internal-ip';
 import Hammerhead from '../hammerhead';
 import EffectEngine from './effect/engine';
 
+import SessionService from './mod/session';
 import RuleManager from './rule/manager';
 import AssetManager from './mod/asset';
 import InjectableManager from './mod/injectable';
@@ -46,16 +47,18 @@ export default class Main {
 
     const modContext = new ModContext(this);
 
+    this._sessions = new SessionService(modContext);
     this._rules = new RuleManager(modContext);
     this._assets = new AssetManager(modContext);
     this._injectables = new InjectableManager(modContext);
-    this._console = new ConsoleService(modContext);
+    this._consoles = new ConsoleService(modContext);
   }
 
   start() {
     this._load();
     this._hammerhead.start();
     this._listenIpc();
+    this._sessions.openSession();
   }
 
   _load() {
@@ -71,13 +74,6 @@ export default class Main {
   }
 
   _listenIpc() {
-    this._client.on('session.open', this.openSession.bind(this));
-
-    // TODO: shall be updating the session model, maybe even persisting them, so they live across client lifecycle
-    this._client.on('session.url', (event, sessionId, url) => 
-      this.getProxyUrl(sessionId, url)
-        .then(proxyUrl => !event.sender.isDestroyed() && event.sender.send('session.url.success', sessionId, proxyUrl)));
-
     this._client.on('rule.save', (event, updateTime, rule) => 
       this.saveRule(rule)
         .then(() => !event.sender.isDestroyed() && event.sender.send('rule.save.success', rule.id, updateTime)));
@@ -107,26 +103,12 @@ export default class Main {
     });
   }
 
-  openSession() {
-    const session = this._hammerhead.openSession();
-    // console.log(session);
-    this._client.send('session.open', session.id);
-  }
-
-  getProxyUrl(sessionId, url) {
-    const proxyUrl = this._hammerhead.getProxyUrl(sessionId, url);
-    // console.log(url + ' => ' + proxyUrl);
-    return Promise.resolve(proxyUrl);
-  }
-
   saveRule(id, type, data) {
     this._rules.update(id, type, data);
     return Promise.resolve();
   }
 
   stop() {
-    this._injectables.close();
-    this._assets.close();
     this._hammerhead.close();
   }
 

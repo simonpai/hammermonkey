@@ -1,4 +1,5 @@
 import EventEmitter from 'events';
+import Events from '../util/events';
 import { mergeBundle } from '../util/objects';
 import DataStore from '../util/nedb';
 import * as Rule from './model';
@@ -6,16 +7,12 @@ import * as Rule from './model';
 export default class RuleManager {
 
   constructor({effects}) {
+    this.events = new Events(this._emitter = new EventEmitter());
     this._db = new DataStore.Collection('rules.db');
-    this._emitter = new EventEmitter();
     this._hash = {};
     this._ids = [];
 
     this._effectsCache = effects.register(this);
-  }
-
-  get events() {
-    return this._emitter;
   }
 
   _constructRule(type, options) {

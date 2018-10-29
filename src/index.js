@@ -59,13 +59,8 @@ function createWindow() {
 // life cycle //
 app.on('ready', () => {
   createWindow()
-    .then(() => {
-      main.start();
-      main.openSession();
-    })
-    .catch((err) => {
-      console.error(err);
-    });
+    .then(main.start.bind(main))
+    .catch(console.error.bind(console)); // eslint-disable-line no-console
 });
 
 app.on('window-all-closed', () => {
@@ -77,9 +72,7 @@ app.on('window-all-closed', () => {
 app.on('activate', () => {
   if (win === undefined) {
     createWindow()
-      .catch((err) => {
-        console.error(err);
-      });
+      .catch(console.error.bind(console)); // eslint-disable-line no-console
   }
 });
 
