@@ -57,7 +57,6 @@ export default class Main {
   start() {
     this._load();
     this._hammerhead.start();
-    this._listenIpc();
     this._sessions.openSession();
   }
 
@@ -71,12 +70,6 @@ export default class Main {
         this._syncToClient();
       }
     });
-  }
-
-  _listenIpc() {
-    this._client.on('rule.save', (event, updateTime, rule) => 
-      this.saveRule(rule)
-        .then(() => !event.sender.isDestroyed() && event.sender.send('rule.save.success', rule.id, updateTime)));
   }
 
   openClient(win) {
@@ -101,11 +94,6 @@ export default class Main {
       rules: this._rules.rules,
       sessions: this._hammerhead.sessions.map(({id, options}) => ({id, options}))
     });
-  }
-
-  saveRule(id, type, data) {
-    this._rules.update(id, type, data);
-    return Promise.resolve();
   }
 
   stop() {

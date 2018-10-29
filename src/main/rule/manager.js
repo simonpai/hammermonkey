@@ -6,13 +6,17 @@ import * as Rule from './model';
 
 export default class RuleManager {
 
-  constructor({effects}) {
+  constructor({effects, client}) {
     this.events = new Events(this._emitter = new EventEmitter());
     this._db = new DataStore.Collection('rules.db');
     this._hash = {};
     this._ids = [];
 
     this._effectsCache = effects.register(this);
+
+    client.on('rule.save', (event, updateTime, rule) => 
+      this.update(rule)
+        .then(() => !event.sender.isDestroyed() && event.sender.send('rule.save.success', rule.id, updateTime)));
   }
 
   _constructRule(type, options) {
@@ -44,11 +48,11 @@ export default class RuleManager {
     }
     this._hash[id] = rule;
 
-    // persist
-    this._db.upsert(id, {type, ...options}); // TODO: get this from rule model
-
     // invalidate effects
     this._effectsCache.invalidate();
+
+    // persist
+    return this._db.upsert(id, {type, ...options}); // TODO: get this from rule model
   }
 
   delete(id) {
@@ -59,11 +63,11 @@ export default class RuleManager {
     this._ids.splice(i, 1);
     delete this._hash[id];
 
-    // persist
-    this._db.delete(id);
-
     // invalidate effects
     this._effectsCache.invalidate();
+
+    // persist
+    return this._db.delete(id);
   }
 
   // TODO: update order
