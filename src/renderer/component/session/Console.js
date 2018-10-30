@@ -64,12 +64,12 @@ renderError.propTypes = {
   classes: PropTypes.object
 };
 
-function SessionConsoleSection({consoleMsgs = [], classes}) {
+function SessionConsoleSection({console = [], classes}) {
   return (
     <div className={classes.root}>
       <div className={classes.console}>
         {
-          consoleMsgs.map(({type, ...msg}) => (type === 'error' ? renderError : renderConsole)({...msg, classes}))
+          console.map(({type, ...msg}) => (type === 'error' ? renderError : renderConsole)({...msg, classes}))
         }
       </div>
     </div>
@@ -77,7 +77,7 @@ function SessionConsoleSection({consoleMsgs = [], classes}) {
 }
 
 SessionConsoleSection.propTypes = {
-  consoleMsgs: PropTypes.array,
+  console: PropTypes.array,
   classes: PropTypes.object
 };
 

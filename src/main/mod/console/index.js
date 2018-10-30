@@ -29,13 +29,13 @@ export default class ConsoleService {
 
   _handleConsole(req, res) {
     const {sessionId} = req.params;
-    this._client.send('session.console', sessionId, req.body);
+    this._client.send('console.console', sessionId, req.body);
     res.sendStatus(204);
   }
 
   _handleError(req, res) {
     const {sessionId} = req.params;
-    this._client.send('error.console', sessionId, req.body);
+    this._client.send('console.error', sessionId, req.body);
     res.sendStatus(204);
   }
 

@@ -1,5 +1,4 @@
 import {ipcRenderer as ipcr} from 'electron';
-import uuid from 'uuid/v1';
 import {type as rootType} from './root';
 
 const {LOAD} = rootType;
@@ -11,10 +10,6 @@ const URL_REQUEST = 'session.url.request';
 const URL_SUCCESS = 'session.url.success';
 const URL_FAILURE = 'session.url.failure';
 
-// const CONSOLE_SENT = 'session.console.sent';
-const CONSOLE_RECEIVED = 'session.console.received';
-const ERROR_RECEIVED = 'session.error.received';
-
 // action //
 export const action = {
   open: () => ({type: OPEN_REQUEST}),
@@ -24,8 +19,7 @@ export const action = {
 // ipc //
 export const ipc = {
   'open': (event, id) => ({type: OPEN_SUCCESS, id}),
-  'url.success': (event, id, url) => ({type: URL_SUCCESS, id, url}),
-  'console': (event, id, value) => ({type: CONSOLE_RECEIVED, id, value}),
+  'url.success': (event, id, url) => ({type: URL_SUCCESS, id, url})
 };
 
 // initial state //
@@ -115,48 +109,6 @@ export function reducer(state = initialState, action = {}) {
     case URL_FAILURE:
       // TODO
       return state;
-    case CONSOLE_RECEIVED:
-      if (!session) {
-        return state;
-      }
-      return {
-        ...state,
-        hash: {
-          ...state.hash,
-          [id]: {
-            ...session,
-            consoleMsgs: [
-              ...session.consoleMsgs,
-              {
-                uuid: uuid(),
-                type: 'console.' + action.value.type,
-                args: action.value.args
-              }
-            ]
-          }
-        }
-      };
-    case ERROR_RECEIVED:
-      if (!session) {
-        return state;
-      }
-      return {
-        ...state,
-        hash: {
-          ...state.hash,
-          [id]: {
-            ...session,
-            consoleMsgs: [
-              ...session.consoleMsgs,
-              {
-                uuid: uuid(),
-                type: 'error',
-                error: action.value
-              }
-            ]
-          }
-        }
-      };
     default:
       return state;
   }

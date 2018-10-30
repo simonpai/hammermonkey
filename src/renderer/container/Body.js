@@ -12,8 +12,8 @@ const styles = theme => ({
   toolbar: theme.mixins.toolbar
 });
 
-function mapStateToProps({ui, session, rule}) {
-  return {ui, session, rule};
+function mapStateToProps({ui, session, rule, console}) {
+  return {ui, session, rule, console};
 }
 
 function mapDispatchToProps(dispatch) {
@@ -40,12 +40,17 @@ const enhance = compose(
   withStyles(styles)
 );
 
-function Body({ui, session, rule, actions/*, classes*/}) {
+function Body({ui, session, rule, console, actions/*, classes*/}) {
   const {primary} = ui;
   switch (primary && primary.type) {
     case 'session':
       return (
-        <SessionPanel {...session.hash[primary.id]} {...ui.session[primary.id]} {...actions.session} />
+        <SessionPanel
+          {...session.hash[primary.id]}
+          {...ui.session[primary.id]}
+          {...actions.session}
+          console={console.hash[primary.id]}
+        />
       );
     case 'rule':
       return (
