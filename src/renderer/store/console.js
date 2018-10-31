@@ -15,7 +15,7 @@ export const action = {
 export const ipc = {
   'eval': (event, sessionId, value) => ({type: EVAL_RESPONSE, sessionId, value}),
   'console': (event, sessionId, value) => ({type: CONSOLE_RECEIVED, sessionId, value}),
-  'error': (event, sessionId, value) => ({type: ERROR_RECEIVED, sessionId, value}),
+  'error': (event, sessionId, error) => ({type: ERROR_RECEIVED, sessionId, error}),
 };
 
 // initial state //
@@ -32,9 +32,8 @@ function getEntryType(action) {
       return 'eval.received';    
     case CONSOLE_RECEIVED:
       return 'console.' + action.value.type;
-    case ERROR_RECEIVED:
-      return 'error';
   }
+  throw new Error();
 }
 
 function getEntryArgs(action) {
@@ -43,11 +42,10 @@ function getEntryArgs(action) {
       return [action.expr];
     case EVAL_RESPONSE:
       return [action.value];
-    case ERROR_RECEIVED:
-      return [action.value];
     case CONSOLE_RECEIVED:
       return action.value.args;
   }
+  throw new Error();
 }
 
 export function reducer(state = initialState, action = {}) {
@@ -59,7 +57,6 @@ export function reducer(state = initialState, action = {}) {
       // no break: eslint-disable-next-line no-fallthrough
     case EVAL_RESPONSE:
     case CONSOLE_RECEIVED:
-    case ERROR_RECEIVED:
       return {
         ...state,
         hash: {
@@ -70,6 +67,21 @@ export function reducer(state = initialState, action = {}) {
               uuid: uuid(),
               type: getEntryType(action),
               args: getEntryArgs(action)
+            }
+          ]
+        }
+      };
+    case ERROR_RECEIVED:
+      return {
+        ...state,
+        hash: {
+          ...state.hash,
+          [sessionId]: [
+            ...session,
+            {
+              uuid: uuid(),
+              type: 'error',
+              error: action.error
             }
           ]
         }

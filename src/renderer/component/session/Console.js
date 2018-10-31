@@ -65,6 +65,7 @@ renderError.propTypes = {
 };
 
 function SessionConsoleSection({console = [], classes}) {
+  window.console.log(console);
   return (
     <div className={classes.root}>
       <div className={classes.console}>
