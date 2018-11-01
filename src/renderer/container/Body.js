@@ -58,7 +58,7 @@ function Body({ui, session, rule, console, actions/*, classes*/}) {
       );
     default:
       return (
-        <Paper>nothing</Paper>
+        <Paper></Paper>
       );
   }
 }

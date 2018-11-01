@@ -9,7 +9,13 @@ function SelectableList({items, selected, onSelect}) {
   return (
     <List component="nav">
       {items.map(item =>
-        <ListItem key={item.key} button selected={item.key === selected} onClick={() => onSelect(item.key)}>
+        <ListItem
+          key={item.key}
+          dense={true}
+          button
+          selected={item.key === selected}
+          onClick={() => onSelect(item.key)}
+        >
           <ListItemIcon>
             <item.Icon />
           </ListItemIcon>

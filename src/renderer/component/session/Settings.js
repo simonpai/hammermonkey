@@ -15,7 +15,7 @@ const styles = theme => ({
 function SessionSettingsSection({id, classes}) {
   return (
     <div className={classes.root}>
-      <Typography variant="headline" component="h3">
+      <Typography variant="h6" component="h3">
         Session {id}
       </Typography>
     </div>

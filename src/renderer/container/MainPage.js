@@ -24,8 +24,10 @@ const styles = theme => ({
   main: {
     flexGrow: 1,
     backgroundColor: theme.palette.background.default,
-    padding: theme.spacing.unit * 3,
+    // padding: theme.spacing.unit * 3,
     minWidth: 0,
+    display: 'flex',
+    flexDirection: 'column',
   },
   toolbar: theme.mixins.toolbar
 });
@@ -81,7 +83,9 @@ function MainPage({ui, actions, classes}) {
       <SideBar />
       <main className={classes.main}>
         <div className={classes.toolbar} />
-        <Body />
+        <div style={{flex: 1}}>
+          <Body />
+        </div>
       </main>
       <NewObjectDialog {...ui.forNewObjectDialog} {...actions.forNewObjectDialog} />
     </div>

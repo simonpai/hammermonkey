@@ -4,6 +4,9 @@ import teal from '@material-ui/core/colors/teal';
 import brown from '@material-ui/core/colors/brown';
 
 const theme = createMuiTheme({
+  typography: {
+    useNextVariants: true
+  },
   palette: {
     primary: teal,
     secondary: brown // TODO: make it brown

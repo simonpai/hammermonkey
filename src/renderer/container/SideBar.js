@@ -15,7 +15,13 @@ import { action, selector } from '../store';
 
 const styles = theme => ({
   drawerPaper: {
-    position: 'relative'
+    position: 'relative',
+    paddingTop: theme.spacing.unit * 2,
+    paddingBottom: theme.spacing.unit * 2
+  },
+  header: {
+    paddingRight: theme.spacing.unit * 2,
+    paddingLeft: theme.spacing.unit * 2
   },
   toolbar: theme.mixins.toolbar
 });
@@ -58,7 +64,7 @@ function SideBar({ui, session, rule, actions, classes}) {
       {
         sessions.length ? (
           <div>
-            <Typography variant="subheading" gutterBottom>Sessions</Typography>
+            <Typography variant="overline" className={classes.header}>Sessions</Typography>
             <SelectableList
               items={sessions.map(({id}) => ({
                 key: id,
@@ -74,7 +80,7 @@ function SideBar({ui, session, rule, actions, classes}) {
       {
         rules.length ? (
           <div>
-            <Typography variant="subheading" gutterBottom>Rules</Typography>
+            <Typography variant="overline" className={classes.header}>Rules</Typography>
             <SelectableList
               items={rules.map(({id, data}) => ({
                 key: id,

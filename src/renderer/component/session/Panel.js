@@ -6,24 +6,18 @@ import Paper from '@material-ui/core/Paper';
 import SessionTabs from './Tabs';
 import SessionSections from './Sections';
 
-const styles = theme => ({
-  /*
-  body: {
-    ...theme.mixins.gutters(),
-    paddingTop: theme.spacing.unit * 2,
-    paddingBottom: theme.spacing.unit * 2,
+const styles = () => ({
+  paper: {
+    height: '100%'
   },
-  */
 });
 
 function SessionPanel({id, selectedTab, onTabSelect, classes, ...options}) {
   return (
-    <div>
-      <Paper>
-        <SessionTabs {...{id, selectedTab, onTabSelect}} />
-        <SessionSections {...{id, selectedTab, ...options}} />
-      </Paper>
-    </div>
+    <Paper className={classes.paper}>
+      <SessionTabs {...{id, selectedTab, onTabSelect}} />
+      <SessionSections {...{id, selectedTab, ...options}} />
+    </Paper>
   )
 }
 
