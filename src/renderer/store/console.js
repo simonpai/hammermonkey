@@ -24,68 +24,46 @@ export const initialState = {
 };
 
 // reducer //
-function getEntryType(action) {
-  switch (action.type) {
-    case EVAL_REQUEST:
-      return 'eval.request';    
-    case EVAL_RESPONSE:
-      return 'eval.received';    
-    case CONSOLE_RECEIVED:
-      return 'console.' + action.value.type;
-  }
-  throw new Error();
-}
-
-function getEntryArgs(action) {
-  switch (action.type) {
-    case EVAL_REQUEST:
-      return [action.expr];
-    case EVAL_RESPONSE:
-      return [action.value];
-    case CONSOLE_RECEIVED:
-      return action.value.args;
-  }
-  throw new Error();
+function append(state, sessionId, obj) {
+  return {
+    ...state,
+    hash: {
+      ...state.hash,
+      [sessionId]: [
+        ...state.hash[sessionId] || [],
+        {
+          uuid: uuid(),
+          ...obj
+        }
+      ]
+    }
+  };
 }
 
 export function reducer(state = initialState, action = {}) {
   const {sessionId} = action;
-  const session = state.hash[sessionId] || [];
   switch (action.type) {
     case EVAL_REQUEST:
       ipcr.send('console.eval', sessionId, action.expr);
-      // no break: eslint-disable-next-line no-fallthrough
+      return append(state, sessionId, {
+        type: 'eval.request',
+        expr: action.expr
+      });
     case EVAL_RESPONSE:
+      return append(state, sessionId, {
+        type: 'eval.received',
+        value: action.value
+      });
     case CONSOLE_RECEIVED:
-      return {
-        ...state,
-        hash: {
-          ...state.hash,
-          [sessionId]: [
-            ...session,
-            {
-              uuid: uuid(),
-              type: getEntryType(action),
-              args: getEntryArgs(action)
-            }
-          ]
-        }
-      };
+      return append(state, sessionId, {
+        type: 'console.' + action.value.type,
+        args: action.value.args
+      });
     case ERROR_RECEIVED:
-      return {
-        ...state,
-        hash: {
-          ...state.hash,
-          [sessionId]: [
-            ...session,
-            {
-              uuid: uuid(),
-              type: 'error',
-              error: action.error
-            }
-          ]
-        }
-      };
+      return append(state, sessionId, {
+        type: 'error',
+        error: action.error
+      });
     default:
       return state;
   }

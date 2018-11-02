@@ -23,6 +23,9 @@ function mapDispatchToProps(dispatch) {
         onTabSelect: (id, value) => dispatch(action.ui.session.selectTab(id, value)),
         onUrlChange: (id, url) => dispatch(action.session.url(id, url))
       },
+      console: {
+        onEval: (id, value) => dispatch(action.console.eval(id, value))
+      },
       rule: {
         onNameChange: (id, name) => dispatch(action.rule.update(id, {name})),
         onContentChange: (id, content) => dispatch(action.rule.update(id, {content})),
@@ -49,6 +52,7 @@ function Body({ui, session, rule, console, actions/*, classes*/}) {
           {...session.hash[primary.id]}
           {...ui.session[primary.id]}
           {...actions.session}
+          {...actions.console} // TODO: organize
           console={console.hash[primary.id]}
         />
       );
