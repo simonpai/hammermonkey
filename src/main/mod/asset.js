@@ -1,4 +1,4 @@
-export default class AssetManager {
+export default class AssetService {
 
   constructor({hammerhead, effects}) {
     this._effects = effects;

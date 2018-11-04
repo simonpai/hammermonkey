@@ -1,6 +1,6 @@
 import express from 'express';
 
-export default class MiddlewareManager {
+export default class MiddlewareService {
 
   constructor({effects}) {
     this._effects = effects;

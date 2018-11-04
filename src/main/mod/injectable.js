@@ -1,6 +1,6 @@
 import { render } from 'mustache';
 
-export default class InjectableManager {
+export default class InjectableService {
 
   constructor({hammerhead, effects}) {
     this._effects = effects;
