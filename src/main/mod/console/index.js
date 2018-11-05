@@ -7,6 +7,7 @@ const USERSCRIPT = readFileSync(require.resolve('./userscript')).toString();
 export default class ConsoleService {
 
   constructor({hammerhead, effects, client}) {
+    this._hammerhead = hammerhead;
     this._client = client;
 
     effects.add({
@@ -20,11 +21,19 @@ export default class ConsoleService {
 
     hammerhead.app
       .post('/:sessionId/http://__host__/api/console/console', bodyParser.json(), this._handleConsole.bind(this))
-      .post('/:sessionId/http://__host__/api/console/error', bodyParser.json(), this._handleError.bind(this));
+      .post('/:sessionId/http://__host__/api/console/error', bodyParser.json(), this._handleError.bind(this))
+      .post('/:sessionId/http://__host__/api/console/eval', bodyParser.json(), this._handleEvalResponse.bind(this))
+      .post('/:sessionId/http://__host__/api/console/eval-error', bodyParser.json(), this._handleEvalError.bind(this));
+
+    client.on('console.eval', this._handleEvalRequest.bind(this));
   }
 
-  get events() {
-    return this._emitter;
+  _handleEvalRequest(event, sessionId, expr) {
+    const session = this._hammerhead.session(sessionId);
+    if (!session) {
+      return;
+    }
+    session.push.add('console.eval', expr);
   }
 
   _handleConsole(req, res) {
@@ -39,6 +48,17 @@ export default class ConsoleService {
     res.sendStatus(204);
   }
 
-  close() {}
+  _handleEvalResponse(req, res) {
+    const {sessionId} = req.params;
+    this._client.send('console.eval', sessionId, req.body.value);
+    res.sendStatus(204);
+  }
+
+  _handleEvalError(req, res) {
+    const {sessionId} = req.params;
+    console.log('[Eval Error]', sessionId, req.body.value); // eslint-disable-line no-console
+    // this._client.send('console.eval', sessionId, req.body.value);
+    res.sendStatus(204);
+  }
 
 }

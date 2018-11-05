@@ -6,6 +6,7 @@ import EffectEngine from './effect';
 
 import SessionService from './mod/session';
 import RuleService from './mod/rule';
+import PushService from './mod/push';
 import AssetService from './mod/asset';
 import InjectableService from './mod/injectable';
 import ConsoleService from './mod/console';
@@ -49,6 +50,7 @@ export default class Main {
 
     this._sessions = new SessionService(modContext);
     this._rules = new RuleService(modContext);
+    this._pushes = new PushService(modContext);
     this._assets = new AssetService(modContext);
     this._injectables = new InjectableService(modContext);
     this._consoles = new ConsoleService(modContext);

@@ -28,6 +28,18 @@ function post(path, body) {
   } catch(e) {} // eslint-disable-line no-empty
 }
 
+window._push_handlers_['console.eval'] = function(expr) {
+  try {
+    post('/eval', {
+      value: toSimpleValue(Function('"use strict";return (' + expr + ')')())
+    });
+  } catch(err) {
+    post('/eval-error', {
+      value: '' + err
+    });
+  }
+}
+
 window.addEventListener('error', function(event) {
   var body = {
     message: event.message,

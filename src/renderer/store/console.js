@@ -13,9 +13,9 @@ export const action = {
 
 // ipc //
 export const ipc = {
-  'eval': (event, sessionId, value) => ({type: EVAL_RESPONSE, sessionId, value}),
-  'console': (event, sessionId, value) => ({type: CONSOLE_RECEIVED, sessionId, value}),
-  'error': (event, sessionId, error) => ({type: ERROR_RECEIVED, sessionId, error}),
+  eval: (event, sessionId, value) => ({type: EVAL_RESPONSE, sessionId, value}),
+  console: (event, sessionId, value) => ({type: CONSOLE_RECEIVED, sessionId, value}),
+  error: (event, sessionId, error) => ({type: ERROR_RECEIVED, sessionId, error}),
 };
 
 // initial state //
@@ -51,7 +51,7 @@ export function reducer(state = initialState, action = {}) {
       });
     case EVAL_RESPONSE:
       return append(state, sessionId, {
-        type: 'eval.received',
+        type: 'eval.response',
         value: action.value
       });
     case CONSOLE_RECEIVED:
