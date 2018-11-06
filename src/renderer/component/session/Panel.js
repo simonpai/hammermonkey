@@ -8,7 +8,11 @@ import SessionSections from './Sections';
 
 const styles = () => ({
   paper: {
-    height: '100%'
+    height: '100%',
+    overflow: 'hidden',
+    display: 'flex',
+    flexDirection: 'column',
+    borderRadius: 0
   },
 });
 

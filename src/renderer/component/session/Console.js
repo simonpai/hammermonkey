@@ -5,15 +5,11 @@ import InputBase from '@material-ui/core/InputBase';
 // import TextField from '@material-ui/core/TextField';
 // import Typography from '@material-ui/core/Typography';
 
-const styles = theme => ({
+const styles = () => ({
   root: {
-    /*
-    paddingTop: theme.spacing.unit * 2,
-    paddingBottom: theme.spacing.unit * 2,
-    */
-    height: '100%',
     display: 'flex',
-    flexDirection: 'column'
+    flexDirection: 'column',
+    flex: '1 1 0%'
   },
   console: {
     fontFamily: '"Roboto Mono", monospace',
@@ -22,8 +18,7 @@ const styles = theme => ({
     color: '#333'
   },
   row: {
-    paddingLeft: theme.spacing.unit * 2,
-    paddingRight: theme.spacing.unit * 2,
+    paddingLeft: '2em',
     borderBottom: '1px #E0E0E0 solid'
   },
   consoleRow: {

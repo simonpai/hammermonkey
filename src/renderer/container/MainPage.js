@@ -83,7 +83,7 @@ function MainPage({ui, actions, classes}) {
       <SideBar />
       <main className={classes.main}>
         <div className={classes.toolbar} />
-        <div style={{flex: 1}}>
+        <div style={{flex: 1, overflow: 'hidden'}}>
           <Body />
         </div>
       </main>
