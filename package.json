@@ -55,6 +55,7 @@
     "fast-deep-equal": "^2.0.1",
     "history": "^4.7.2",
     "internal-ip": "^3.0.1",
+    "mdi-material-ui": "^5.6.0",
     "mustache": "^3.0.0",
     "nedb": "^1.8.0",
     "opn": "^5.4.0",

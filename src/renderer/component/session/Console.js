@@ -2,6 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import InputBase from '@material-ui/core/InputBase';
+import ChevronRight from 'mdi-material-ui/ChevronRight';
+import ChevronDoubleLeft from 'mdi-material-ui/ChevronDoubleLeft';
+import CloseCircle from 'mdi-material-ui/CloseCircle';
+
 // import TextField from '@material-ui/core/TextField';
 // import Typography from '@material-ui/core/Typography';
 
@@ -9,17 +13,27 @@ const styles = () => ({
   root: {
     display: 'flex',
     flexDirection: 'column',
-    flex: '1 1 0%'
+    flex: '1 1 0%',
+    overflow: 'scroll'
   },
   console: {
     fontFamily: '"Roboto Mono", monospace',
     fontSize: 12,
     lineHeight: '1.8em',
-    color: '#333'
+    color: '#666'
   },
   row: {
+    position: 'relative',
     paddingLeft: '2em',
     borderBottom: '1px #E0E0E0 solid'
+  },
+  icon: {
+    position: 'absolute',
+    top: '0.2em',
+    left: '0.3em',
+    width: '1em',
+    fontSize: 15,
+    color: '#999'
   },
   consoleRow: {
   },
@@ -32,14 +46,16 @@ const styles = () => ({
   inputContainer: {
     display: 'flex',
     flexWrap: 'wrap',
-    flex: 1
+    flex: 1,
+    position: 'relative',
+    fontSize: 12,
+    paddingLeft: '2em'
   },
   input: {
     flex: 1,
     fontSize: 12,
     lineHeight: '1.8em',
     padding: 0,
-    paddingLeft: 16,
     alignItems: 'start'
   }
 });
@@ -91,13 +107,16 @@ function getClassName(type, classes) {
 function renderIcon(type, classes) {
   switch (type) {
     case 'console.log':
-      return (<i></i>);
+      return (<i className={classes.icon} />);
     case 'error':
-      return (<i></i>);
+      return (<CloseCircle className={classes.icon} style={{color: 'red'}} />);
     case 'eval.request':
-      return (<i></i>);
+      return (<ChevronRight className={classes.icon} />);
     case 'eval.response':
-      return (<i></i>);
+      return (<ChevronDoubleLeft className={classes.icon} />);
+    case 'eval.input':
+      // TODO: use theme
+      return (<ChevronRight className={classes.icon} style={{color: '#009688'}} />);
   }
 }
 
@@ -125,6 +144,9 @@ function SessionConsoleSection({id, console = [], onEval, classes}) {
         }
       </div>
       <div className={classes.inputContainer}>
+        {
+          renderIcon('eval.input', classes)
+        }
         <InputBase
           defaultValue=""
           className={classes.input}
