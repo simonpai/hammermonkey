@@ -1,2 +1,2 @@
-export { default as SessionIcon } from '@material-ui/icons/Cast';
-export { default as RuleIcon } from '@material-ui/icons/Assignment';
+export { default as SessionIcon } from 'mdi-material-ui/TabletCellphone';
+export { default as RuleIcon } from 'mdi-material-ui/FileDocument';

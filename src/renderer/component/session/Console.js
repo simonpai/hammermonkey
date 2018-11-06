@@ -157,9 +157,12 @@ function SessionConsoleSection({id, console = [], onEval, classes}) {
           }}
           onKeyDown={event => {
             if (event.key === 'Enter' && !event.shiftKey) {
-              event.preventDefault();
-              onEval(id, event.target.value);
-              event.target.value = '';
+              event.preventDefault(); // in case Enter pressed with empty input
+              var value = event.target.value.trim();
+              if (value) {
+                onEval(id, value);
+                event.target.value = '';
+              }
             }
           }}
         />

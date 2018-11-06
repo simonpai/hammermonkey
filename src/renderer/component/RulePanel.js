@@ -6,7 +6,7 @@ import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 // import Typography from '@material-ui/core/Typography';
-import SaveIcon from '@material-ui/icons/Save';
+import Floppy from 'mdi-material-ui/Floppy';
 
 import { selector } from '../store/rule';
 
@@ -43,7 +43,7 @@ function RulePanel({onNameChange, onContentChange, onSave, classes, ...rule}) {
           color="primary"
           className={classes.saveButton}
         >
-          <SaveIcon />
+          <Floppy />
         </Button>
       </div>
       <div style={{display: 'flex'}}>

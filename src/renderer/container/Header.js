@@ -7,7 +7,7 @@ import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
 // import Typography from '@material-ui/core/Typography';
-import AddIcon from '@material-ui/icons/Add';
+import Plus from 'mdi-material-ui/Plus';
 
 import { DIALOG_ID as NEW_OBJECT_DIALOG_ID } from '../component/NewObjectDialog';
 import { action } from '../store';
@@ -54,7 +54,7 @@ function Header({ui, actions, classes}) {
           color="inherit"
           onClick={() => actions.ui.dialog.open(NEW_OBJECT_DIALOG_ID)}
         >
-          <AddIcon />
+          <Plus />
         </IconButton>
       </Toolbar>
     </AppBar>
