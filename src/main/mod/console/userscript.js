@@ -31,7 +31,7 @@ function post(path, body) {
 window._push_handlers_['console.eval'] = function(expr) {
   try {
     post('/eval', {
-      value: toSimpleValue(Function('"use strict";return (' + expr + ')')())
+      value: Function('"use strict";return (' + expr + ')')()
     });
   } catch(err) {
     post('/eval-error', {
