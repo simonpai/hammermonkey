@@ -38,7 +38,8 @@ const styles = () => ({
   consoleRow: {
   },
   errorRow: {
-    color: 'red'
+    color: 'red',
+    backgroundColor: 'rgba(255, 0, 0, 0.05)'
   },
   cell: {
     marginRight: '1em'
