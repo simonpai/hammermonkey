@@ -12,7 +12,7 @@ class Push {
 
   add(...args) {
     this._messages.push(args);
-    setTimeout(this._tryDispatch.bind(this), 0);
+    setTimeout(this._tryDispatch0.bind(this), 0);
   }
 
   update(...args) {
@@ -26,13 +26,25 @@ class Push {
     this.push(...args);
   }
 
-  _tryDispatch() {
-    const response = this._response;
+  _tryDispatch0() {
     const messages = this._messages;
-    if (!response || !messages.length) {
+    if (!messages.length) {
+      return;
+    }
+    this._tryDispatch1();
+  }
+
+  _tryDispatch1() {
+    const response = this._response;
+    if (!response) {
       return;
     }
     delete this._response;
+    const responseTimeoutId = this._responseTimeoutId;
+    if (responseTimeoutId) {
+      clearTimeout(responseTimeoutId);
+      delete this._responseTimeoutId;
+    }
     this._dispatch(response);
   }
 
@@ -46,6 +58,7 @@ class Push {
       this._dispatch(response);
     } else {
       this._response = response;
+      this._responseTimeoutId = setTimeout(this._tryDispatch1.bind(this), 30000);
     }
   }
 
