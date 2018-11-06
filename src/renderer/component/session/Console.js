@@ -66,6 +66,9 @@ function render(type, classes, {uuid, ...msg}) {
   return (
     <div key={uuid} className={classes.row + ' ' + getClassName(type, classes)}>
       {
+        renderIcon(type, classes)
+      }
+      {
         renderContent(type, classes, msg)
       }
     </div>
@@ -82,6 +85,19 @@ function getClassName(type, classes) {
       return classes.consoleRow;
     case 'eval.response':
       return classes.consoleRow;
+  }
+}
+
+function renderIcon(type, classes) {
+  switch (type) {
+    case 'console.log':
+      return (<i></i>);
+    case 'error':
+      return (<i></i>);
+    case 'eval.request':
+      return (<i></i>);
+    case 'eval.response':
+      return (<i></i>);
   }
 }
 
