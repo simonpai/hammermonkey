@@ -132,7 +132,7 @@ function renderContent(type, classes, {args, error, expr, value}) {
     case 'eval.request':
       return expr;
     case 'eval.response':
-      return JSON.stringify(value);
+      return JSON.stringify(error || value);
   }
 }
 

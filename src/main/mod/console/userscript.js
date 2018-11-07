@@ -34,8 +34,8 @@ window._push_handlers_['console.eval'] = function(expr) {
       value: Function('"use strict";return (' + expr + ')')()
     });
   } catch(err) {
-    post('/eval-error', {
-      value: '' + err
+    post('/eval', {
+      error: '' + err
     });
   }
 }
