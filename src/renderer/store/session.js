@@ -34,6 +34,16 @@ export const selector = {
 };
 
 // reducer //
+function update(state, id, obj) {
+  return {
+    ...state,
+    hash: {
+      ...state.hash,
+      [id]: obj
+    }
+  };
+}
+
 export function reducer(state = initialState, action = {}) {
   const {id} = action;
   const session = id && state.hash[id];
@@ -52,14 +62,7 @@ export function reducer(state = initialState, action = {}) {
       return state;
     case OPEN_SUCCESS:
       return {
-        ...state,
-        hash: {
-          ...state.hash,
-          [id]: {
-            id,
-            consoleMsgs: []
-          }
-        },
+        ...update(state, id, {id}),
         ids: [
           ...state.ids,
           id
@@ -72,40 +75,22 @@ export function reducer(state = initialState, action = {}) {
       // TODO: rename: shall be update
       var url = action.url.trim();
       if (!url) {
-        return {
-          ...state,
-          hash: {
-            ...state.hash,
-            [id]: {
-              ...session,
-              url: url,
-              proxyUrl: undefined
-            }
-          }
-        };
+        return update(state, id, {
+          ...session,
+          url: url,
+          proxyUrl: undefined
+        });
       }
       ipcr.send('session.url', id, url.indexOf('://') < 0 ? ('http://' + url) : url);
-      return {
-        ...state,
-        hash: {
-          ...state.hash,
-          [id]: {
-            ...session,
-            url: url
-          }
-        }
-      };
+      return update(state, id, {
+        ...session,
+        url: url
+      });
     case URL_SUCCESS:
-      return {
-        ...state,
-        hash: {
-          ...state.hash,
-          [id]: {
-            ...session,
-            proxyUrl: action.url
-          }
-        }
-      };
+      return update(state, id, {
+        ...session,
+        proxyUrl: action.url
+      });
     case URL_FAILURE:
       // TODO
       return state;

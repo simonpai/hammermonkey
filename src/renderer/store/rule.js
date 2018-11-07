@@ -41,7 +41,7 @@ export const selector = {
 };
 
 // reducer //
-function _createRule(id, currentTime) {
+function create(id, currentTime) {
   return {
     id,
     data: {
@@ -55,9 +55,20 @@ function _createRule(id, currentTime) {
   };
 }
 
+function update(state, id, obj) {
+  return {
+    ...state,
+    hash: {
+      ...state.hash,
+      [id]: obj
+    }
+  };
+}
+
 export function reducer(state = initialState, action = {}) {
   const currentTime = Date.now();
-  const rule = action.id && state.hash[action.id];
+  const {id} = action;
+  const rule = id && state.hash[id];
   switch (action.type) {
     case LOAD:
       return action.data.rules.sequence()
@@ -68,65 +79,43 @@ export function reducer(state = initialState, action = {}) {
           return acc;
         });
     case CREATE:
-      var id = uuid();
+      var newId = uuid();
       return {
-        ...state,
-        hash: {
-          ...state.hash,
-          [id]: _createRule(id, currentTime)
-        },
-        ids: [id].concat(state.ids)
+        ...update(state, newId, create(newId, currentTime)),
+        ids: [newId].concat(state.ids)
       };
     case UPDATE:
-      return {
-        ...state,
-        hash: {
-          ...state.hash,
-          [action.id]: {
-            ...rule,
-            data: {
-              ...rule.data,
-              ...action.obj
-            },
-            updateTime: currentTime
-          }
-        }
-      };
+      return update(state, id, {
+        ...rule,
+        data: {
+          ...rule.data,
+          ...action.obj
+        },
+        updateTime: currentTime
+      });
     case DELETE:
-      var {[action.id]: deleted, ...resthash} = state.hash; // eslint-disable-line no-unused-vars
+      var {[id]: deleted, ...restHash} = state.hash; // eslint-disable-line no-unused-vars
       // TODO: send to main process
       return {
         ...state,
-        hash: resthash,
+        hash: restHash,
         ids: state.ids.filter(id => id !== action.id)
       };
     case SAVE_REQUEST:
       var {type, data, active} = rule;
-      ipcr.send('rule.save', currentTime, {id: action.id, type, data, active});
-      return {
-        ...state,
-        hash: {
-          ...state.hash,
-          [action.id]: {
-            ...rule,
-            updateTime: currentTime,
-            savedData: data,
-            saving: true
-          }
-        }
-      };
+      ipcr.send('rule.save', currentTime, {id, type, data, active});
+      return update(state, id, {
+        ...rule,
+        updateTime: currentTime,
+        savedData: data,
+        saving: true
+      });
     case SAVE_SUCCESS:
       if (rule.updateTime === action.updateTime) {
-        return {
-          ...state,
-          hash: {
-            ...state.hash,
-            [action.id]: {
-              ...rule,
-              saving: false
-            }
-          }
-        };
+        return update(state, id, {
+          ...rule,
+          saving: false
+        });
       } else {
         return state;
       }
