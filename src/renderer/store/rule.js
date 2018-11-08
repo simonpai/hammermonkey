@@ -2,6 +2,7 @@ import {ipcRenderer as ipcr} from 'electron';
 import uuid from 'uuid/v1';
 import equal from 'fast-deep-equal';
 import {type as rootType} from './root';
+import createDict from '../util/dict';
 
 const {LOAD} = rootType;
 
@@ -29,14 +30,12 @@ export const ipc = {
 };
 
 // initial state //
-export const initialState = {
-  hash: {},
-  ids: []
-};
+const $d = createDict();
+export const initialState = $d({}).state;
 
 // selector //
 export const selector = {
-  list: ({ids, hash}) => ids.map(id => hash[id]),
+  $d: $d,
   isSaved: ({data, savedData}) => savedData !== undefined && equal(data, savedData)
 };
 
@@ -55,67 +54,42 @@ function create(id, currentTime) {
   };
 }
 
-function update(state, id, obj) {
-  return {
-    ...state,
-    hash: {
-      ...state.hash,
-      [id]: obj
-    }
-  };
-}
-
 export function reducer(state = initialState, action = {}) {
   const currentTime = Date.now();
   const {id} = action;
-  const rule = id && state.hash[id];
+  const dict = $d(state);
+  const rule = id && dict.get(id);
   switch (action.type) {
     case LOAD:
-      return action.data.rules.sequence()
-        .fold({hash: {}, ids: []}, (acc, rule) => {
-          const {id, data} = rule;
-          acc.hash[id] = {...rule, saving: false, savedData: data};
-          acc.ids.push(id);
-          return acc;
-        });
+      return $d(action.data.rules.map(rule => ({...rule, saving: false, savedData: rule.data}))).state;
     case CREATE:
-      var newId = uuid();
-      return {
-        ...update(state, newId, create(newId, currentTime)),
-        ids: [newId].concat(state.ids)
-      };
+      return dict.upsert(create(uuid(), currentTime)).state;
     case UPDATE:
-      return update(state, id, {
+      return dict.upsert({
         ...rule,
         data: {
           ...rule.data,
           ...action.obj
         },
         updateTime: currentTime
-      });
+      }).state;
     case DELETE:
-      var {[id]: deleted, ...restHash} = state.hash; // eslint-disable-line no-unused-vars
-      // TODO: send to main process
-      return {
-        ...state,
-        hash: restHash,
-        ids: state.ids.filter(id => id !== action.id)
-      };
+      return dict.delete(id).state;
     case SAVE_REQUEST:
       var {type, data, active} = rule;
       ipcr.send('rule.save', currentTime, {id, type, data, active});
-      return update(state, id, {
+      return dict.upsert({
         ...rule,
         updateTime: currentTime,
         savedData: data,
         saving: true
-      });
+      }).state;
     case SAVE_SUCCESS:
       if (rule.updateTime === action.updateTime) {
-        return update(state, id, {
+        return dict.upsert({
           ...rule,
           saving: false
-        });
+        }).state;
       } else {
         return state;
       }
