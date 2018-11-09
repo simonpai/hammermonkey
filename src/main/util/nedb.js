@@ -57,6 +57,7 @@ class Collection {
   }
 
   load() {
+    // TODO: sanity check on hash and ids consistency, fix data with warning
     return this._db.find({})
       // .then(v => console.log(v) || v)
       .then(docs => docs.sequence()

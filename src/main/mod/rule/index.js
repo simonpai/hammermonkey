@@ -68,6 +68,7 @@ export default class RuleService {
       return;
     }
     this._ids.splice(i, 1);
+    this._saveMeta();
     delete this._hash[id];
 
     // invalidate effects
