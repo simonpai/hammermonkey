@@ -2,6 +2,7 @@
 const UI_SELECT_PRIMARY = 'ui.selectPrimary';
 const UI_SESSION_SELECT_TAB = 'ui.session.selectTab';
 const UI_DIALOG_OPEN = 'ui.dialog.open';
+const RULE_DELETE_REQUEST = 'rule.delete.request';
 
 // action //
 export const action = {
@@ -23,6 +24,7 @@ export const initialState = {
 
 // reducer //
 export function reducer(state = initialState, action = {}) {
+  const {primary} = state;
   switch (action.type) {
     case UI_SELECT_PRIMARY:
       return {
@@ -48,6 +50,14 @@ export function reducer(state = initialState, action = {}) {
         ...state,
         dialog: action.id
       };
+    case RULE_DELETE_REQUEST:
+      if (primary && primary.type === 'rule' && primary.id === action.id) {
+        return {
+          ...state,
+          primary: undefined
+        };
+      }
+      return state;
     default:
       return state;
   }

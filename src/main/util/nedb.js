@@ -36,12 +36,12 @@ class Datastore {
 
   // TODO: count
 
-  update(query, update, options) {
+  update(query, update, options = {}) {
     return new Promise((resolve, reject) =>
       this._db.update(query, update, options, (err, numReplaced, upsert) => err ? reject(err) : resolve(numReplaced, upsert)));
   }
 
-  remove(query, options) {
+  remove(query, options = {}) {
     return new Promise((resolve, reject) =>
       this._db.remove(query, options, (err, numRemoved) => err ? reject(err) : resolve(numRemoved)));
   }

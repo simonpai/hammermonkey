@@ -7,6 +7,8 @@ import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 // import Typography from '@material-ui/core/Typography';
 import Floppy from 'mdi-material-ui/Floppy';
+import Delete from 'mdi-material-ui/Delete';
+// import ContentCopy from 'mdi-material-ui/ContentCopy';
 
 import { selector } from '../store/rule';
 
@@ -17,14 +19,14 @@ const styles = theme => ({
     paddingBottom: theme.spacing.unit * 2,
     height: '100%'
   },
-  saveButton: {
+  button: {
     marginLeft: theme.spacing.unit * 2,
     minWidth: 'auto',
     width: 48
   }
 });
 
-function RulePanel({onNameChange, onContentChange, onSave, classes, ...rule}) {
+function RulePanel({onNameChange, onContentChange, onSave, onDelete, classes, ...rule}) {
   const {id, data, saving} = rule;
   const saved = selector.isSaved(rule);
   return (
@@ -41,9 +43,16 @@ function RulePanel({onNameChange, onContentChange, onSave, classes, ...rule}) {
           onClick={() => onSave(id)}
           variant="contained"
           color="primary"
-          className={classes.saveButton}
+          className={classes.button}
         >
           <Floppy />
+        </Button>
+        <Button
+          onClick={() => onDelete(id)}
+          variant="contained"
+          className={classes.button}
+        >
+          <Delete />
         </Button>
       </div>
       <div style={{display: 'flex'}}>
@@ -71,6 +80,7 @@ RulePanel.propTypes = {
   onNameChange: PropTypes.func.isRequired,
   onContentChange: PropTypes.func.isRequired,
   onSave: PropTypes.func.isRequired,
+  onDelete:PropTypes.func.isRequired,
   classes: PropTypes.object
 };
 

@@ -29,7 +29,8 @@ function mapDispatchToProps(dispatch) {
       rule: {
         onNameChange: (id, name) => dispatch(action.rule.update(id, {name})),
         onContentChange: (id, content) => dispatch(action.rule.update(id, {content})),
-        onSave: (id) => dispatch(action.rule.save(id))
+        onSave: (id) => dispatch(action.rule.save(id)),
+        onDelete: (id) => dispatch(action.rule.delete(id))
       }
     }
   };

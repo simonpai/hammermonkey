@@ -21,7 +21,12 @@ function _inspect(f, name, mode) {
     try {
       const r = f.apply(this, arguments);
       (mode & 2) && console.log('[' + name + '] return:', r);
-      return r;
+      return r && typeof r.then === 'function' && typeof r.catch === 'function' ?
+        r.catch((err) => {
+          console.log('[' + name + '] error:', err);
+          throw err;
+        }) :
+        r;
     } catch(err) {
       console.log('[' + name + '] error:', err);
       throw err;

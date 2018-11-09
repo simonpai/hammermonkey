@@ -11,12 +11,20 @@ import AssetService from './mod/asset';
 import InjectableService from './mod/injectable';
 import ConsoleService from './mod/console';
 
+function patchEvent(event) {
+  const _send = event.sender.send;
+  event.sender.send = function() {
+    return this.isDestroyed() ? undefined : _send.apply(this, arguments);
+  }
+  return event;
+}
+
 class Client {
   constructor(main) {
     this._main = main;
   }
-  on() {
-    return ipc.on(...arguments);
+  on(name, callback) {
+    return ipc.on(name, (event, ...args) => callback(patchEvent(event), ...args));
   }
   send() {
     if (!this._main._win) {

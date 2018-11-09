@@ -16,7 +16,14 @@ export default class RuleService {
 
     client.on('rule.save', (event, updateTime, rule) => 
       this.update(rule)
-        .then(() => !event.sender.isDestroyed() && event.sender.send('rule.save.success', rule.id, updateTime)));
+        .then(
+          () => event.sender.send('rule.save.success', rule.id, updateTime),
+          () => event.sender.send('rule.save.failure', rule.id, updateTime)));
+    client.on('rule.delete', (event, id) =>
+      this.delete(id)
+        .then(
+          () => event.sender.send('rule.delete.success', id),
+          () => event.sender.send('rule.delete.failure', id)));
   }
 
   _constructRule(type, options) {

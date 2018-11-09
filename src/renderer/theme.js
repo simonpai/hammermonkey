@@ -9,7 +9,7 @@ const theme = createMuiTheme({
   },
   palette: {
     primary: teal,
-    secondary: brown // TODO: make it brown
+    secondary: brown
   }
 });
 
