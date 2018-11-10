@@ -20,9 +20,10 @@ const styles = theme => ({
     height: '100%'
   },
   button: {
-    marginLeft: theme.spacing.unit * 2,
+    marginLeft: 10,
     minWidth: 'auto',
-    width: 48
+    width: 40,
+    height: 40
   }
 });
 
@@ -36,7 +37,7 @@ function RulePanel({onNameChange, onContentChange, onSave, onDelete, classes, ..
           label="Name"
           value={data.name || ''}
           onChange={event => onNameChange(id, event.target.value)}
-          style={{flexGrow: 1}}
+          style={{flexGrow: 1, marginTop: -8}}
         />
         <Button
           disabled={saved || saving}

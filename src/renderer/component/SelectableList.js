@@ -11,7 +11,6 @@ function SelectableList({items, selected, onSelect}) {
       {items.map(item =>
         <ListItem
           key={item.key}
-          dense={true}
           button
           selected={item.key === selected}
           onClick={() => onSelect(item.key)}
