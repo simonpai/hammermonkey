@@ -5,7 +5,7 @@ import { withStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 
 import SessionPanel from '../component/session/Panel';
-import RulePanel from '../component/RulePanel';
+import RulePanel from '../component/rule/Panel';
 import { action } from '../store';
 
 const styles = theme => ({

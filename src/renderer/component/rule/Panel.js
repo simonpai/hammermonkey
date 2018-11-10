@@ -10,14 +10,17 @@ import Floppy from 'mdi-material-ui/Floppy';
 import Delete from 'mdi-material-ui/Delete';
 // import ContentCopy from 'mdi-material-ui/ContentCopy';
 
-import { selector } from '../store/rule';
+import { selector } from '../../store/rule';
 
 const styles = theme => ({
   paper: {
     ...theme.mixins.gutters(),
     paddingTop: theme.spacing.unit * 2,
     paddingBottom: theme.spacing.unit * 2,
-    height: '100%'
+    height: '100%',
+    boxSizing: 'border-box',
+    display: 'flex',
+    flexDirection: 'column'
   },
   button: {
     marginLeft: 10,
@@ -56,7 +59,7 @@ function RulePanel({onNameChange, onContentChange, onSave, onDelete, classes, ..
           <Delete />
         </Button>
       </div>
-      <div style={{display: 'flex'}}>
+      <div style={{display: 'flex', flexGrow: 1}}>
         <TextField
           label="Content"
           style={{flexGrow: 1}}
@@ -65,7 +68,10 @@ function RulePanel({onNameChange, onContentChange, onSave, onDelete, classes, ..
           margin="normal"
           variant="outlined"
           InputProps={{
-            style: {fontFamily: '"Roboto Mono", monospace'}
+            style: {fontFamily: '"Roboto Mono", monospace', height: '100%'}
+          }}
+          inputProps={{
+            style: {height: '100%'}
           }}
           value={data.content || ''}
           onChange={event => onContentChange(id, event.target.value)}
