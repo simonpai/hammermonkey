@@ -8,7 +8,7 @@ import TextField from '@material-ui/core/TextField';
 const styles = theme => ({
   root: {
     ...theme.mixins.gutters(),
-    paddingTop: theme.spacing.unit * 2,
+    paddingTop: theme.spacing.unit,
     paddingBottom: theme.spacing.unit * 2,
   },
 });
