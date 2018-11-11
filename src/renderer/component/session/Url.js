@@ -3,6 +3,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
+import Tooltip from '@material-ui/core/Tooltip';
 // import Typography from '@material-ui/core/Typography';
 
 const styles = theme => ({
@@ -26,16 +27,23 @@ function SessionUrlSection({id, url, proxyUrl, onUrlChange, classes}) {
         />
       </div>
       <div>
-        <TextField
-          label="Proxy URL"
-          value={proxyUrl || ''}
-          fullWidth
-          margin="normal"
-          InputProps={{
-            readOnly: true,
-          }}
-          onClick={() => proxyUrl && clipboard.writeText(proxyUrl)}
-        />
+        <Tooltip title="click to copy">
+          <TextField
+            label="Proxy URL"
+            value={proxyUrl || ''}
+            fullWidth
+            margin="normal"
+            InputProps={{
+              readOnly: true
+            }}
+            inputProps={{
+              style: {
+                cursor: 'pointer'
+              }
+            }}
+            onClick={() => proxyUrl && clipboard.writeText(proxyUrl)}
+          />
+        </Tooltip>
       </div>
     </div>
   )
