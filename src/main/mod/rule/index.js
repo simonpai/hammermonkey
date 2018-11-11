@@ -1,21 +1,41 @@
+/*
 import EventEmitter from 'events';
 import Events from '../../util/events';
+*/
 import { mergeBundle } from '../../util/objects';
-import DataStore from '../../util/nedb';
+// import DataStore from '../../util/nedb';
+import DictModel from '../../util/dict';
 import * as Rule from './model';
+
+function serialize(rule) {
+  return rule.serialized;
+}
+
+function deserialize(id, {type, ...options}) {
+  return new (Rule[type])({id, ...options});
+}
 
 export default class RuleService {
 
   constructor({effects, client}) {
-    this.events = new Events(this._emitter = new EventEmitter());
+    const effectCache = this._effectsCache = effects.register(this);
+
+    // this.events = new Events(this._emitter = new EventEmitter());
+    const dict = this._dict = new DictModel({
+      filename: 'rules.db',
+      serialize,
+      deserialize
+    });
+    /*
     this._db = new DataStore.Collection('rules.db');
     this._hash = {};
     this._ids = [];
+    */
 
-    this._effectsCache = effects.register(this);
+    dict.events.on('change', effectCache.invalidate.bind(effectCache));
 
     client.on('rule.save', (event, updateTime, rule) => 
-      this.update(rule)
+      this.upsert(rule)
         .then(
           () => event.sender.send('rule.save.success', rule.id, updateTime),
           () => event.sender.send('rule.save.failure', rule.id, updateTime)));
@@ -26,11 +46,15 @@ export default class RuleService {
           () => event.sender.send('rule.delete.failure', id)));
   }
 
+  /*
   _constructRule(type, options) {
     return new (Rule[type])(options);
   }
+  */
 
   load() {
+    return this._dict.load();
+    /*
     return this._db.load()
       // .then(v => console.log(v) || v)
       .then(({hash = {}, meta = {}}) => {
@@ -44,64 +68,31 @@ export default class RuleService {
         // invalidate effects
         this._effectsCache.invalidate();
       });
+    */
   }
 
-  update({id, type, ...options}) {
-    const rule = this._constructRule(type, {id, ...options});
-
-    if (!this._hash[id]) {
-      this._ids.splice(0, 0, id);
-      this._saveMeta();
-    }
-    this._hash[id] = rule;
-
-    // invalidate effects
-    this._effectsCache.invalidate();
-
-    // persist
-    return this._db.upsert(id, {type, ...options}); // TODO: get this from rule model
+  upsert({id, type, ...options}) {
+    return this._dict.upsert(id, deserialize(id, {type, ...options}), 0);
   }
 
   delete(id) {
-    const i = this._ids.indexOf(id);
-    if (i < 0) {
-      return;
-    }
-    this._ids.splice(i, 1);
-    this._saveMeta();
-    delete this._hash[id];
-
-    // invalidate effects
-    this._effectsCache.invalidate();
-
-    // persist
-    return this._db.delete(id);
+    return this._dict.delete(id);
   }
 
   // TODO: update order
 
   get(id) {
-    return this._rules[id];
+    return this._dict.get(id);
   }
 
   get rules() {
-    return this._sequence().toList();
+    return this._dict.items;
   }
 
   get effects() {
-    return this._sequence()
+    return this._dict.sequence()
       .map(this._effectsOfRule.bind(this))
       .fold({}, mergeBundle);
-  }
-
-  _saveMeta() {
-    this._db.saveMeta({ids: this._ids});
-  }
-
-  _sequence() {
-    return this._ids
-      .sequence()
-      .map(id => this._hash[id]);
   }
 
   _effectsOfRule(rule) {

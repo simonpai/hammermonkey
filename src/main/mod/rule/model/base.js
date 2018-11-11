@@ -11,4 +11,9 @@ export default class BaseRule {
     return {};
   }
 
+  get serialized() {
+    const {id, type, active, data} = this;
+    return {id, type, active, data};
+  }
+
 }
