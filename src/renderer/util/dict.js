@@ -1,12 +1,9 @@
-import { mappedBy } from './functions';
-
 class Dict {
 
   constructor({ids = [], hash = {}}, options) {
     this._ids = ids;
     this._hash = hash;
     this._options = options;
-    this._keyFn = options.keyFn;
 
     this.get = this.get.bind(this);
     this.contains = this.contains.bind(this);
@@ -39,12 +36,11 @@ class Dict {
     return this._hash.hasOwnProperty(id);
   }
 
-  upsert(item, index) {
-    const id = this._keyFn(item);
+  upsert(id, item, index) {
     return new Dict({
       ids: this.contains(id) ? this._ids :
         (index === undefined || index >= this.length) ? [...this._ids, id] :
-        [...this._ids.sublist(0, index), id, ...this._ids.sublist(index)],
+        [...this._ids.slice(0, index), id, ...this._ids.slice(index)],
       hash: {...this._hash, [id]: item}
     }, this._options);
   }
@@ -60,25 +56,24 @@ class Dict {
 }
 
 export default function dict(options = {}) {
-  // key function
-  const keyFn = mappedBy(options.key || 'id');
-  options = {...options, keyFn};
-
   // make EMPTY singleton
   const EMPTY = new Dict({}, options);
 
-  return (items) => {
-    if (items === undefined) {
+  return (items = []) => {
+    if (items === []) {
       return EMPTY;
     }
     if (Array.isArray(items)) {
-      const ids = items.map(keyFn);
-      const hash = items.reduce((acc, item) => {
-        acc[keyFn(item)] = item;
+      const state = items.reduce((acc, [id, item]) => {
+        const {ids, hash} = acc;
+        ids.push(id);
+        hash[id] = item;
         return acc;
-      }, {});
-
-      return new Dict({ids, hash}, options);
+      }, {
+        ids: [],
+        hash: {}
+      });
+      return new Dict(state, options);
     }
     if (typeof items === 'object') {
       return new Dict(items, options);

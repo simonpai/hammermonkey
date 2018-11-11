@@ -63,11 +63,12 @@ export function reducer(state = initialState, action = {}) {
   const rule = id && dict.get(id);
   switch (action.type) {
     case LOAD:
-      return $d(action.data.rules.map(rule => ({...rule, saving: false, savedData: rule.data}))).state;
+      return $d(action.data.rules.map(rule => ([rule.id, {...rule, saving: false, savedData: rule.data}]))).state;
     case CREATE:
-      return dict.upsert(create(uuid(), currentTime), 0).state;
+      var newId = uuid();
+      return dict.upsert(newId, create(newId, currentTime), 0).state;
     case UPDATE:
-      return dict.upsert({
+      return dict.upsert(id, {
         ...rule,
         data: {
           ...rule.data,
@@ -78,7 +79,7 @@ export function reducer(state = initialState, action = {}) {
     case SAVE_REQUEST:
       var {type, data, active} = rule;
       ipcr.send('rule.save', currentTime, {id, type, data, active});
-      return dict.upsert({
+      return dict.upsert(id, {
         ...rule,
         updateTime: currentTime,
         savedData: data,
@@ -86,7 +87,7 @@ export function reducer(state = initialState, action = {}) {
       }).state;
     case SAVE_SUCCESS:
       if (rule.updateTime === action.updateTime) {
-        return dict.upsert({
+        return dict.upsert(id, {
           ...rule,
           saving: false
         }).state;
