@@ -1,9 +1,4 @@
-/*
-import EventEmitter from 'events';
-import Events from '../../util/events';
-*/
 import { mergeBundle } from '../../util/objects';
-// import DataStore from '../../util/nedb';
 import DictModel from '../../util/dict';
 import * as Rule from './model';
 
@@ -20,18 +15,11 @@ export default class RuleService {
   constructor({effects, client}) {
     const effectCache = this._effectsCache = effects.register(this);
 
-    // this.events = new Events(this._emitter = new EventEmitter());
     const dict = this._dict = new DictModel({
       filename: 'rules.db',
       serialize,
       deserialize
     });
-    /*
-    this._db = new DataStore.Collection('rules.db');
-    this._hash = {};
-    this._ids = [];
-    */
-
     dict.events.on('change', effectCache.invalidate.bind(effectCache));
 
     client.on('rule.save', (event, updateTime, rule) => 
@@ -46,29 +34,8 @@ export default class RuleService {
           () => event.sender.send('rule.delete.failure', id)));
   }
 
-  /*
-  _constructRule(type, options) {
-    return new (Rule[type])(options);
-  }
-  */
-
   load() {
     return this._dict.load();
-    /*
-    return this._db.load()
-      // .then(v => console.log(v) || v)
-      .then(({hash = {}, meta = {}}) => {
-        Object.keys(hash).forEach(id => {
-          const {type, ...options} = hash[id];
-          hash[id] = this._constructRule(type, {id, ...options});
-        });
-        this._hash = hash;
-        this._ids = meta.ids || [];
-
-        // invalidate effects
-        this._effectsCache.invalidate();
-      });
-    */
   }
 
   upsert({id, type, ...options}) {
