@@ -7,7 +7,7 @@ export default class SessionService {
     client.on('session.open', this.openSession.bind(this));
 
     // TODO: shall be updating the session model, maybe even persisting them, so they live across client lifecycle
-    client.on('session.url', (event, sessionId, url) => 
+    client.on('session.url', (event, sessionId, url) =>
       this.getProxyUrl(sessionId, url)
         .then(proxyUrl => !event.sender.isDestroyed() && event.sender.send('session.url.success', sessionId, proxyUrl)));
   }
