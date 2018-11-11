@@ -7,13 +7,11 @@ const ROOT_PATH = app.getPath('userData');
 class Datastore {
 
   constructor(options) {
-    const {filename} = options;
+    const {filename, autoload} = options;
     if (filename) {
-      options = {
-        ...options,
-        filename: pathAPI.join(ROOT_PATH, filename)
-      }
+      options.filename = pathAPI.join(ROOT_PATH, filename);
     }
+    options.autoload = autoload !== false; // default true
     this._db = new _Datastore(options);
   }
 
@@ -53,7 +51,7 @@ class Datastore {
 class Collection {
 
   constructor(filename) {
-    this._db = new Datastore({filename, autoload: true});
+    this._db = new Datastore({filename});
   }
 
   load() {
