@@ -65,7 +65,7 @@ export function reducer(state = initialState, action = {}) {
     case LOAD:
       return $d(action.data.rules.map(rule => ({...rule, saving: false, savedData: rule.data}))).state;
     case CREATE:
-      return dict.upsert(create(uuid(), currentTime)).state;
+      return dict.upsert(create(uuid(), currentTime), 0).state;
     case UPDATE:
       return dict.upsert({
         ...rule,
