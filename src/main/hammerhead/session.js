@@ -6,7 +6,7 @@ export default class Session extends hammerhead.Session {
 
   constructor(uploadRoot, options = {}) {
     super(uploadRoot);
-    this.id = '' + serial++;
+    this.id = options.id || ('' + serial++);
     this.options = options;
   }
 
@@ -26,6 +26,10 @@ export default class Session extends hammerhead.Session {
 
   handlePageError(ctx, err) {
     console.error(err);
+  }
+
+  getProxyUrl(url) {
+    return this.proxy.getProxyUrl(this, url);
   }
 
 }

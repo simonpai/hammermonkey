@@ -1,27 +1,74 @@
+import DictModel from '../../util/dict';
+
+function serialize({_hhs, ...obj}) { // eslint-disable-line no-unused-vars
+  return obj;
+}
+
 export default class SessionService {
 
   constructor({hammerhead, client}) {
     this._hammerhead = hammerhead;
     this._client = client;
 
-    client.on('session.open', this.openSession.bind(this));
+    this._inject(hammerhead, this);
 
-    // TODO: shall be updating the session model, maybe even persisting them, so they live across client lifecycle
-    client.on('session.url', (event, sessionId, url) =>
-      this.getProxyUrl(sessionId, url)
-        .then(proxyUrl => !event.sender.isDestroyed() && event.sender.send('session.url.success', sessionId, proxyUrl)));
+    this._dict = new DictModel({
+      filename: 'sessions.db',
+      serialize: serialize,
+      deserialize: this._deserialize.bind(this)
+    });
+
+    client.on('session.open', (event, options) => this.open(options));
+    client.on('session.url', (event, id, url) => this.setUrl(id, url));
   }
 
-  openSession() {
-    const session = this._hammerhead.openSession();
-    // console.log(session);
-    this._client.send('session.open', session.id);
+  _inject(hammerhead) {
+    this._openSession = hammerhead.openSession.bind(hammerhead);
+    hammerhead.openSession = this.open.bind(this);
+
+    Object.defineProperty(hammerhead, 'sessions', this);
   }
 
-  getProxyUrl(sessionId, url) {
-    const proxyUrl = this._hammerhead.getProxyUrl(sessionId, url);
-    // console.log(url + ' => ' + proxyUrl);
-    return Promise.resolve(proxyUrl);
+  _deserialize(id, options) {
+    const session = this.get(id);
+    const _hhs = (session && session._hhs) || this._openSession(options);
+    return {
+      ...options,
+      _hhs
+    };
+  }
+
+  get(id) {
+    return this._dict.get(id);
+  }
+
+  get sessions() {
+    return this._dict.items;
+  }
+
+  load() {
+    return this._dict.load();
+  }
+
+  open(options = {}) {
+    // TODO: separate id?
+    const {id} = options;
+    const session = this._deserialize(id, options);
+    this._dict.upsert(id, session);
+
+    this._client.send('session.open', id, serialize(session));
+  }
+
+  setUrl(id, url) {
+    const session = this.get(id);
+    const proxyUrl = session && session._hhs && session._hhs.getProxyUrl(url);
+    this._dict.upsert(id, {
+      ...session,
+      url,
+      proxyUrl
+    });
+
+    this._client.send('session.proxyUrl', id, proxyUrl);
   }
 
 }

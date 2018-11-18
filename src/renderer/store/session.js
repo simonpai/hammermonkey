@@ -1,6 +1,8 @@
 import {ipcRenderer as ipcr} from 'electron';
+import nanoid from 'nanoid/generate';
 import {type as rootType} from './root';
 
+const ALPHABET = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 const {LOAD} = rootType;
 
 const OPEN_REQUEST = 'session.open.request';
@@ -18,8 +20,8 @@ export const action = {
 
 // ipc //
 export const ipc = {
-  'open': (event, id) => ({type: OPEN_SUCCESS, id}),
-  'url.success': (event, id, url) => ({type: URL_SUCCESS, id, url})
+  'open': (event, id, data) => ({type: OPEN_SUCCESS, id, data}),
+  'proxyUrl': (event, id, proxyUrl) => ({type: URL_SUCCESS, id, proxyUrl})
 };
 
 // initial state //
@@ -52,13 +54,14 @@ export function reducer(state = initialState, action = {}) {
       return action.data.sessions.sequence()
         .fold({hash: {}, ids: []}, (acc, session) => {
           const {id} = session;
-          acc.hash[id] = {...session, consoleMsgs: []};
+          acc.hash[id] = session;
           acc.ids.push(id);
           return acc;
         });
     case OPEN_REQUEST:
       // TODO: create a placeholder session
-      ipcr.send('session.open');
+      var newId = nanoid(ALPHABET, 8);
+      ipcr.send('session.open', {id: newId});
       return state;
     case OPEN_SUCCESS:
       return {
@@ -89,7 +92,7 @@ export function reducer(state = initialState, action = {}) {
     case URL_SUCCESS:
       return update(state, id, {
         ...session,
-        proxyUrl: action.url
+        proxyUrl: action.proxyUrl
       });
     case URL_FAILURE:
       // TODO

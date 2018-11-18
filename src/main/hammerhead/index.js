@@ -17,8 +17,6 @@ export default class Hammerhead {
     this.host = ip + ':' + this.port1;
 
     this.events = new Events(this._emitter = new EventEmitter());
-    this._sessions = {};
-    this._sessionIds = [];
     this.app = express();
 
     this.Session = Session;
@@ -34,15 +32,8 @@ export default class Hammerhead {
 
     this.proxy = new Proxy(this.ip, this.port1, this.port2);
     this.proxy.app = this.app;
+
     this._emitter.emit('start');
-  }
-
-  get sessions() {
-    return this._sessionIds.map(id => this._sessions[id]);
-  }
-
-  session(id) {
-    return this._sessions[id];
   }
 
   openSession(options) {
@@ -52,26 +43,10 @@ export default class Hammerhead {
     const session = new Session(this.uploadRoot, options);
     this._emitter.emit('session.create', session);
 
-    const {id} = session;
     this.proxy.openSession(session);
-
-    this._sessions[id] = session;
-    this._sessionIds.push(id);
 
     this._emitter.emit('session.open', session);
     return session;
-  }
-
-  // TODO: closeSession(sessionId) {}
-
-  getProxyUrl(sessionId, url) {
-    this._assertInteractive();
-
-    const session = this._sessions[sessionId];
-    if (!session) {
-      throw new Error('Session not found: ' + sessionId);
-    }
-    return this.proxy.getProxyUrl(session, url);
   }
 
   close() {

@@ -2,13 +2,17 @@ import EventEmitter from 'events';
 import DataStore from './nedb';
 import Events from './events';
 
+function identity(v) {
+  return v;
+}
+
 export default class DictModel {
 
   constructor({filename, serialize, deserialize}) {
     this.events = new Events(this._emitter = new EventEmitter());
     this._db = new DataStore.Collection(filename);
-    this._serialize = serialize;
-    this._deserialize = deserialize;
+    this._serialize = serialize || identity;
+    this._deserialize = deserialize || identity;
     this._hash = {};
     this._ids = [];
 

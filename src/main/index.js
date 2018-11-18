@@ -67,12 +67,13 @@ export default class Main {
   start() {
     this._load();
     this._hammerhead.start();
-    this._sessions.openSession();
+    // this._sessions.open();
   }
 
   _load() {
     return Promise.all([
-      this._rules.load()
+      this._rules.load(),
+      this._sessions.load()
     ]).then(() => {
       this._loaded = true;
       if (this._syncToClientRequested) {
@@ -102,7 +103,7 @@ export default class Main {
   _syncToClient() {
     this._client.send('load', {
       rules: this._rules.rules,
-      sessions: this._hammerhead.sessions.map(({id, options}) => ({id, options}))
+      sessions: this._sessions.sessions
     });
   }
 

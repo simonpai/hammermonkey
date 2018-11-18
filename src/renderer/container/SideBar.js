@@ -68,7 +68,7 @@ function SideBar({ui, session, rule, actions, classes}) {
             <SelectableList
               items={sessions.map(({id}) => ({
                 key: id,
-                label: 'Session ' + id,
+                label: id,
                 Icon: SessionIcon
               }))}
               selected={primary && primary.type === 'session' ? primary.id : undefined}
