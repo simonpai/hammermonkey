@@ -55,7 +55,7 @@ const enhance = compose(
 function SideBar({ui, session, rule, actions, classes}) {
   const primary = ui.primary;
   const rules = selector.rule.$d(rule).items;
-  const sessions = selector.session.list(session);
+  const sessions = selector.session.$d(session).items;
   return (
     <Drawer variant="permanent" classes={{
       paper: classes.drawerPaper

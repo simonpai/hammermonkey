@@ -1,6 +1,7 @@
 import {ipcRenderer as ipcr} from 'electron';
 import nanoid from 'nanoid/generate';
 import {type as rootType} from './root';
+import createDict from '../util/dict';
 
 const ALPHABET = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 const {LOAD} = rootType;
@@ -25,52 +26,29 @@ export const ipc = {
 };
 
 // initial state //
-export const initialState = {
-  hash: {},
-  ids: []
-};
+const $d = createDict();
+export const initialState = $d({}).state;
 
 // selector //
 export const selector = {
-  list: session => session.ids.map(id => session.hash[id])
+  $d: $d
 };
 
 // reducer //
-function update(state, id, obj) {
-  return {
-    ...state,
-    hash: {
-      ...state.hash,
-      [id]: obj
-    }
-  };
-}
-
 export function reducer(state = initialState, action = {}) {
   const {id} = action;
-  const session = id && state.hash[id];
+  const dict = $d(state);
+  const session = id && dict.get(id);
   switch (action.type) {
     case LOAD:
-      return action.data.sessions.sequence()
-        .fold({hash: {}, ids: []}, (acc, session) => {
-          const {id} = session;
-          acc.hash[id] = session;
-          acc.ids.push(id);
-          return acc;
-        });
+      return $d(action.data.sessions.map(session => ([session.id, session]))).state;
     case OPEN_REQUEST:
       // TODO: create a placeholder session
       var newId = nanoid(ALPHABET, 8);
       ipcr.send('session.open', {id: newId});
       return state;
     case OPEN_SUCCESS:
-      return {
-        ...update(state, id, {id}),
-        ids: [
-          ...state.ids,
-          id
-        ]
-      };
+      return dict.upsert(id, action.data).state;
     case OPEN_FAILURE:
       // TODO
       return state;
@@ -78,22 +56,23 @@ export function reducer(state = initialState, action = {}) {
       // TODO: rename: shall be update
       var url = action.url.trim();
       if (!url) {
-        return update(state, id, {
+        return dict.upsert(id, {
           ...session,
           url: url,
           proxyUrl: undefined
-        });
+        }).state;
       }
+      // TODO: should this be handled at main side?
       ipcr.send('session.url', id, url.indexOf('://') < 0 ? ('http://' + url) : url);
-      return update(state, id, {
+      return dict.upsert(id, {
         ...session,
         url: url
-      });
+      }).state;
     case URL_SUCCESS:
-      return update(state, id, {
+      return dict.upsert(id, {
         ...session,
         proxyUrl: action.proxyUrl
-      });
+      }).state;
     case URL_FAILURE:
       // TODO
       return state;
