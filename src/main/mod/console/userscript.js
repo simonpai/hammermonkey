@@ -28,15 +28,17 @@ function post(path, body) {
   } catch(e) {} // eslint-disable-line no-empty
 }
 
-window._push_handlers_['console.eval'] = function(expr) {
-  try {
-    post('/eval', {
-      value: Function('"use strict";return (' + expr + ')')()
-    });
-  } catch(err) {
-    post('/eval', {
-      error: '' + err
-    });
+if (window._push_handlers_) {
+  window._push_handlers_['console.eval'] = function(expr) {
+    try {
+      post('/eval', {
+        value: Function('"use strict";return (' + expr + ')')()
+      });
+    } catch(err) {
+      post('/eval', {
+        error: '' + err
+      });
+    }
   }
 }
 

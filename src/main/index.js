@@ -58,7 +58,7 @@ export default class Main {
 
     this._sessions = new SessionService(modContext);
     this._rules = new RuleService(modContext);
-    this._pushes = new PushService(modContext);
+    // this._pushes = new PushService(modContext);
     this._assets = new AssetService(modContext);
     this._injectables = new InjectableService(modContext);
     this._consoles = new ConsoleService(modContext);
