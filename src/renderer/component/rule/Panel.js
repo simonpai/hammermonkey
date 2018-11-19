@@ -1,6 +1,7 @@
 // import { clipboard } from 'electron';
 import React from 'react';
 import PropTypes from 'prop-types';
+import { HotKeys } from 'react-hotkeys';
 import { withStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';
@@ -30,54 +31,62 @@ const styles = theme => ({
   }
 });
 
+const keyMap = {
+  save: ['command+s', 'ctrl+s']
+};
+
 function RulePanel({onNameChange, onContentChange, onSave, onDelete, classes, ...rule}) {
   const {id, data, saving} = rule;
   const saved = selector.isSaved(rule);
   return (
-    <Paper className={classes.paper}>
-      <div style={{display: 'flex'}}>
-        <TextField
-          label="Name"
-          value={data.name || ''}
-          onChange={event => onNameChange(id, event.target.value)}
-          style={{flexGrow: 1, marginTop: -8}}
-        />
-        <Button
-          disabled={saved || saving}
-          onClick={() => onSave(id)}
-          variant="contained"
-          color="primary"
-          className={classes.button}
-        >
-          <Floppy />
-        </Button>
-        <Button
-          onClick={() => onDelete(id)}
-          variant="contained"
-          className={classes.button}
-        >
-          <Delete />
-        </Button>
-      </div>
-      <div style={{display: 'flex', flexGrow: 1}}>
-        <TextField
-          label="Content"
-          style={{flexGrow: 1}}
-          multiline
-          rows="10"
-          margin="normal"
-          variant="outlined"
-          InputProps={{
-            style: {fontFamily: '"Roboto Mono", monospace', height: '100%'}
-          }}
-          inputProps={{
-            style: {height: '100%'}
-          }}
-          value={data.content || ''}
-          onChange={event => onContentChange(id, event.target.value)}
-        />
-      </div>
-    </Paper>
+    <HotKeys keyMap={keyMap} handlers={{
+      save: () => onSave(id)
+    }}>
+      <Paper className={classes.paper}>
+        <div style={{display: 'flex'}}>
+          <TextField
+            label="Name"
+            value={data.name || ''}
+            onChange={event => onNameChange(id, event.target.value)}
+            style={{flexGrow: 1, marginTop: -8}}
+          />
+          <Button
+            disabled={saved || saving}
+            onClick={() => onSave(id)}
+            variant="contained"
+            color="primary"
+            className={classes.button}
+          >
+            <Floppy />
+          </Button>
+          <Button
+            onClick={() => onDelete(id)}
+            variant="contained"
+            className={classes.button}
+          >
+            <Delete />
+          </Button>
+        </div>
+        <div style={{display: 'flex', flexGrow: 1}}>
+          <TextField
+            label="Content"
+            style={{flexGrow: 1}}
+            multiline
+            rows="10"
+            margin="normal"
+            variant="outlined"
+            InputProps={{
+              style: {fontFamily: '"Roboto Mono", monospace', height: '100%'}
+            }}
+            inputProps={{
+              style: {height: '100%'}
+            }}
+            value={data.content || ''}
+            onChange={event => onContentChange(id, event.target.value)}
+          />
+        </div>
+      </Paper>
+    </HotKeys>
   )
 }
 
