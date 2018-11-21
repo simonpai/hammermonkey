@@ -14,6 +14,11 @@ import Delete from 'mdi-material-ui/Delete';
 import { selector } from '../../store/rule';
 
 const styles = theme => ({
+  root: {
+    height: '100%',
+    display: 'flex',
+    flexDirection: 'column'
+  },
   paper: {
     ...theme.mixins.gutters(),
     paddingTop: theme.spacing.unit * 2,
@@ -39,7 +44,7 @@ function RulePanel({onNameChange, onContentChange, onSave, onDelete, classes, ..
   const {id, data, saving} = rule;
   const saved = selector.isSaved(rule);
   return (
-    <HotKeys keyMap={keyMap} handlers={{
+    <HotKeys className={classes.root} keyMap={keyMap} handlers={{
       save: () => onSave(id)
     }}>
       <Paper className={classes.paper}>
