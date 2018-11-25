@@ -8,8 +8,8 @@ import SessionPanel from '../component/session/Panel';
 import RulePanel from '../component/rule/Panel';
 import { action } from '../store';
 
-const styles = theme => ({
-  toolbar: theme.mixins.toolbar
+const styles = () => ({
+  // toolbar: theme.mixins.toolbar
 });
 
 function mapStateToProps({ui, session, rule, console}) {

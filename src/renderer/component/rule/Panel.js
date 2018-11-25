@@ -26,7 +26,8 @@ const styles = theme => ({
     height: '100%',
     boxSizing: 'border-box',
     display: 'flex',
-    flexDirection: 'column'
+    flexDirection: 'column',
+    borderRadius: 0
   },
   button: {
     marginLeft: 10,
