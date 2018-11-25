@@ -31,7 +31,7 @@ const enhance = compose(
   )
 );
 
-function Header({ui, actions}) {
+function AppBar({ui, actions}) {
   return (
     <Menu
       inverted
@@ -51,9 +51,9 @@ function Header({ui, actions}) {
   );
 }
 
-Header.propTypes = {
+AppBar.propTypes = {
   ui: PropTypes.object,
   actions: PropTypes.object
 };
 
-export default enhance(Header);
+export default enhance(AppBar);

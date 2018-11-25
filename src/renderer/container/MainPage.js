@@ -1,7 +1,7 @@
 import React from 'react';
 
-import Header from './Header';
-import SideBar from './SideBar';
+import AppBar from './AppBar';
+import Inventory from './Inventory';
 import Body from './Body';
 
 function MainPage() {
@@ -13,12 +13,12 @@ function MainPage() {
       display: 'flex',
       flexDirection: 'column'
     }}>
-      <Header />
+      <AppBar />
       <div style={{
         display: 'flex',
         flexGrow: 1
       }}>
-        <SideBar />
+        <Inventory />
         <main style={{
           flexGrow: 1,
           minWidth: 0,

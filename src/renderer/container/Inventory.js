@@ -5,6 +5,8 @@ import { compose } from 'recompose';
 import { withStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 
+import { Header } from 'semantic-ui-react';
+
 import { SessionIcon, RuleIcon } from '../component/Icons';
 import SelectableList from '../component/SelectableList';
 import { action, selector } from '../store';
@@ -31,10 +33,7 @@ function mapDispatchToProps(dispatch) {
   return {
     actions: {
       ui: {
-        sidebar: {
-          selectSession: id => dispatch(action.ui.selectPrimary('session', id)),
-          selectRule: id => dispatch(action.ui.selectPrimary('rule', id))
-        }
+        select: (type, id) => dispatch(action.ui.selectPrimary(type, id))
       }
     }
   };
@@ -48,7 +47,7 @@ const enhance = compose(
   withStyles(styles)
 );
 
-function SideBar({ui, session, rule, actions, classes}) {
+function Inventory({ui, session, rule, actions, classes}) {
   const primary = ui.primary;
   const rules = selector.rule.$d(rule).items;
   const sessions = selector.session.$d(session).items;
@@ -56,13 +55,15 @@ function SideBar({ui, session, rule, actions, classes}) {
     <div style={{
       position: 'relative'
     }}>
-      <div style={{
-        paddingTop: 8
-      }}>
+      <div>
         {
           sessions.length ? (
             <div>
-              <Typography variant="overline" className={classes.header}>Sessions</Typography>
+              <Header as="h4" dividing style={{
+                marginTop: '0.75em',
+                marginBottom: '0.25em',
+                paddingLeft: '1em'
+              }}>Sessions</Header>
               <SelectableList
                 items={sessions.map(({id}) => ({
                   key: id,
@@ -70,7 +71,7 @@ function SideBar({ui, session, rule, actions, classes}) {
                   Icon: SessionIcon
                 }))}
                 selected={primary && primary.type === 'session' ? primary.id : undefined}
-                onSelect={actions.ui.sidebar.selectSession}
+                onSelect={(id) => actions.ui.select('session', id)}
               />
             </div>
           ) : undefined
@@ -78,7 +79,11 @@ function SideBar({ui, session, rule, actions, classes}) {
         {
           rules.length ? (
             <div>
-              <Typography variant="overline" className={classes.header}>Rules</Typography>
+              <Header as="h4" dividing style={{
+                marginTop: '0.75em',
+                marginBottom: '0.25em',
+                paddingLeft: '1em'
+              }}>Rules</Header>
               <SelectableList
                 items={rules.map(({id, data}) => ({
                   key: id,
@@ -86,7 +91,7 @@ function SideBar({ui, session, rule, actions, classes}) {
                   Icon: RuleIcon
                 }))}
                 selected={primary && primary.type === 'rule' ? primary.id : undefined}
-                onSelect={actions.ui.sidebar.selectRule}
+                onSelect={(id) => actions.ui.select('rule', id)}
               />
             </div>
           ) : undefined
@@ -96,4 +101,4 @@ function SideBar({ui, session, rule, actions, classes}) {
   );
 }
 
-export default enhance(SideBar);
+export default enhance(Inventory);
