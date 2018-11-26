@@ -45,7 +45,7 @@ function RulePanel({onNameChange, onContentChange, onSave, onDelete, classes, ..
   const {id, data, saving} = rule;
   const saved = selector.isSaved(rule);
   return (
-    <HotKeys className={classes.root} keyMap={keyMap} handlers={{
+    <HotKeys className={classes.root} keyMap={keyMap} style={{outline: 0}} handlers={{
       save: () => onSave(id)
     }}>
       <Paper className={classes.paper}>
