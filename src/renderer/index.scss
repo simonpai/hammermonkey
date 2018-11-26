@@ -7,3 +7,12 @@ html {
 body {
   margin: 0;
 }
+.ui.secondary.pointing.rippling.menu .item {
+  padding: 0;
+  
+  & > .button-base {
+    padding: .85714286em 1.14285714em;
+    width: 100%;
+    justify-content: left;
+  }
+}

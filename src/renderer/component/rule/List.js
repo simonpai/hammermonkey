@@ -1,10 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Menu, Icon } from 'semantic-ui-react'
+import { Menu, Icon } from 'semantic-ui-react';
+import ButtonBase from '@material-ui/core/ButtonBase/ButtonBase';
+// import createRippleHandler from '@material-ui/core/ButtonBase/createRippleHandler';
 
 function RuleList({rules, selected, onSelect}) {
   return (
-    <Menu pointing secondary vertical style={{
+    <Menu pointing secondary vertical className="rippling" style={{
       marginTop: 0
     }}>
       {rules.map(({key, label, icon}) =>
@@ -15,10 +17,14 @@ function RuleList({rules, selected, onSelect}) {
           color={key === selected ? 'teal' : 'black'}
           onClick={() => onSelect(key)}
         >
-          <Icon name={icon} />
-          {
-            label
-          }
+          <ButtonBase className="button-base">
+            <Icon name={icon} style={{
+              marginRight: '0.75em'
+            }} />
+            {
+              label
+            }
+          </ButtonBase>
         </Menu.Item>
       )}
     </Menu>
