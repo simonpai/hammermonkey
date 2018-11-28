@@ -3,7 +3,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { HotKeys } from 'react-hotkeys';
 import { withStyles } from '@material-ui/core/styles';
-import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 // import Typography from '@material-ui/core/Typography';
@@ -48,7 +47,7 @@ function RulePanel({onNameChange, onContentChange, onSave, onDelete, classes, ..
     <HotKeys className={classes.root} keyMap={keyMap} style={{outline: 0}} handlers={{
       save: () => onSave(id)
     }}>
-      <Paper className={classes.paper}>
+      <div className={classes.paper}>
         <div style={{display: 'flex'}}>
           <TextField
             label="Name"
@@ -91,7 +90,7 @@ function RulePanel({onNameChange, onContentChange, onSave, onDelete, classes, ..
             onChange={event => onContentChange(id, event.target.value)}
           />
         </div>
-      </Paper>
+      </div>
     </HotKeys>
   )
 }

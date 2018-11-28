@@ -67,6 +67,8 @@ function Body(options) {
       minWidth: 0,
       display: 'flex',
       flexDirection: 'column',
+      borderLeft: '1px solid #CCC',
+      boxShadow: '0 0 5px rgba(0, 0, 0, 0.1)'
     }}>
       <SelectedPanel {...options} />
     </main>
