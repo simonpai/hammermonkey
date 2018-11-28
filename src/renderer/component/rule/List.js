@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Menu, Icon } from 'semantic-ui-react';
 import ButtonBase from '@material-ui/core/ButtonBase/ButtonBase';
-// import createRippleHandler from '@material-ui/core/ButtonBase/createRippleHandler';
 
 function RuleList({rules, selected, onSelect}) {
   return (

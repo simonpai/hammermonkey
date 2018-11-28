@@ -1,8 +1,8 @@
 import React from 'react';
 
-import AppBar from './AppBar';
-import Inventory from './Inventory';
-import Body from './Body';
+import AppBar from '../container/AppBar';
+import Inventory from '../container/Inventory';
+import Body from '../container/Body';
 
 function MainPage() {
   return (
@@ -19,14 +19,7 @@ function MainPage() {
         flexGrow: 1
       }}>
         <Inventory />
-        <main style={{
-          flexGrow: 1,
-          minWidth: 0,
-          display: 'flex',
-          flexDirection: 'column',
-        }}>
-          <Body />
-        </main>
+        <Body />
       </div>
     </div>
   );

@@ -1,16 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
-import { withStyles } from '@material-ui/core/styles';
-import Paper from '@material-ui/core/Paper';
 
 import SessionPanel from '../component/session/Panel';
 import RulePanel from '../component/rule/Panel';
 import { action } from '../store';
-
-const styles = () => ({
-  // toolbar: theme.mixins.toolbar
-});
 
 function mapStateToProps({ui, session, rule, console}) {
   return {ui, session, rule, console};
@@ -40,11 +34,10 @@ const enhance = compose(
   connect(
     mapStateToProps,
     mapDispatchToProps
-  ),
-  withStyles(styles)
+  )
 );
 
-function Body({ui, session, rule, console, actions/*, classes*/}) {
+function SelectedPanel({ui, session, rule, console, actions}) {
   const {primary} = ui;
   switch (primary && primary.type) {
     case 'session':
@@ -62,10 +55,22 @@ function Body({ui, session, rule, console, actions/*, classes*/}) {
         <RulePanel {...rule.hash[primary.id]} {...actions.rule} />
       );
     default:
-      return (
-        <Paper></Paper>
-      );
+      return null;
   }
+}
+
+function Body(options) {
+  const {ui: {primary}} = options;
+  return primary && primary.type ? (
+    <main style={{
+      flexGrow: 1,
+      minWidth: 0,
+      display: 'flex',
+      flexDirection: 'column',
+    }}>
+      <SelectedPanel {...options} />
+    </main>
+  ) : null;
 }
 
 export default enhance(Body);
