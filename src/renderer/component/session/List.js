@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Menu, Icon } from 'semantic-ui-react';
-import ButtonBase from '@material-ui/core/ButtonBase/ButtonBase';
+import RippleMenuItem from '../../semantic/RippleMenuItem';
 
 function SessionList({sessions, selected, onSelect}) {
   return (
@@ -9,22 +9,20 @@ function SessionList({sessions, selected, onSelect}) {
       marginTop: 0
     }}>
       {sessions.map(({key, label, icon}) =>
-        <Menu.Item
+        <RippleMenuItem
           key={key}
           name={key}
           active={key === selected}
           color={key === selected ? 'teal' : 'black'}
           onClick={() => onSelect(key)}
         >
-          <ButtonBase className="mu-bb">
-            <Icon name={icon} style={{
-              marginRight: '0.75em'
-            }} />
-            {
-              label
-            }
-          </ButtonBase>
-        </Menu.Item>
+          <Icon name={icon} style={{
+            marginRight: '0.75em'
+          }} />
+          {
+            label
+          }
+        </RippleMenuItem>
       )}
     </Menu>
   )
