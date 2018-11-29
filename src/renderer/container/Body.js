@@ -3,11 +3,11 @@ import { connect } from 'react-redux';
 import { compose } from 'recompose';
 
 import SessionPanel from '../component/session/Panel';
-import RulePanel from '../component/rule/Panel';
+import RulePanel from './RulePanel';
 import { action } from '../store';
 
-function mapStateToProps({ui, session, rule, console}) {
-  return {ui, session, rule, console};
+function mapStateToProps({ui, session, console}) {
+  return {ui, session, console};
 }
 
 function mapDispatchToProps(dispatch) {
@@ -37,7 +37,7 @@ const enhance = compose(
   )
 );
 
-function SelectedPanel({ui, session, rule, console, actions}) {
+function SelectedPanel({ui, session, console, actions}) {
   const {primary} = ui;
   switch (primary && primary.type) {
     case 'session':
@@ -52,7 +52,7 @@ function SelectedPanel({ui, session, rule, console, actions}) {
       );
     case 'rule':
       return (
-        <RulePanel {...rule.hash[primary.id]} {...actions.rule} />
+        <RulePanel />
       );
     default:
       return null;

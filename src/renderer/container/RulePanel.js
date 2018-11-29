@@ -1,11 +1,12 @@
-// import { clipboard } from 'electron';
 import React from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { compose } from 'recompose';
 import { HotKeys } from 'react-hotkeys';
 import { Input, Button, Icon, Form, TextArea } from 'semantic-ui-react';
 import { withStyles } from '@material-ui/core/styles';
 
-import { selector } from '../../store/rule';
+import { action, selector } from '../store/rule';
 
 const styles = theme => ({
   root: {
@@ -34,12 +35,39 @@ const keyMap = {
   save: ['command+s', 'ctrl+s']
 };
 
-function RulePanel({onNameChange, onContentChange, onSave, onDelete, classes, ...rule}) {
+function mapStateToProps({ui, rule}) {
+  return {
+    rule: selector.$d(rule).get(ui.primary.id)
+  };
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    actions: {
+      rule: {
+        onNameChange: (id, name) => dispatch(action.update(id, {name})),
+        onContentChange: (id, content) => dispatch(action.update(id, {content})),
+        onSave: (id) => dispatch(action.save(id)),
+        onDelete: (id) => dispatch(action.delete(id))
+      }
+    }
+  };
+}
+
+const enhance = compose(
+  connect(
+    mapStateToProps,
+    mapDispatchToProps
+  ),
+  withStyles(styles)
+);
+
+function RulePanel({actions, classes, rule}) {
   const {id, data, saving} = rule;
   const saved = selector.isSaved(rule);
   return (
     <HotKeys className={classes.root} keyMap={keyMap} style={{outline: 0}} handlers={{
-      save: () => onSave(id)
+      save: () => actions.rule.onSave(id)
     }}>
       <div className={classes.paper}>
         <div>
@@ -48,14 +76,14 @@ function RulePanel({onNameChange, onContentChange, onSave, onDelete, classes, ..
               icon
               color="teal"
               disabled={saved || saving}
-              onClick={() => onSave(id)}
+              onClick={() => actions.rule.onSave(id)}
               className={classes.button}
             >
               <Icon name="save" />
             </Button>
             <Button
               icon
-              onClick={() => onDelete(id)}
+              onClick={() => actions.rule.onDelete(id)}
               className={classes.button}
             >
               <Icon name="trash" />
@@ -66,7 +94,7 @@ function RulePanel({onNameChange, onContentChange, onSave, onDelete, classes, ..
               placeholder="Name"
               style={{width: '100%', height: 40}}
               value={data.name || ''}
-              onChange={event => onNameChange(id, event.target.value)}
+              onChange={event => actions.rule.onNameChange(id, event.target.value)}
             />
           </div>
         </div>
@@ -75,7 +103,7 @@ function RulePanel({onNameChange, onContentChange, onSave, onDelete, classes, ..
             placeholder="console.log('Hello world.')"
             style={{flexGrow: 1, resize: 'none', fontFamily: '"Roboto Mono", monospace', lineHeight: '1.5em'}}
             value={data.content || ''}
-            onChange={event => onContentChange(id, event.target.value)}
+            onChange={event => actions.rule.onContentChange(id, event.target.value)}
           />
         </Form>
       </div>
@@ -84,13 +112,9 @@ function RulePanel({onNameChange, onContentChange, onSave, onDelete, classes, ..
 }
 
 RulePanel.propTypes = {
-  id: PropTypes.string.isRequired,
-  data: PropTypes.object,
-  onNameChange: PropTypes.func.isRequired,
-  onContentChange: PropTypes.func.isRequired,
-  onSave: PropTypes.func.isRequired,
-  onDelete:PropTypes.func.isRequired,
+  rule: PropTypes.object.isRequired,
+  actions: PropTypes.object.isRequired,
   classes: PropTypes.object
 };
 
-export default withStyles(styles)(RulePanel);
+export default enhance(RulePanel);
