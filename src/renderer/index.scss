@@ -9,10 +9,15 @@ body {
 }
 .ui.secondary.pointing.rippling.menu .item {
   padding: 0;
-  
-  & > .button-base {
+
+  & > .mu-bb {
     padding: .85714286em 1.14285714em;
     width: 100%;
     justify-content: left;
+  }
+}
+.ui.icon.button, .ui.icon.buttons .button {
+  & > .mu-bb {
+    padding: .78571429em .78571429em .78571429em;
   }
 }

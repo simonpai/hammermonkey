@@ -2,13 +2,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { HotKeys } from 'react-hotkeys';
+import { Input, Button, Icon, Form, TextArea } from 'semantic-ui-react';
 import { withStyles } from '@material-ui/core/styles';
-import Button from '@material-ui/core/Button';
-import TextField from '@material-ui/core/TextField';
-// import Typography from '@material-ui/core/Typography';
-import Floppy from 'mdi-material-ui/Floppy';
-import Delete from 'mdi-material-ui/Delete';
-// import ContentCopy from 'mdi-material-ui/ContentCopy';
 
 import { selector } from '../../store/rule';
 
@@ -29,8 +24,7 @@ const styles = theme => ({
     borderRadius: 0
   },
   button: {
-    marginLeft: 10,
-    minWidth: 'auto',
+    margin: '0 0 0 10px !important',
     width: 40,
     height: 40
   }
@@ -48,48 +42,42 @@ function RulePanel({onNameChange, onContentChange, onSave, onDelete, classes, ..
       save: () => onSave(id)
     }}>
       <div className={classes.paper}>
-        <div style={{display: 'flex'}}>
-          <TextField
-            label="Name"
-            value={data.name || ''}
-            onChange={event => onNameChange(id, event.target.value)}
-            style={{flexGrow: 1, marginTop: -8}}
-          />
-          <Button
-            disabled={saved || saving}
-            onClick={() => onSave(id)}
-            variant="contained"
-            color="primary"
-            className={classes.button}
-          >
-            <Floppy />
-          </Button>
-          <Button
-            onClick={() => onDelete(id)}
-            variant="contained"
-            className={classes.button}
-          >
-            <Delete />
-          </Button>
+        <div>
+          <div style={{float: 'right'}}>
+            <Button
+              icon
+              color="teal"
+              disabled={saved || saving}
+              onClick={() => onSave(id)}
+              className={classes.button}
+            >
+              <Icon name="save" />
+            </Button>
+            <Button
+              icon
+              onClick={() => onDelete(id)}
+              className={classes.button}
+            >
+              <Icon name="trash" />
+            </Button>
+          </div>
+          <div style={{overflow: 'hidden'}}>
+            <Input
+              placeholder="Name"
+              style={{width: '100%', height: 40}}
+              value={data.name || ''}
+              onChange={event => onNameChange(id, event.target.value)}
+            />
+          </div>
         </div>
-        <div style={{display: 'flex', flexGrow: 1}}>
-          <TextField
-            label="Content"
-            style={{flexGrow: 1}}
-            multiline
-            rows="10"
-            margin="normal"
-            variant="outlined"
-            InputProps={{
-              style: {fontFamily: '"Roboto Mono", monospace', height: '100%'}
-            }}
-            inputProps={{
-              style: {height: '100%'}
-            }}
+        <Form style={{display: 'flex', flexGrow: 1, marginTop: 10}}>
+          <TextArea
+            placeholder="console.log('Hello world.')"
+            style={{flexGrow: 1, resize: 'none', fontFamily: '"Roboto Mono", monospace', lineHeight: '1.5em'}}
             value={data.content || ''}
             onChange={event => onContentChange(id, event.target.value)}
           />
-        </div>
+        </Form>
       </div>
     </HotKeys>
   )

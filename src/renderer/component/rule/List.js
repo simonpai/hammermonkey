@@ -16,7 +16,7 @@ function RuleList({rules, selected, onSelect}) {
           color={key === selected ? 'teal' : 'black'}
           onClick={() => onSelect(key)}
         >
-          <ButtonBase className="button-base">
+          <ButtonBase className="mu-bb">
             <Icon name={icon} style={{
               marginRight: '0.75em'
             }} />
