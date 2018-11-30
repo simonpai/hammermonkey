@@ -77,7 +77,8 @@ function SessionPanel({id, ui = {}, session, console, actions}) {
       overflow: 'hidden',
       display: 'flex',
       flexDirection: 'column',
-      borderRadius: 0
+      borderRadius: 0,
+      backgroundColor: 'white'
     }}>
       <SessionTabs
         selection={selection}

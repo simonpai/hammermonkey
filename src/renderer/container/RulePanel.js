@@ -8,21 +8,20 @@ import { withStyles } from '@material-ui/core/styles';
 
 import { action, selector } from '../store/rule';
 
-const styles = theme => ({
+const styles = () => ({
   root: {
     height: '100%',
     display: 'flex',
     flexDirection: 'column'
   },
   paper: {
-    ...theme.mixins.gutters(),
-    paddingTop: theme.spacing.unit * 2,
-    paddingBottom: theme.spacing.unit * 2,
+    padding: 20,
     height: '100%',
     boxSizing: 'border-box',
     display: 'flex',
     flexDirection: 'column',
-    borderRadius: 0
+    borderRadius: 0,
+    backgroundColor: 'white'
   },
   button: {
     margin: '0 0 0 10px !important',

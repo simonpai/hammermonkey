@@ -60,8 +60,9 @@ function Body(options) {
       minWidth: 0,
       display: 'flex',
       flexDirection: 'column',
-      borderLeft: '1px solid #CCC',
-      boxShadow: '0 0 5px rgba(0, 0, 0, 0.1)'
+      padding: 30,
+      boxShadow: 'inset rgba(0, 0, 0, 0.1) 0 0 10px',
+      backgroundColor: '#EEE'
     }}>
       <SelectedPanel {...primary} />
     </main>
