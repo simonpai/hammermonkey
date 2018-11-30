@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
 
-import SessionPanel from '../component/session/Panel';
+import SessionPanel from './SessionPanel';
 import RulePanel from './RulePanel';
 import { action } from '../store';
 
@@ -37,18 +37,11 @@ const enhance = compose(
   )
 );
 
-function SelectedPanel({ui, session, console, actions}) {
-  const {primary} = ui;
-  switch (primary && primary.type) {
+function SelectedPanel({type}) {
+  switch (type) {
     case 'session':
       return (
-        <SessionPanel
-          {...session.hash[primary.id]}
-          {...ui.session[primary.id]}
-          {...actions.session}
-          {...actions.console} // TODO: organize
-          console={console.hash[primary.id]}
-        />
+        <SessionPanel />
       );
     case 'rule':
       return (
@@ -70,7 +63,7 @@ function Body(options) {
       borderLeft: '1px solid #CCC',
       boxShadow: '0 0 5px rgba(0, 0, 0, 0.1)'
     }}>
-      <SelectedPanel {...options} />
+      <SelectedPanel {...primary} />
     </main>
   ) : null;
 }

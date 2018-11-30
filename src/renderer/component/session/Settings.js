@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-// import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 
 const styles = theme => ({
@@ -12,7 +11,8 @@ const styles = theme => ({
   },
 });
 
-function SessionSettingsSection({id, classes}) {
+function SessionSettingsSection({session, classes}) {
+  const {id} = session;
   return (
     <div className={classes.root}>
       <Typography variant="h6" component="h3">
@@ -23,7 +23,7 @@ function SessionSettingsSection({id, classes}) {
 }
 
 SessionSettingsSection.propTypes = {
-  id: PropTypes.string.isRequired,
+  session: PropTypes.object.isRequired,
   classes: PropTypes.object
 };
 

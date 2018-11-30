@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import Tooltip from '@material-ui/core/Tooltip';
-// import Typography from '@material-ui/core/Typography';
 
 const styles = theme => ({
   root: {
@@ -14,7 +13,8 @@ const styles = theme => ({
   },
 });
 
-function SessionUrlSection({id, url, proxyUrl, onUrlChange, classes}) {
+function SessionUrlSection({session, onUrlChange, classes}) {
+  const {url, proxyUrl} = session;
   return (
     <div className={classes.root}>
       <div>
@@ -23,7 +23,7 @@ function SessionUrlSection({id, url, proxyUrl, onUrlChange, classes}) {
           value={url || ''}
           fullWidth
           margin="normal"
-          onChange={event => onUrlChange(id, event.target.value.trim())}
+          onChange={event => onUrlChange(event.target.value.trim())}
         />
       </div>
       <div>
@@ -50,9 +50,12 @@ function SessionUrlSection({id, url, proxyUrl, onUrlChange, classes}) {
 }
 
 SessionUrlSection.propTypes = {
+  /*
   id: PropTypes.string.isRequired,
   url: PropTypes.string,
   proxyUrl: PropTypes.string,
+  */
+  session: PropTypes.object.isRequired,
   onUrlChange: PropTypes.func.isRequired,
   classes: PropTypes.object
 };

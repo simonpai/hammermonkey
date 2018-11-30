@@ -136,7 +136,7 @@ function renderContent(type, classes, {args, error, expr, value}) {
   }
 }
 
-function SessionConsoleSection({id, console = [], onEval, classes}) {
+function SessionConsoleSection({console = [], onEval, classes}) {
   return (
     <div className={classes.root}>
       <div className={classes.console}>
@@ -160,7 +160,7 @@ function SessionConsoleSection({id, console = [], onEval, classes}) {
               event.preventDefault(); // in case Enter pressed with empty input
               var value = event.target.value.trim();
               if (value) {
-                onEval(id, value);
+                onEval(value);
                 event.target.value = '';
               }
             }
@@ -172,7 +172,6 @@ function SessionConsoleSection({id, console = [], onEval, classes}) {
 }
 
 SessionConsoleSection.propTypes = {
-  id: PropTypes.string.isRequired,
   console: PropTypes.array,
   classes: PropTypes.object,
   onEval: PropTypes.func.isRequired
