@@ -11,6 +11,7 @@ import CloseCircle from 'mdi-material-ui/CloseCircle';
 
 const styles = () => ({
   root: {
+    height: '100%',
     display: 'flex',
     flexDirection: 'column',
     flex: '1 1 0%',

@@ -6,6 +6,13 @@ html {
 }
 body {
   margin: 0;
+
+  & ::-webkit-scrollbar,
+  & ::-webkit-scrollbar-track {
+    all: unset;
+    width: 0;
+    height: 0;
+  }
 }
 .ui.secondary.pointing.rippling.menu .item {
   padding: 0;

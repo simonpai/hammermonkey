@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
+import { Segment } from 'semantic-ui-react';
 
 import SessionTabs from '../component/session/Tabs';
 import SettingsSection from '../component/session/Settings';
@@ -74,17 +75,25 @@ function SessionPanel({id, ui = {}, session, console, actions}) {
   return (
     <div style={{
       height: '100%',
-      overflow: 'hidden',
       display: 'flex',
       flexDirection: 'column',
-      borderRadius: 0,
-      backgroundColor: 'white'
+      borderRadius: 0
     }}>
       <SessionTabs
         selection={selection}
         onSelect={value => actions.ui.onSelect(id, value)}
       />
-      <SelectedSection {...{id, selection, session, console, actions}} />
+      <Segment
+        attached="bottom"
+        style={{
+          padding: 0,
+          flexGrow: 1,
+          height: '100%',
+          boxShadow: 'rgba(0, 0, 0, 0.2) 0 3px 5px'
+        }}
+      >
+        <SelectedSection {...{id, selection, session, console, actions}} />
+      </Segment>
     </div>
   )
 }

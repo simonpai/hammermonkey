@@ -1,8 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Menu } from 'semantic-ui-react';
+// import RippleMenuItem from '../../semantic/RippleMenuItem';
+
 import { withStyles } from '@material-ui/core/styles';
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
 
 const styles = () => ({
   tabs: {
@@ -13,31 +14,36 @@ const styles = () => ({
   },
 });
 
-function SessionTabs({selection, onSelect, classes}) {
+function SessionTab({value, label, active, onSelect}) {
   return (
-    <Tabs
-      value={selection || 'url'}
-      indicatorColor="primary"
-      textColor="primary"
-      onChange={(event, value) => onSelect(value)}
-      classes={{root: classes.tabs}}
+    <Menu.Item
+      name={value}
+      active={active}
+      style={{
+        fontWeight: 'bold',
+        opacity: active ? 1 : 0.65
+      }}
+      onClick={() => onSelect(value)}
     >
-      <Tab
-        value="settings"
-        classes={{root: classes.tab}}
-        label="Settings"
-      />
-      <Tab
-        value="url"
-        classes={{root: classes.tab}}
-        label="URL"
-      />
-      <Tab
-        value="console"
-        classes={{root: classes.tab}}
-        label="Console"
-      />
-    </Tabs>
+      {label || name}
+    </Menu.Item>
+  );
+}
+
+SessionTab.propTypes = {
+  value: PropTypes.string.isRequired,
+  label: PropTypes.string,
+  active: PropTypes.bool.isRequired,
+  onSelect: PropTypes.func.isRequired
+};
+
+function SessionTabs({selection = 'url', onSelect}) {
+  return (
+    <Menu attached="top" tabular>
+      <SessionTab value="settings" label="Settings" active={selection === 'settings'} onSelect={onSelect} />
+      <SessionTab value="url" label="URL" active={selection === 'url'} onSelect={onSelect} />
+      <SessionTab value="console" label="Console" active={selection === 'console'} onSelect={onSelect} />
+    </Menu>
   )
 }
 
