@@ -3,17 +3,6 @@ import PropTypes from 'prop-types';
 import { Menu } from 'semantic-ui-react';
 // import RippleMenuItem from '../../semantic/RippleMenuItem';
 
-import { withStyles } from '@material-ui/core/styles';
-
-const styles = () => ({
-  tabs: {
-    borderBottom: '1px solid #CCC',
-  },
-  tab: {
-    minWidth: 120,
-  },
-});
-
 function SessionTab({value, label, active, onSelect}) {
   return (
     <Menu.Item
@@ -50,8 +39,7 @@ function SessionTabs({selection = 'url', onSelect}) {
 
 SessionTabs.propTypes = {
   selection: PropTypes.string,
-  onSelect: PropTypes.func.isRequired,
-  classes: PropTypes.object
+  onSelect: PropTypes.func.isRequired
 };
 
-export default withStyles(styles)(SessionTabs);
+export default SessionTabs;

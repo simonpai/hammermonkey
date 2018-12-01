@@ -54,7 +54,7 @@ function SelectedPanel({type}) {
 
 function Body(options) {
   const {ui: {primary}} = options;
-  return primary && primary.type ? (
+  return (
     <main style={{
       flexGrow: 1,
       minWidth: 0,
@@ -64,9 +64,11 @@ function Body(options) {
       boxShadow: 'inset rgba(0, 0, 0, 0.1) 0 0 10px',
       backgroundColor: '#EEE'
     }}>
-      <SelectedPanel {...primary} />
+      {
+        primary && primary.type && <SelectedPanel {...primary} />
+      }
     </main>
-  ) : null;
+  );
 }
 
 export default enhance(Body);
