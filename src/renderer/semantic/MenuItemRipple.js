@@ -5,7 +5,7 @@ import ButtonBase from '@material-ui/core/ButtonBase/ButtonBase';
 function MenuItemRipple({children, ...props}) {
   return (
     <Menu.Item {...props}>
-      <ButtonBase className="mu-bb">
+      <ButtonBase className="mui-button-base">
         {children}
       </ButtonBase>
     </Menu.Item>

@@ -14,17 +14,80 @@ body {
     height: 0;
   }
 }
+
+// material ui hack //
 .ui.secondary.pointing.rippling.menu .item {
   padding: 0;
 
-  & > .mu-bb {
+  & > .mui-button-base {
     padding: .85714286em 1.14285714em;
     width: 100%;
     justify-content: left;
   }
 }
 .ui.icon.button, .ui.icon.buttons .button {
-  & > .mu-bb {
+  & > .mui-button-base {
     padding: .78571429em .78571429em .78571429em;
   }
 }
+
+.ui.transparent.input.mui-light-input > input {
+  padding: 0.333em 0 !important;
+}
+
+.mui-underline {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  pointer-events: none;
+
+  &::before,
+  &::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+  }
+  &::before {
+    border-bottom: 1px solid #CCC;
+    transition: border-bottom-color 200ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+  }
+  &::after {
+    border-bottom: 2px solid #00b5ad; // TODO
+    transform: scaleX(0);
+    transition: transform 200ms cubic-bezier(0.0, 0, 0.2, 1) 0ms;
+  }
+}
+:hover:not(:disabled) + .mui-underline {
+  &::before {
+    border-bottom-width: 2px;
+    // Reset on touch devices, it doesn't add specificity
+    @media (hover: none) {
+      border-bottom-width: 1px;
+    }
+  }
+}
+:hover:not(:disabled):not(:focus):not(:invalid) + .mui-underline {
+  &::before {
+    border-bottom-color: rgba(0, 0, 0, .87); // TODO
+    // Reset on touch devices, it doesn't add specificity
+    @media (hover: none) {
+      border-bottom-color: #CCC;
+    }
+  }
+}
+:invalid + .mui-underline {
+  &::after {
+    border-bottom-color: red;
+    transform: scaleX(1);
+  }
+}
+:focus + .mui-underline {
+  &::after {
+    transform: scaleX(1);
+  }
+}
+

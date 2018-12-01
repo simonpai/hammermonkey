@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
 import { HotKeys } from 'react-hotkeys';
-import { Input, Button, Icon, Form, TextArea } from 'semantic-ui-react';
+import { Button, Icon, Form, TextArea } from 'semantic-ui-react';
 import { withStyles } from '@material-ui/core/styles';
 
 import { action, selector } from '../store/rule';
@@ -92,12 +92,14 @@ function RulePanel({actions, classes, rule}) {
             </Button>
           </div>
           <div style={{overflow: 'hidden'}}>
-            <Input
-              placeholder="Name"
-              style={{width: '100%', height: 40}}
-              value={data.name || ''}
-              onChange={event => actions.rule.onNameChange(id, event.target.value)}
-            />
+            <Form>
+              <Form.Input.Light
+                fluid
+                label="Title"
+                value={data.name || ''}
+                onChange={event => actions.rule.onNameChange(id, event.target.value)}
+              />
+            </Form>
           </div>
         </div>
         <Form style={{display: 'flex', flexGrow: 1, marginTop: 10}}>
