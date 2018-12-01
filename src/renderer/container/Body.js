@@ -4,36 +4,14 @@ import { compose } from 'recompose';
 
 import SessionPanel from './SessionPanel';
 import RulePanel from './RulePanel';
-import { action } from '../store';
 
-function mapStateToProps({ui, session, console}) {
-  return {ui, session, console};
-}
-
-function mapDispatchToProps(dispatch) {
-  return {
-    actions: {
-      session: {
-        onTabSelect: (id, value) => dispatch(action.ui.session.selectTab(id, value)),
-        onUrlChange: (id, url) => dispatch(action.session.url(id, url))
-      },
-      console: {
-        onEval: (id, value) => dispatch(action.console.eval(id, value))
-      },
-      rule: {
-        onNameChange: (id, name) => dispatch(action.rule.update(id, {name})),
-        onContentChange: (id, content) => dispatch(action.rule.update(id, {content})),
-        onSave: (id) => dispatch(action.rule.save(id)),
-        onDelete: (id) => dispatch(action.rule.delete(id))
-      }
-    }
-  };
+function mapStateToProps({ui}) {
+  return {ui};
 }
 
 const enhance = compose(
   connect(
-    mapStateToProps,
-    mapDispatchToProps
+    mapStateToProps
   )
 );
 
@@ -52,8 +30,8 @@ function SelectedPanel({type}) {
   }
 }
 
-function Body(options) {
-  const {ui: {primary}} = options;
+function Body({ui}) {
+  const {primary} = ui;
   return (
     <main style={{
       flexGrow: 1,
