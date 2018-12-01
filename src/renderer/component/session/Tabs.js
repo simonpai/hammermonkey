@@ -21,7 +21,8 @@ function SessionTab({value, label, active, onSelect}) {
       active={active}
       style={{
         fontWeight: 'bold',
-        opacity: active ? 1 : 0.65
+        opacity: active ? 1 : 0.65,
+        boxShadow: active ? 'rgba(0,0,0,0.2) 0 0px 3px' : 'none'
       }}
       onClick={() => onSelect(value)}
     >
