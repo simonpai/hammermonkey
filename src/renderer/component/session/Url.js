@@ -1,43 +1,43 @@
 import { clipboard } from 'electron';
 import React from 'react';
 import PropTypes from 'prop-types';
-import TextField from '@material-ui/core/TextField';
-import Tooltip from '@material-ui/core/Tooltip';
+import { Form, Popup } from 'semantic-ui-react';
 
 function SessionUrlSection({session, onUrlChange}) {
   const {url, proxyUrl} = session;
   return (
     <div style={{
-      padding: '0 10px'
+      padding: 10
     }}>
-      <div>
-        <TextField
+      <Form>
+        <Form.Input.Light
+          fluid
           label="Original URL"
+          placeholder="google.com"
           value={url || ''}
-          fullWidth
-          margin="normal"
           onChange={event => onUrlChange(event.target.value.trim())}
         />
-      </div>
-      <div>
-        <Tooltip title="click to copy">
-          <TextField
-            label="Proxy URL"
-            value={proxyUrl || ''}
-            fullWidth
-            margin="normal"
-            InputProps={{
-              readOnly: true
-            }}
-            inputProps={{
-              style: {
-                cursor: 'pointer'
-              }
-            }}
-            onClick={() => proxyUrl && clipboard.writeText(proxyUrl)}
-          />
-        </Tooltip>
-      </div>
+        <Popup
+          inverted
+          position="bottom left"
+          size="small"
+          content="click to copy"
+          trigger={
+            <Form.Input.Light
+              fluid
+              label="Proxy URL"
+              readOnly
+              value={proxyUrl || ''}
+              inputProps={{
+                style: {
+                  cursor: 'pointer'
+                }
+              }}
+              onClick={() => proxyUrl && clipboard.writeText(proxyUrl)}
+            />
+          }
+        />
+      </Form>
     </div>
   )
 }

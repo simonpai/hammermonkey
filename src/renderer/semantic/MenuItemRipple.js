@@ -2,7 +2,7 @@ import React from 'react';
 import { Menu } from 'semantic-ui-react';
 import ButtonBase from '@material-ui/core/ButtonBase/ButtonBase';
 
-function RippleMenuItem({children, ...props}) {
+function MenuItemRipple({children, ...props}) {
   return (
     <Menu.Item {...props}>
       <ButtonBase className="mu-bb">
@@ -12,4 +12,4 @@ function RippleMenuItem({children, ...props}) {
   )
 }
 
-export default RippleMenuItem;
+export default MenuItemRipple;

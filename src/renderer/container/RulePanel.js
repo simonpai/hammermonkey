@@ -9,20 +9,6 @@ import { withStyles } from '@material-ui/core/styles';
 import { action, selector } from '../store/rule';
 
 const styles = () => ({
-  root: {
-    height: '100%',
-    display: 'flex',
-    flexDirection: 'column'
-  },
-  paper: {
-    padding: 20,
-    height: '100%',
-    boxSizing: 'border-box',
-    display: 'flex',
-    flexDirection: 'column',
-    borderRadius: 0,
-    backgroundColor: 'white'
-  },
   button: {
     margin: '0 0 0 10px !important',
     width: 40,
@@ -65,10 +51,27 @@ function RulePanel({actions, classes, rule}) {
   const {id, data, saving} = rule;
   const saved = selector.isSaved(rule);
   return (
-    <HotKeys className={classes.root} keyMap={keyMap} style={{outline: 0}} handlers={{
-      save: () => actions.rule.onSave(id)
-    }}>
-      <div className={classes.paper}>
+    <HotKeys
+      keyMap={keyMap}
+      style={{
+        height: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+        outline: 0
+      }}
+      handlers={{
+        save: () => actions.rule.onSave(id)
+      }}
+    >
+      <div style={{
+        padding: 20,
+        height: '100%',
+        boxSizing: 'border-box',
+        display: 'flex',
+        flexDirection: 'column',
+        borderRadius: 0,
+        backgroundColor: 'white'
+      }}>
         <div>
           <div style={{float: 'right'}}>
             <Button

@@ -6,9 +6,6 @@ import ChevronRight from 'mdi-material-ui/ChevronRight';
 import ChevronDoubleLeft from 'mdi-material-ui/ChevronDoubleLeft';
 import CloseCircle from 'mdi-material-ui/CloseCircle';
 
-// import TextField from '@material-ui/core/TextField';
-// import Typography from '@material-ui/core/Typography';
-
 const styles = () => ({
   root: {
     height: '100%',

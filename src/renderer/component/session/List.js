@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Menu, Icon } from 'semantic-ui-react';
-import RippleMenuItem from '../../semantic/RippleMenuItem';
 
 function SessionList({sessions, selected, onSelect}) {
   return (
@@ -9,7 +8,7 @@ function SessionList({sessions, selected, onSelect}) {
       marginTop: 0
     }}>
       {sessions.map(({key, label, icon}) =>
-        <RippleMenuItem
+        <Menu.Item.Ripple
           key={key}
           name={key}
           active={key === selected}
@@ -22,7 +21,7 @@ function SessionList({sessions, selected, onSelect}) {
           {
             label
           }
-        </RippleMenuItem>
+        </Menu.Item.Ripple>
       )}
     </Menu>
   )

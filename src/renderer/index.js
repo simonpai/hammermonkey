@@ -5,6 +5,8 @@ import { ConnectedRouter } from 'react-router-redux';
 import createHistory from 'history/createBrowserHistory';
 
 import '../polyfill';
+import './semantic/shim';
+
 import withTheme from './theme';
 import routes from './routes';
 import configureStore from './store/configure';
