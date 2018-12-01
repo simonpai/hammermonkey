@@ -15,6 +15,36 @@ body {
   }
 }
 
+// semantic ui fix //
+.ui.menu.inverted.teal .ui.dropdown .menu {
+  border-color: #00b5ad !important;
+
+  > .item {
+    background-color: #00b5ad !important;
+    color: rgba(255, 255, 255, .9) !important;
+
+    &::before {
+      content: '';
+      display: block;
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      width: 100%;
+      pointer-events: none;
+      background-color: transparent !important;
+    }
+    &:hover {
+      color: #FFF;
+
+      &::before {
+        background-color: rgba(255, 255, 255, .08) !important;
+      }
+    }
+  }
+}
+
 // material ui hack //
 .ui.secondary.pointing.rippling.menu .item {
   padding: 0;

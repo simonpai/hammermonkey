@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
-// import { push } from 'react-router-redux';
 import { Menu, Dropdown } from 'semantic-ui-react';
 
 import { action } from '../store';
