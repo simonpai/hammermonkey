@@ -1,13 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Menu, Icon } from 'semantic-ui-react';
+import { Menu } from 'semantic-ui-react';
+import Icon from '@mdi/react';
+import { mdiMonitorCellphone } from '@mdi/js';
 
 function SessionList({sessions, selected, onSelect}) {
   return (
     <Menu pointing secondary vertical className="rippling" style={{
       marginTop: 0
     }}>
-      {sessions.map(({key, label, icon}) =>
+      {sessions.map(({key, label}) =>
         <Menu.Item.Ripple
           key={key}
           name={key}
@@ -15,9 +17,14 @@ function SessionList({sessions, selected, onSelect}) {
           color={key === selected ? 'teal' : 'black'}
           onClick={() => onSelect(key)}
         >
-          <Icon name={icon} style={{
-            marginRight: '0.75em'
-          }} />
+          <Icon
+            path={mdiMonitorCellphone}
+            color={key === selected ? 'teal' : 'black'}
+            style={{
+              width: 16,
+              marginRight: '0.75em'
+            }}
+          />
           {
             label
           }
@@ -31,8 +38,7 @@ SessionList.propTypes = {
   sessions: PropTypes.arrayOf(
     PropTypes.shape({
       key: PropTypes.string.isRequired,
-      label: PropTypes.string.isRequired,
-      icon: PropTypes.any
+      label: PropTypes.string.isRequired
     }).isRequired
   ).isRequired,
   selected: PropTypes.string,

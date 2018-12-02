@@ -1,13 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Menu, Icon } from 'semantic-ui-react';
+import { Menu } from 'semantic-ui-react';
+import Icon from '@mdi/react';
+import { mdiFileDocumentOutline } from '@mdi/js';
 
 function RuleList({rules, selected, onSelect}) {
   return (
     <Menu pointing secondary vertical className="rippling" style={{
       marginTop: 0
     }}>
-      {rules.map(({key, label, icon}) =>
+      {rules.map(({key, label}) =>
         <Menu.Item.Ripple
           key={key}
           name={key}
@@ -15,9 +17,14 @@ function RuleList({rules, selected, onSelect}) {
           color={key === selected ? 'teal' : 'black'}
           onClick={() => onSelect(key)}
         >
-          <Icon name={icon} style={{
-            marginRight: '0.75em'
-          }} />
+          <Icon
+            path={mdiFileDocumentOutline}
+            color={key === selected ? 'teal' : 'black'}
+            style={{
+              width: 16,
+              marginRight: '0.75em'
+            }}
+          />
           {
             label
           }

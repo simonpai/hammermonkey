@@ -49,8 +49,7 @@ function Inventory({ui, session, rule, actions}) {
               <SessionList
                 sessions={sessions.map(({id}) => ({
                   key: id,
-                  label: id,
-                  icon: 'mobile alternate'
+                  label: id
                 }))}
                 selected={primary && primary.type === 'session' ? primary.id : undefined}
                 onSelect={(id) => actions.ui.select('session', id)}
@@ -69,8 +68,7 @@ function Inventory({ui, session, rule, actions}) {
               <RuleList
                 rules={rules.map(({id, data}) => ({
                   key: id,
-                  label: data.name || '(untitled)',
-                  icon: 'code'
+                  label: data.name || '(untitled)'
                 }))}
                 selected={primary && primary.type === 'rule' ? primary.id : undefined}
                 onSelect={(id) => actions.ui.select('rule', id)}

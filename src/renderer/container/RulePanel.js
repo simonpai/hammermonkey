@@ -3,7 +3,9 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
 import { HotKeys } from 'react-hotkeys';
-import { Button, Icon, Form, TextArea } from 'semantic-ui-react';
+import { Button, Form, TextArea } from 'semantic-ui-react';
+import Icon from '@mdi/react';
+import { mdiFloppy, mdiDelete } from '@mdi/js';
 
 import { action, selector } from '../store/rule';
 
@@ -77,14 +79,14 @@ function RulePanel({actions, rule}) {
               disabled={saved || saving}
               onClick={() => actions.rule.onSave(id)}
             >
-              <Icon name="save" />
+              <Icon path={mdiFloppy} color="white" />
             </Button.Ripple>
             <Button.Ripple
               icon
               style={buttonStyle}
               onClick={() => actions.rule.onDelete(id)}
             >
-              <Icon name="trash" />
+              <Icon path={mdiDelete} color="#666" />
             </Button.Ripple>
           </div>
           <div style={{overflow: 'hidden'}}>
