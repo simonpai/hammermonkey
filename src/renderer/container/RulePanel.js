@@ -70,7 +70,7 @@ function RulePanel({actions, rule}) {
       }}>
         <div>
           <div style={{float: 'right'}}>
-            <Button
+            <Button.Ripple
               icon
               color="teal"
               style={buttonStyle}
@@ -78,14 +78,14 @@ function RulePanel({actions, rule}) {
               onClick={() => actions.rule.onSave(id)}
             >
               <Icon name="save" />
-            </Button>
-            <Button
+            </Button.Ripple>
+            <Button.Ripple
               icon
               style={buttonStyle}
               onClick={() => actions.rule.onDelete(id)}
             >
               <Icon name="trash" />
-            </Button>
+            </Button.Ripple>
           </div>
           <div style={{overflow: 'hidden'}}>
             <Form>
