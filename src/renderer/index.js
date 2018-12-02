@@ -7,7 +7,6 @@ import createHistory from 'history/createBrowserHistory';
 import '../polyfill';
 import './semantic/shim';
 
-import withTheme from './theme';
 import routes from './routes';
 import configureStore from './store/configure';
 
@@ -29,10 +28,8 @@ const store = configureStore(history);
 const rootElement = document.querySelector(document.currentScript.getAttribute('data-container'));
 
 ReactDOM.render(
-  withTheme(
-    <Provider store={store}>
-      <ConnectedRouter history={history}>{routes}</ConnectedRouter>
-    </Provider>
-  ),
+  <Provider store={store}>
+    <ConnectedRouter history={history}>{routes}</ConnectedRouter>
+  </Provider>,
   rootElement
 );
