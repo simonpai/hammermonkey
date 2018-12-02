@@ -66,6 +66,7 @@ function SessionConsoleSection({console = [], onEval}) {
         }
         <TextArea
           className="hm input code"
+          autoFocus
           onKeyDown={event => {
             if (event.key === 'Enter' && !event.shiftKey) {
               event.preventDefault(); // in case Enter pressed with empty input
