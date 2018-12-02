@@ -28,11 +28,11 @@ export default class ConsoleService {
   }
 
   _handleEvalRequest(event, sessionId, expr) {
-    const session = this._hammerhead.session(sessionId);
+    const session = this._hammerhead.sessions.get(sessionId);
     if (!session) {
       return;
     }
-    session.push.add('console.eval', expr);
+    // session.push.add('console.eval', expr);
   }
 
   _handleConsole(req, res) {

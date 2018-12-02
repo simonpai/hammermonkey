@@ -26,7 +26,9 @@ export default class SessionService {
     this._openSession = hammerhead.openSession.bind(hammerhead);
     hammerhead.openSession = this.open.bind(this);
 
-    Object.defineProperty(hammerhead, 'sessions', this);
+    Object.defineProperty(hammerhead, 'sessions', {
+      value: this
+    });
   }
 
   _deserialize(id, options) {
