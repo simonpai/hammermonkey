@@ -4,17 +4,8 @@ import { connect } from 'react-redux';
 import { compose } from 'recompose';
 import { HotKeys } from 'react-hotkeys';
 import { Button, Icon, Form, TextArea } from 'semantic-ui-react';
-import { withStyles } from '@material-ui/core/styles';
 
 import { action, selector } from '../store/rule';
-
-const styles = () => ({
-  button: {
-    margin: '0 0 0 10px !important',
-    width: 40,
-    height: 40
-  }
-});
 
 const keyMap = {
   save: ['command+s', 'ctrl+s']
@@ -43,11 +34,16 @@ const enhance = compose(
   connect(
     mapStateToProps,
     mapDispatchToProps
-  ),
-  withStyles(styles)
+  )
 );
 
-function RulePanel({actions, classes, rule}) {
+const buttonStyle = {
+  margin: '0 0 0 10px !important',
+  width: 40,
+  height: 40
+};
+
+function RulePanel({actions, rule}) {
   const {id, data, saving} = rule;
   const saved = selector.isSaved(rule);
   return (
@@ -77,16 +73,16 @@ function RulePanel({actions, classes, rule}) {
             <Button
               icon
               color="teal"
+              style={buttonStyle}
               disabled={saved || saving}
               onClick={() => actions.rule.onSave(id)}
-              className={classes.button}
             >
               <Icon name="save" />
             </Button>
             <Button
               icon
+              style={buttonStyle}
               onClick={() => actions.rule.onDelete(id)}
-              className={classes.button}
             >
               <Icon name="trash" />
             </Button>
@@ -117,8 +113,7 @@ function RulePanel({actions, classes, rule}) {
 
 RulePanel.propTypes = {
   rule: PropTypes.object.isRequired,
-  actions: PropTypes.object.isRequired,
-  classes: PropTypes.object
+  actions: PropTypes.object.isRequired
 };
 
 export default enhance(RulePanel);

@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import Icon from '@mdi/react';
+import { mdiChevronDoubleLeft, mdiCloseCircle, mdiChevronRight } from '@mdi/js';
+
 import { withStyles } from '@material-ui/core/styles';
 import InputBase from '@material-ui/core/InputBase';
-import ChevronRight from 'mdi-material-ui/ChevronRight';
-import ChevronDoubleLeft from 'mdi-material-ui/ChevronDoubleLeft';
-import CloseCircle from 'mdi-material-ui/CloseCircle';
 
 const styles = () => ({
   root: {
@@ -23,15 +23,14 @@ const styles = () => ({
   row: {
     position: 'relative',
     paddingLeft: '2em',
+    minHeight: '1.8em',
     borderBottom: '1px #E0E0E0 solid'
   },
   icon: {
     position: 'absolute',
-    top: '0.2em',
-    left: '0.3em',
-    width: '1em',
-    fontSize: 15,
-    color: '#999'
+    top: '0.1em',
+    left: '0.2em',
+    width: '1.6em'
   },
   consoleRow: {
   },
@@ -106,16 +105,15 @@ function getClassName(type, classes) {
 function renderIcon(type, classes) {
   switch (type) {
     case 'console.log':
-      return (<i className={classes.icon} />);
+      return null;
     case 'error':
-      return (<CloseCircle className={classes.icon} style={{color: 'red'}} />);
+      return (<Icon className={classes.icon} path={mdiCloseCircle} color="red" />);
     case 'eval.request':
-      return (<ChevronRight className={classes.icon} />);
+      return (<Icon className={classes.icon} path={mdiChevronRight} color="#999" />);
     case 'eval.response':
-      return (<ChevronDoubleLeft className={classes.icon} />);
+      return (<Icon className={classes.icon} path={mdiChevronDoubleLeft} color="#999" />);
     case 'eval.input':
-      // TODO: use theme
-      return (<ChevronRight className={classes.icon} style={{color: '#009688'}} />);
+      return (<Icon className={classes.icon} path={mdiChevronRight} color="teal" />);
   }
 }
 
@@ -136,8 +134,19 @@ function renderContent(type, classes, {args, error, expr, value}) {
 
 function SessionConsoleSection({console = [], onEval, classes}) {
   return (
-    <div className={classes.root}>
-      <div className={classes.console}>
+    <div style={{
+      height: '100%',
+      display: 'flex',
+      flexDirection: 'column',
+      flex: '1 1 0%',
+      overflow: 'scroll'
+    }}>
+      <div style={{
+        fontFamily: '"Roboto Mono", monospace',
+        fontSize: 12,
+        lineHeight: '1.8em',
+        color: '#666'
+      }}>
         {
           console.map(({type, ...msg}) => render(type, classes, {...msg}))
         }
