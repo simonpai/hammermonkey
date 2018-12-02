@@ -33,6 +33,9 @@ export default class ConsoleService {
       return;
     }
     // session.push.add('console.eval', expr);
+    this._client.send('console.eval', sessionId, {
+      value: '[eval response placeholder] ' + expr
+    });
   }
 
   _handleConsole(req, res) {
