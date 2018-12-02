@@ -1,0 +1,54 @@
+.hm.console-panel {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 0%;
+  overflow: scroll;
+  font-size: 12px;
+  color: #555; // TODO
+
+  &,
+  .hm.input {
+    line-height: 1.8em;
+  }
+
+  .hm.input {
+    width: 100%;
+    border: none;
+    padding: 0;
+    outline: none;
+    resize: none;
+  }
+
+  .hm.input-container {
+    display: flex;
+    flex-wrap: wrap;
+    flex: 1;
+    position: relative;
+    font-size: 12;
+    padding-left: 2em;
+  }
+
+  .hm.row {
+    position: relative;
+    padding-left: 2em;
+    min-height: 1.8em;
+    border-bottom: 1px solid #E0E0E0;
+  }
+
+  .hm.row.error {
+    color: red;
+    background-color: rgba(255, 0, 0, 0.05);
+  }
+
+  .hm.cell {
+    margin-right: 1em;
+  }
+
+  .hm.icon {
+    position: absolute;
+    top: 0.1em;
+    left: 0.2em;
+    width: 1.6em;
+  }
+}
