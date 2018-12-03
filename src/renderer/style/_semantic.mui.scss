@@ -12,11 +12,6 @@
     justify-content: left;
   }
 }
-.ui.icon.button, .ui.icon.buttons .button {
-  & > .mui-button-base {
-    padding: .78571429em .78571429em .78571429em;
-  }
-}
 
 .ui.transparent.input.mui-light-input > input {
   padding: 0.333em 0 !important;
