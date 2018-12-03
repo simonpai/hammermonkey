@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { compose } from 'recompose';
 
 import SessionPanel from './SessionPanel';
-import UserscriptPanel from './UserscriptPanel';
+import RulePanel from './RulePanel';
 
 function mapStateToProps({ui}) {
   return {ui};
@@ -23,7 +23,7 @@ function SelectedPanel({type}) {
       );
     case 'rule':
       return (
-        <UserscriptPanel />
+        <RulePanel />
       );
     default:
       return null;

@@ -1,43 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import { compose } from 'recompose';
 import { HotKeys } from 'react-hotkeys';
 import { Button, Form, TextArea } from 'semantic-ui-react';
 import Icon from '@mdi/react';
 import { mdiFloppy, mdiDelete } from '@mdi/js';
 
-import { action, selector } from '../store/rule';
+import { selector } from '../../../store/rule';
 
 const keyMap = {
   save: ['command+s', 'ctrl+s']
 };
-
-function mapStateToProps({ui, rule}) {
-  return {
-    rule: selector.$d(rule).get(ui.primary.id)
-  };
-}
-
-function mapDispatchToProps(dispatch) {
-  return {
-    actions: {
-      rule: {
-        onNameChange: (id, name) => dispatch(action.update(id, {name})),
-        onContentChange: (id, content) => dispatch(action.update(id, {content})),
-        onSave: (id) => dispatch(action.save(id)),
-        onDelete: (id) => dispatch(action.delete(id))
-      }
-    }
-  };
-}
-
-const enhance = compose(
-  connect(
-    mapStateToProps,
-    mapDispatchToProps
-  )
-);
 
 const buttonStyle = {
   margin: '0 0 0 10px !important',
@@ -118,4 +90,4 @@ UserscriptPanel.propTypes = {
   actions: PropTypes.object.isRequired
 };
 
-export default enhance(UserscriptPanel);
+export default UserscriptPanel;
