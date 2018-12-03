@@ -45,7 +45,7 @@ const buttonStyle = {
   height: 40
 };
 
-function RulePanel({actions, rule}) {
+function UserscriptPanel({actions, rule}) {
   const {id, data, saving} = rule;
   const saved = selector.isSaved(rule);
   return (
@@ -113,9 +113,9 @@ function RulePanel({actions, rule}) {
   )
 }
 
-RulePanel.propTypes = {
+UserscriptPanel.propTypes = {
   rule: PropTypes.object.isRequired,
   actions: PropTypes.object.isRequired
 };
 
-export default enhance(RulePanel);
+export default enhance(UserscriptPanel);
