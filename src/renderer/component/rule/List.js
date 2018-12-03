@@ -22,7 +22,8 @@ function RuleList({rules, selected, onSelect}) {
             color={key === selected ? 'teal' : 'black'}
             style={{
               width: 16,
-              marginRight: '0.75em'
+              marginRight: '0.75em',
+              verticalAlign: 'sub'
             }}
           />
           {
