@@ -30,8 +30,8 @@ SessionTab.propTypes = {
 function SessionTabs({selection = 'url', onSelect}) {
   return (
     <Menu attached="top" tabular>
-      <SessionTab value="settings" label="Settings" active={selection === 'settings'} onSelect={onSelect} />
       <SessionTab value="url" label="URL" active={selection === 'url'} onSelect={onSelect} />
+      <SessionTab value="settings" label="Settings" active={selection === 'settings'} onSelect={onSelect} />
       <SessionTab value="console" label="Console" active={selection === 'console'} onSelect={onSelect} />
     </Menu>
   )
