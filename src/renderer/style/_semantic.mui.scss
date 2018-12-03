@@ -3,21 +3,17 @@
  */
 
  // menu item w/ ripple effect //
-.ui.secondary.pointing.rippling.menu .item {
-  padding: 0;
-
-  & > .mui-button-base {
-    padding: .85714286em 1.14285714em;
-    width: 100%;
-    justify-content: left;
-  }
+.ui.secondary.pointing.menu .item.mui-button-base {
+  width: calc(100% + 2px);
+  font-family: inherit;
+  text-align: left;
 }
 
+// input underline //
 .ui.transparent.input.mui-light-input > input {
   padding: 0.333em 0 !important;
 }
 
-// input underline //
 .mui-underline {
   position: absolute;
   left: 0;

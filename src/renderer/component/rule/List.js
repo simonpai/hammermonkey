@@ -6,7 +6,7 @@ import { mdiFileDocumentOutline } from '@mdi/js';
 
 function RuleList({rules, selected, onSelect}) {
   return (
-    <Menu pointing secondary vertical className="rippling" style={{
+    <Menu pointing secondary vertical style={{
       marginTop: 0
     }}>
       {rules.map(({key, label}) =>

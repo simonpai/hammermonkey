@@ -6,7 +6,7 @@ import { mdiMonitorCellphone } from '@mdi/js';
 
 function SessionList({sessions, selected, onSelect}) {
   return (
-    <Menu pointing secondary vertical className="rippling" style={{
+    <Menu pointing secondary vertical style={{
       marginTop: 0
     }}>
       {sessions.map(({key, label}) =>
