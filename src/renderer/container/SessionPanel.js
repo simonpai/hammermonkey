@@ -1,9 +1,9 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
-import { Segment } from 'semantic-ui-react';
+import { Tab } from 'semantic-ui-react';
 
-import SessionTabs from '../component/session/Tabs';
 import SettingsSection from '../component/session/Settings';
 import UrlSection from '../component/session/Url';
 import ConsoleSection from '../component/session/Console';
@@ -13,11 +13,12 @@ import { selector } from '../store/session';
 
 function mapStateToProps({ui, session, console}) {
   const id = ui.primary.id;
+  const section = (ui.session[id] || {}).selectedTab || 'url';
   return {
     id,
+    section,
     session: selector.$d(session).get(id),
-    console: console.hash[id],
-    ui: ui.session[id]
+    console: console.hash[id]
   };
 }
 
@@ -44,58 +45,49 @@ const enhance = compose(
   )
 );
 
-function SelectedSection({id, selection, session, console, actions}) {
-  switch (selection) {
-    case 'settings':
-      return (
-        <SettingsSection
-          {...{session}}
-        />
-      );
-    case 'console':
-      return (
-        <ConsoleSection
-          onEval={value => actions.console.onEval(id, value)}
-          {...{console}}
-        />
-      );
-    case 'url':
-    default:
-      return (
-        <UrlSection
-          onUrlChange={url => actions.session.onUrlChange(id, url)}
-          {...{session}}
-        />
-      );
-  }
+/* eslint-disable react/display-name */
+function sections({id, session, console, actions}) {
+  const onUrlChange = url => actions.session.onUrlChange(id, url);
+  const onEval = value => actions.console.onEval(id, value);
+  return [
+    {
+      name: 'url',
+      label: 'URL',
+      render: () => <UrlSection onUrlChange={onUrlChange} {...{session}} />
+    },
+    {
+      name: 'settings',
+      label: 'Settings',
+      render: () => <SettingsSection {...{session}} />
+    },
+    {
+      name: 'console',
+      label: 'Console',
+      render: () => <ConsoleSection onEval={onEval} {...{console}} />
+    }
+  ];
+}
+/* eslint-enable react/display-name */
+
+function SessionPanel({id, section, session, console, actions}) {
+  return (
+    <Tab.View
+      value={section}
+      sections={sections({id, session, console, actions})}
+      onSelect={value => actions.ui.onSelect(id, value)}
+    />
+  );
 }
 
-function SessionPanel({id, ui = {}, session, console, actions}) {
-  const selection = ui.selectedTab;
-  return (
-    <div style={{
-      height: '100%',
-      display: 'flex',
-      flexDirection: 'column',
-      borderRadius: 0
-    }}>
-      <SessionTabs
-        selection={selection}
-        onSelect={value => actions.ui.onSelect(id, value)}
-      />
-      <Segment
-        attached="bottom"
-        style={{
-          padding: 0,
-          flexGrow: 1,
-          height: '100%',
-          boxShadow: 'rgba(0, 0, 0, 0.2) 0 3px 5px'
-        }}
-      >
-        <SelectedSection {...{id, selection, session, console, actions}} />
-      </Segment>
-    </div>
-  )
-}
+SessionPanel.propTypes = {
+  id: PropTypes.string.isRequired,
+  section: PropTypes.string.isRequired,
+  session: PropTypes.object.isRequired,
+  console: PropTypes.arrayOf(
+    PropTypes.shape({
+    }).isRequired
+  ),
+  actions: PropTypes.object.isRequired
+};
 
 export default enhance(SessionPanel);
