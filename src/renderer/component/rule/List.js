@@ -39,8 +39,7 @@ RuleList.propTypes = {
   rules: PropTypes.arrayOf(
     PropTypes.shape({
       key: PropTypes.string.isRequired,
-      label: PropTypes.string.isRequired,
-      icon: PropTypes.any
+      label: PropTypes.string.isRequired
     }).isRequired
   ).isRequired,
   selected: PropTypes.string,
