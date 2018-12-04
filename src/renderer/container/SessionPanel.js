@@ -75,7 +75,10 @@ function SessionPanel({id, section, session, console, actions}) {
       value={section}
       sections={sections({id, session, console, actions})}
       onSelect={value => actions.ui.onSelect(id, value)}
-    />
+    >
+      <Tab.View.Toolbar>
+      </Tab.View.Toolbar>
+    </Tab.View>
   );
 }
 

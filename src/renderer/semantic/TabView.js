@@ -26,7 +26,7 @@ TabMenuItem.propTypes = {
   onSelect: PropTypes.func.isRequired
 };
 
-function TabMenu({sections, value, onSelect}) {
+function TabMenu({sections, value, onSelect, toolbarChildren}) {
   return (
     <Menu attached="top" tabular>
       {
@@ -34,6 +34,13 @@ function TabMenu({sections, value, onSelect}) {
           <TabMenuItem key={name} name={name} label={label} active={value === name} onSelect={() => onSelect(name)} />
         ))
       }
+      <Menu.Menu position='right'>
+        <Menu.Item>
+          {
+            toolbarChildren
+          }
+        </Menu.Item>
+      </Menu.Menu>
     </Menu>
   )
 }
@@ -46,7 +53,8 @@ TabMenu.propTypes = {
     }).isRequired,
   ).isRequired,
   value: PropTypes.string.isRequired,
-  onSelect: PropTypes.func.isRequired
+  onSelect: PropTypes.func.isRequired,
+  toolbarChildren: PropTypes.any
 };
 
 function getSelectedSection({sections, value}) {
@@ -58,8 +66,25 @@ function getSelectedSection({sections, value}) {
   return undefined;
 }
 
-function TabView(props) {
+function TabToolbar() {
+  return undefined;
+}
+
+function getToolbarChildren(children) {
+  if (!Array.isArray(children)) {
+    children = [children];
+  }
+  for (let {type, props} of children) {
+    if (type === TabToolbar) {
+      return props.children;
+    }
+  }
+  return undefined;
+}
+
+function TabView({children, ...props}) {
   const section = getSelectedSection(props);
+  const toolbarChildren = getToolbarChildren(children);
   return (
     <div style={{
       height: '100%',
@@ -67,7 +92,7 @@ function TabView(props) {
       flexDirection: 'column',
       borderRadius: 0
     }}>
-      <TabMenu {...props} />
+      <TabMenu toolbarChildren={toolbarChildren} {...props} />
       <Segment
         attached="bottom"
         style={{
@@ -96,5 +121,7 @@ TabView.propTypes = {
   value: PropTypes.string.isRequired,
   onSelect: PropTypes.func.isRequired
 };
+
+TabView.Toolbar = TabToolbar;
 
 export default TabView;
