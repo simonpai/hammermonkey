@@ -2,7 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
-import { Tab } from 'semantic-ui-react';
+import { Tab, Button } from 'semantic-ui-react';
+import Icon from '@mdi/react';
+import { mdiDelete } from '@mdi/js';
 
 import SettingsSection from '../component/session/Settings';
 import UrlSection from '../component/session/Url';
@@ -77,6 +79,13 @@ function SessionPanel({id, section, session, console, actions}) {
       onSelect={value => actions.ui.onSelect(id, value)}
     >
       <Tab.View.Toolbar>
+        <Button.Ripple
+          icon
+          // disabled={saved || saving}
+          // onClick={() => actions.rule.onSave(id)}
+        >
+          <Icon path={mdiDelete} color="#666" />
+        </Button.Ripple>
       </Tab.View.Toolbar>
     </Tab.View>
   );

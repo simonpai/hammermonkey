@@ -1,9 +1,6 @@
 @import 'reset';
 @import 'semantic.patch';
 @import 'semantic.mui';
-
-.hm.code {
-  font-family: "Roboto Mono", monospace;
-}
+@import 'component';
 
 @import 'console';

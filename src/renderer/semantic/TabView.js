@@ -7,11 +7,6 @@ function TabMenuItem({name, label, active, onSelect}) {
     <Menu.Item
       name={name}
       active={active}
-      style={{
-        fontWeight: 'bold',
-        opacity: active ? 1 : 0.65,
-        boxShadow: active ? 'rgba(0,0,0,0.2) 0 0px 3px' : 'none'
-      }}
       onClick={onSelect}
     >
       {label || name}
@@ -35,11 +30,9 @@ function TabMenu({sections, value, onSelect, toolbarChildren}) {
         ))
       }
       <Menu.Menu position='right'>
-        <Menu.Item>
-          {
-            toolbarChildren
-          }
-        </Menu.Item>
+        {
+          toolbarChildren
+        }
       </Menu.Menu>
     </Menu>
   )
@@ -86,21 +79,11 @@ function TabView({children, ...props}) {
   const section = getSelectedSection(props);
   const toolbarChildren = getToolbarChildren(children);
   return (
-    <div style={{
-      height: '100%',
-      display: 'flex',
-      flexDirection: 'column',
-      borderRadius: 0
-    }}>
+    <div className="hm tab view">
       <TabMenu toolbarChildren={toolbarChildren} {...props} />
       <Segment
+        className="pane"
         attached="bottom"
-        style={{
-          padding: 0,
-          flexGrow: 1,
-          height: '100%',
-          boxShadow: 'rgba(0, 0, 0, 0.2) 0 3px 5px'
-        }}
       >
         {
           section && section.render()
