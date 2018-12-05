@@ -28,7 +28,7 @@ function mapDispatchToProps(dispatch) {
   return {
     actions: {
       ui: {
-        onSelect: (id, value) => dispatch(action.ui.session.selectTab(id, value))
+        onSelect: (id, value) => dispatch(action.ui.session.section(id, value))
       },
       session: {
         onUrlChange: (id, url) => dispatch(action.session.url(id, url))

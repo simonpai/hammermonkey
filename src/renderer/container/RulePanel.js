@@ -3,23 +3,29 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
 
-import { action, selector } from '../store/rule';
+import { action } from '../store';
+import { selector } from '../store/rule';
 import UserscriptPanel from '../component/rule/userscript/Panel';
 
 function mapStateToProps({ui, rule}) {
+  const id = ui.primary.id;
   return {
-    rule: selector.$d(rule).get(ui.primary.id)
+    rule: selector.$d(rule).get(id),
+    ui: ui.rule[id]
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
     actions: {
+      ui: {
+        onSelect: (id, value) => dispatch(action.ui.rule.section(id, value))
+      },
       rule: {
-        onNameChange: (id, name) => dispatch(action.update(id, {name})),
-        onContentChange: (id, content) => dispatch(action.update(id, {content})),
-        onSave: (id) => dispatch(action.save(id)),
-        onDelete: (id) => dispatch(action.delete(id))
+        onNameChange: (id, name) => dispatch(action.rule.update(id, {name})),
+        onContentChange: (id, content) => dispatch(action.rule.update(id, {content})),
+        onSave: (id) => dispatch(action.rule.save(id)),
+        onDelete: (id) => dispatch(action.rule.delete(id))
       }
     }
   };

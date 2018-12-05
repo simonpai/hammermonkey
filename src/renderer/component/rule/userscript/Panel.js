@@ -1,24 +1,40 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { HotKeys } from 'react-hotkeys';
-import { Button, Form, TextArea } from 'semantic-ui-react';
+import { Tab, Button } from 'semantic-ui-react';
 import Icon from '@mdi/react';
 import { mdiFloppy, mdiDelete } from '@mdi/js';
 
 import { selector } from '../../../store/rule';
+import SettingsSection from './Settings';
+import EditorSection from './Editor';
 
 const keyMap = {
   save: ['command+s', 'ctrl+s']
 };
 
-const buttonStyle = {
-  margin: '0 0 0 10px !important',
-  width: 40,
-  height: 40
-};
+/* eslint-disable react/display-name */
+function sections({id, rule, actions}) {
+  const onContentChange = value => actions.rule.onContentChange(id, value);
+  const onNameChange = value => actions.rule.onNameChange(id, value);
+  return [
+    {
+      name: 'editor',
+      label: 'Editor',
+      render: () => <EditorSection {...{rule, onContentChange}} />
+    },
+    {
+      name: 'settings',
+      label: 'Settings',
+      render: () => <SettingsSection {...{rule, onNameChange}} />
+    }
+  ];
+}
+/* eslint-enable react/display-name */
 
-function UserscriptPanel({actions, rule}) {
-  const {id, data, saving} = rule;
+function UserscriptPanel({ui = {}, rule, actions}) {
+  const {section = 'editor'} = ui;
+  const {id, saving} = rule;
   const saved = selector.isSaved(rule);
   return (
     <HotKeys
@@ -33,59 +49,33 @@ function UserscriptPanel({actions, rule}) {
         save: () => actions.rule.onSave(id)
       }}
     >
-      <div style={{
-        padding: 20,
-        height: '100%',
-        boxSizing: 'border-box',
-        display: 'flex',
-        flexDirection: 'column',
-        borderRadius: 0,
-        backgroundColor: 'white'
-      }}>
-        <div>
-          <div style={{float: 'right'}}>
-            <Button.Ripple
-              icon
-              color="teal"
-              style={buttonStyle}
-              disabled={saved || saving}
-              onClick={() => actions.rule.onSave(id)}
-            >
-              <Icon path={mdiFloppy} color="white" />
-            </Button.Ripple>
-            <Button.Ripple
-              icon
-              style={buttonStyle}
-              onClick={() => actions.rule.onDelete(id)}
-            >
-              <Icon path={mdiDelete} color="#666" />
-            </Button.Ripple>
-          </div>
-          <div style={{overflow: 'hidden'}}>
-            <Form>
-              <Form.Input.Light
-                fluid
-                label="Title"
-                value={data.name || ''}
-                onChange={event => actions.rule.onNameChange(id, event.target.value)}
-              />
-            </Form>
-          </div>
-        </div>
-        <Form style={{display: 'flex', flexGrow: 1, marginTop: 10}}>
-          <TextArea
-            placeholder="console.log('Hello world.')"
-            style={{flexGrow: 1, resize: 'none', fontFamily: '"Roboto Mono", monospace', lineHeight: '1.5em'}}
-            value={data.content || ''}
-            onChange={event => actions.rule.onContentChange(id, event.target.value)}
-          />
-        </Form>
-      </div>
+      <Tab.View
+        value={section}
+        sections={sections({id, rule, actions})}
+        onSelect={value => actions.ui.onSelect(id, value)}
+      >
+        <Tab.View.Toolbar>
+          <Button.Ripple
+            icon
+            disabled={saved || saving}
+            onClick={() => actions.rule.onSave(id)}
+          >
+            <Icon path={mdiFloppy} color="teal" />
+          </Button.Ripple>
+          <Button.Ripple
+            icon
+            onClick={() => actions.rule.onDelete(id)}
+          >
+            <Icon path={mdiDelete} color="#666" />
+          </Button.Ripple>
+        </Tab.View.Toolbar>
+      </Tab.View>
     </HotKeys>
-  )
+  );
 }
 
 UserscriptPanel.propTypes = {
+  ui: PropTypes.object,
   rule: PropTypes.object.isRequired,
   actions: PropTypes.object.isRequired
 };

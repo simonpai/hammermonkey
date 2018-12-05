@@ -4,3 +4,10 @@
 @import 'component';
 
 @import 'console';
+
+textarea.hm.userscript {
+  border: none;
+  padding: 0.5em;
+  line-height: 1.5em;
+  color: #333;
+}
