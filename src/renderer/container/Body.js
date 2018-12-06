@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
 
@@ -31,7 +32,8 @@ function SelectedPanel({type}) {
 }
 
 function Body({ui}) {
-  const {primary} = ui;
+  const {body} = ui;
+  const type = body && body[0];
   return (
     <main style={{
       flexGrow: 1,
@@ -43,10 +45,14 @@ function Body({ui}) {
       backgroundColor: '#EEE'
     }}>
       {
-        primary && primary.type && <SelectedPanel {...primary} />
+        type && <SelectedPanel type={type} />
       }
     </main>
   );
 }
+
+Body.propTypes = {
+  ui: PropTypes.object.isRequired
+};
 
 export default enhance(Body);

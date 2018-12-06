@@ -14,9 +14,9 @@ function mapStateToProps({ui, session, rule}) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    actions: {
+    action: {
       ui: {
-        select: (type, id) => dispatch(action.ui.selectPrimary(type, id))
+        selectBody: (type, id) => dispatch(action.ui.selectBody(type, id))
       }
     }
   };
@@ -29,8 +29,8 @@ const enhance = compose(
   )
 );
 
-function Inventory({ui, session, rule, actions}) {
-  const primary = ui.primary;
+function Inventory({ui, session, rule, action}) {
+  const body = ui.body;
   const rules = selector.rule.$d(rule).items;
   const sessions = selector.session.$d(session).items;
   return (
@@ -51,8 +51,8 @@ function Inventory({ui, session, rule, actions}) {
                   key: id,
                   label: id
                 }))}
-                selected={primary && primary.type === 'session' ? primary.id : undefined}
-                onSelect={(id) => actions.ui.select('session', id)}
+                selected={body && body.type === 'session' ? body.id : undefined}
+                onSelect={(id) => action.ui.selectBody('session', id)}
               />
             </div>
           ) : undefined
@@ -70,8 +70,8 @@ function Inventory({ui, session, rule, actions}) {
                   key: id,
                   label: data.name || '(untitled)'
                 }))}
-                selected={primary && primary.type === 'rule' ? primary.id : undefined}
-                onSelect={(id) => actions.ui.select('rule', id)}
+                selected={body && body.type === 'rule' ? body.id : undefined}
+                onSelect={(id) => action.ui.selectBody('rule', id)}
               />
             </div>
           ) : undefined
@@ -85,7 +85,7 @@ Inventory.propTypes = {
   ui: PropTypes.object,
   session: PropTypes.object,
   rule: PropTypes.object,
-  actions: PropTypes.object
+  action: PropTypes.object
 };
 
 export default enhance(Inventory);

@@ -8,7 +8,7 @@ import { selector } from '../store/rule';
 import UserscriptPanel from '../component/rule/userscript/Panel';
 
 function mapStateToProps({ui, rule}) {
-  const id = ui.primary.id;
+  const id = ui.body[1];
   return {
     rule: selector.$d(rule).get(id),
     ui: ui.rule[id]
@@ -17,15 +17,15 @@ function mapStateToProps({ui, rule}) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    actions: {
+    action: {
       ui: {
-        onSelect: (id, value) => dispatch(action.ui.rule.section(id, value))
+        selectSection: (id, value) => dispatch(action.ui.rule.selectSection(id, value))
       },
       rule: {
-        onNameChange: (id, name) => dispatch(action.rule.update(id, {name})),
-        onContentChange: (id, content) => dispatch(action.rule.update(id, {content})),
-        onSave: (id) => dispatch(action.rule.save(id)),
-        onDelete: (id) => dispatch(action.rule.delete(id))
+        updateName: (id, name) => dispatch(action.rule.update(id, {name})),
+        updateContent: (id, content) => dispatch(action.rule.update(id, {content})),
+        save: (id) => dispatch(action.rule.save(id)),
+        delete: (id) => dispatch(action.rule.delete(id))
       }
     }
   };
@@ -46,7 +46,7 @@ function RulePanel(props) {
 
 RulePanel.propTypes = {
   rule: PropTypes.object.isRequired,
-  actions: PropTypes.object.isRequired
+  action: PropTypes.object.isRequired
 };
 
 export default enhance(RulePanel);

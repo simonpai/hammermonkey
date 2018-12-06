@@ -14,8 +14,8 @@ import { action } from '../store';
 import { selector } from '../store/session';
 
 function mapStateToProps({ui, session, console}) {
-  const id = ui.primary.id;
-  const section = (ui.session[id] || {}).selectedTab || 'url';
+  const id = ui.body[1];
+  const section = (ui.session[id] || {}).section || 'url';
   return {
     id,
     section,
@@ -26,15 +26,15 @@ function mapStateToProps({ui, session, console}) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    actions: {
+    action: {
       ui: {
-        onSelect: (id, value) => dispatch(action.ui.session.section(id, value))
+        selectSection: (id, value) => dispatch(action.ui.session.selectSection(id, value))
       },
       session: {
-        onUrlChange: (id, url) => dispatch(action.session.url(id, url))
+        updateUrl: (id, url) => dispatch(action.session.url(id, url))
       },
       console: {
-        onEval: (id, value) => dispatch(action.console.eval(id, value))
+        eval: (id, value) => dispatch(action.console.eval(id, value))
       }
     }
   };
@@ -48,9 +48,9 @@ const enhance = compose(
 );
 
 /* eslint-disable react/display-name */
-function sections({id, session, console, actions}) {
-  const onUrlChange = url => actions.session.onUrlChange(id, url);
-  const onEval = value => actions.console.onEval(id, value);
+function sections({id, session, console, action}) {
+  const onUrlChange = url => action.session.updateUrl(id, url);
+  const onEval = value => action.console.eval(id, value);
   return [
     {
       name: 'url',
@@ -71,18 +71,18 @@ function sections({id, session, console, actions}) {
 }
 /* eslint-enable react/display-name */
 
-function SessionPanel({id, section, session, console, actions}) {
+function SessionPanel({id, section, session, console, action}) {
   return (
     <Tab.View
       value={section}
-      sections={sections({id, session, console, actions})}
-      onSelect={value => actions.ui.onSelect(id, value)}
+      sections={sections({id, session, console, action})}
+      onSelect={value => action.ui.selectSection(id, value)}
     >
       <Tab.View.Toolbar>
         <Button.Ripple
           icon
           // disabled={saved || saving}
-          // onClick={() => actions.rule.onSave(id)}
+          // onClick={() => action.rule.onSave(id)}
         >
           <Icon path={mdiDelete} color="#666" />
         </Button.Ripple>
@@ -99,7 +99,7 @@ SessionPanel.propTypes = {
     PropTypes.shape({
     }).isRequired
   ),
-  actions: PropTypes.object.isRequired
+  action: PropTypes.object.isRequired
 };
 
 export default enhance(SessionPanel);

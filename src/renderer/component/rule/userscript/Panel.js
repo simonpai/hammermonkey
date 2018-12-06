@@ -14,9 +14,9 @@ const keyMap = {
 };
 
 /* eslint-disable react/display-name */
-function sections({id, rule, actions}) {
-  const onContentChange = value => actions.rule.onContentChange(id, value);
-  const onNameChange = value => actions.rule.onNameChange(id, value);
+function sections({id, rule, action}) {
+  const onContentChange = value => action.rule.updateContent(id, value);
+  const onNameChange = value => action.rule.updateName(id, value);
   return [
     {
       name: 'editor',
@@ -32,7 +32,7 @@ function sections({id, rule, actions}) {
 }
 /* eslint-enable react/display-name */
 
-function UserscriptPanel({ui = {}, rule, actions}) {
+function UserscriptPanel({ui = {}, rule, action}) {
   const {section = 'editor'} = ui;
   const {id, saving} = rule;
   const saved = selector.isSaved(rule);
@@ -46,25 +46,25 @@ function UserscriptPanel({ui = {}, rule, actions}) {
         outline: 0
       }}
       handlers={{
-        save: () => actions.rule.onSave(id)
+        save: () => action.rule.save(id)
       }}
     >
       <Tab.View
         value={section}
-        sections={sections({id, rule, actions})}
-        onSelect={value => actions.ui.onSelect(id, value)}
+        sections={sections({id, rule, action})}
+        onSelect={value => action.ui.selectSection(id, value)}
       >
         <Tab.View.Toolbar>
           <Button.Ripple
             icon
             disabled={saved || saving}
-            onClick={() => actions.rule.onSave(id)}
+            onClick={() => action.rule.save(id)}
           >
             <Icon path={mdiFloppy} color="teal" />
           </Button.Ripple>
           <Button.Ripple
             icon
-            onClick={() => actions.rule.onDelete(id)}
+            onClick={() => action.rule.delete(id)}
           >
             <Icon path={mdiDelete} color="#666" />
           </Button.Ripple>
@@ -77,7 +77,7 @@ function UserscriptPanel({ui = {}, rule, actions}) {
 UserscriptPanel.propTypes = {
   ui: PropTypes.object,
   rule: PropTypes.object.isRequired,
-  actions: PropTypes.object.isRequired
+  action: PropTypes.object.isRequired
 };
 
 export default UserscriptPanel;

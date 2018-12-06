@@ -1,7 +1,7 @@
 // type //
-const UI_SELECT_PRIMARY = 'ui.selectPrimary';
-const UI_SESSION_SECTION = 'ui.session.section';
-const UI_RULE_SECTION = 'ui.rule.section';
+const UI_BODY_SELECT = 'ui.body.select';
+const UI_SESSION_SECTION_SELECT = 'ui.session.section.select';
+const UI_RULE_SECTION_SELECT = 'ui.rule.section.select';
 const UI_DIALOG_OPEN = 'ui.dialog.open';
 
 const SESSION_DELETE_REQUEST = 'session.delete.request';
@@ -9,12 +9,12 @@ const RULE_DELETE_REQUEST = 'rule.delete.request';
 
 // action //
 export const action = {
-  selectPrimary: (objType, id) => ({type: UI_SELECT_PRIMARY, objType, id}),
+  selectBody: (type, id) => ({type: UI_BODY_SELECT, value: [type, id]}),
   session: {
-    section: (id, value) => ({type: UI_SESSION_SECTION, id, value})
+    selectSection: (id, value) => ({type: UI_SESSION_SECTION_SELECT, id, value})
   },
   rule: {
-    section: (id, value) => ({type: UI_RULE_SECTION, id, value})
+    selectSection: (id, value) => ({type: UI_RULE_SECTION_SELECT, id, value})
   },
   dialog: {
     open: id => ({type: UI_DIALOG_OPEN, id})
@@ -23,7 +23,7 @@ export const action = {
 
 // initial state //
 export const initialState = {
-  primary: undefined,
+  body: undefined,
   session: {},
   rule: {},
   dialog: undefined
@@ -31,28 +31,25 @@ export const initialState = {
 
 // reducer //
 export function reducer(state = initialState, action = {}) {
-  const {primary} = state;
+  const {body} = state;
   switch (action.type) {
-    case UI_SELECT_PRIMARY:
+    case UI_BODY_SELECT:
       return {
         ...state,
-        primary: action.objType ? {
-          type: action.objType,
-          id: action.id
-        } : undefined
+        body: action.value
       };
-    case UI_SESSION_SECTION:
+    case UI_SESSION_SECTION_SELECT:
       return {
         ...state,
         session: {
           ...state.session,
           [action.id]: {
             ...state.session[action.id],
-            selectedTab: action.value
+            section: action.value
           }
         }
       };
-    case UI_RULE_SECTION:
+    case UI_RULE_SECTION_SELECT:
       return {
         ...state,
         rule: {
@@ -71,18 +68,18 @@ export function reducer(state = initialState, action = {}) {
 
     // TODO: simplify
     case SESSION_DELETE_REQUEST:
-      if (primary && primary.type === 'session' && primary.id === action.id) {
+      if (body && body.type === 'session' && body.id === action.id) {
         return {
           ...state,
-          primary: undefined
+          body: undefined
         };
       }
       return state;
     case RULE_DELETE_REQUEST:
-      if (primary && primary.type === 'rule' && primary.id === action.id) {
+      if (body && body.type === 'rule' && body.id === action.id) {
         return {
           ...state,
-          primary: undefined
+          body: undefined
         };
       }
       return state;

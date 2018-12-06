@@ -12,7 +12,7 @@ function mapStateToProps({ui}) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    actions: {
+    action: {
       session: {
         open: () => dispatch(action.session.open())
       },
@@ -30,7 +30,7 @@ const enhance = compose(
   )
 );
 
-function AppBar({ui, actions}) {
+function AppBar({/*ui, */action}) {
   return (
     <Menu
       inverted
@@ -42,8 +42,8 @@ function AppBar({ui, actions}) {
     >
       <Dropdown text="New" item>
         <Dropdown.Menu>
-          <Dropdown.Item onClick={() => actions.session.open()}>Session</Dropdown.Item>
-          <Dropdown.Item onClick={() => actions.rule.create()}>Rule</Dropdown.Item>
+          <Dropdown.Item onClick={() => action.session.open()}>Session</Dropdown.Item>
+          <Dropdown.Item onClick={() => action.rule.create()}>Rule</Dropdown.Item>
         </Dropdown.Menu>
       </Dropdown>
     </Menu>
@@ -52,7 +52,7 @@ function AppBar({ui, actions}) {
 
 AppBar.propTypes = {
   ui: PropTypes.object,
-  actions: PropTypes.object
+  action: PropTypes.object
 };
 
 export default enhance(AppBar);
