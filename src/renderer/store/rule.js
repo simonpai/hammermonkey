@@ -1,8 +1,9 @@
-import {ipcRenderer as ipcr} from 'electron';
+import { ipcRenderer as ipcr } from 'electron';
 import uuid from 'uuid/v1';
 import equal from 'fast-deep-equal';
-import {type as rootType} from './root';
+import { type as rootType } from './root';
 import createDict from '../util/dict';
+import { augment } from '../util/objects';
 
 const {LOAD} = rootType;
 
@@ -31,15 +32,21 @@ export const ipc = {
   'delete.success': (event, id) => ({type: DELETE_SUCCESS, id})
 };
 
-// initial state //
-const $d = createDict();
-export const initialState = $d({}).state;
-
 // selector //
-export const selector = {
-  $d: $d,
-  isSaved: ({data, savedData}) => savedData !== undefined && equal(data, savedData)
-};
+function $r(rule) {
+  return augment(rule, {
+    get saved() {
+      const {data, savedData} = this;
+      return savedData !== undefined && equal(data, savedData);
+    }
+  });
+}
+export const $ = createDict({
+  mapping: $r
+});
+
+// initial state //
+export const initialState = $({}).state;
 
 // reducer //
 function create(id, currentTime) {
@@ -59,11 +66,12 @@ function create(id, currentTime) {
 export function reducer(state = initialState, action = {}) {
   const currentTime = Date.now();
   const {id} = action;
-  const dict = $d(state);
-  const rule = id && dict.get(id);
+  const dict = $(state);
+  const $rule = id && dict.get(id);
+  const rule = $rule && $rule.state;
   switch (action.type) {
     case LOAD:
-      return $d(action.data.rules.map(rule => ([rule.id, {...rule, saving: false, savedData: rule.data}]))).state;
+      return $(action.data.rules.map(rule => ([rule.id, {...rule, saving: false, savedData: rule.data}]))).state;
     case CREATE:
       var newId = uuid();
       return dict.upsert(newId, create(newId, currentTime), 0).state;

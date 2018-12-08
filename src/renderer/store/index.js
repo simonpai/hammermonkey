@@ -9,7 +9,7 @@ import * as root from './root';
 const store = duck({ui, session, rule, console}, root);
 
 export const action = store.action;
-export const selector = store.selector;
+export const $ = store.$;
 export const ipc = store.ipc;
 export const initialState = store.initialState;
 export const reducer = store.reducer;

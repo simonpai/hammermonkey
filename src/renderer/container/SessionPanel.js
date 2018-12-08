@@ -10,17 +10,16 @@ import SettingsSection from '../component/session/Settings';
 import UrlSection from '../component/session/Url';
 import ConsoleSection from '../component/session/Console';
 
-import { action } from '../store';
-import { selector } from '../store/session';
+import { action, $ } from '../store';
 
 function mapStateToProps({ui, session, console}) {
-  const id = ui.body[1];
-  const section = (ui.session[id] || {}).section || 'url';
+  const id = $.ui(ui).body[1];
+  const section = $.ui(ui).section('session', id) || 'url';
   return {
     id,
     section,
-    session: selector.$d(session).get(id),
-    console: console.hash[id]
+    session: $.session(session).get(id),
+    console: $.console(console).get(id)
   };
 }
 

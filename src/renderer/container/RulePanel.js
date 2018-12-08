@@ -3,15 +3,16 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
 
-import { action } from '../store';
-import { selector } from '../store/rule';
+import { action, $ } from '../store';
 import UserscriptPanel from '../component/rule/userscript/Panel';
 
 function mapStateToProps({ui, rule}) {
-  const id = ui.body[1];
+  const id = $.ui(ui).body[1];
   return {
-    rule: selector.$d(rule).get(id),
-    ui: ui.rule[id]
+    rule: $.rule(rule).get(id),
+    ui: {
+      section: $.ui(ui).section('rule', id) || 'editor'
+    }
   };
 }
 

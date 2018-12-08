@@ -18,50 +18,69 @@ export const ipc = {
   error: (event, sessionId, error) => ({type: ERROR_RECEIVED, sessionId, error}),
 };
 
-// initial state //
-export const initialState = {
-  hash: {}
-};
+// selector //
+class ConsoleSelector {
 
-// reducer //
-function append(state, sessionId, obj) {
-  return {
-    ...state,
-    hash: {
-      ...state.hash,
-      [sessionId]: [
-        ...state.hash[sessionId] || [],
-        {
-          uuid: uuid(),
-          ...obj
-        }
-      ]
-    }
-  };
+  constructor({hash = {}}) {
+    this._hash = hash;
+  }
+
+  get state() {
+    return {
+      hash: this._hash
+    };
+  }
+
+  get(sessionId) {
+    return this._hash[sessionId] || [];
+  }
+
+  append(sessionId, obj) {
+    return new ConsoleSelector({
+      hash: {
+        ...this._hash,
+        [sessionId]: [
+          ...this._hash[sessionId] || [],
+          {
+            uuid: uuid(),
+            ...obj
+          }
+        ]
+      }
+    });
+  }
 }
 
+export const $ = state => new ConsoleSelector(state);
+
+// initial state //
+export const initialState = $({}).state;
+
+// reducer //
 export function reducer(state = initialState, action = {}) {
   const {sessionId} = action;
+  const append = obj => $(state).append(sessionId, obj).state;
+
   switch (action.type) {
     case EVAL_REQUEST:
       ipcr.send('console.eval', sessionId, action.expr);
-      return append(state, sessionId, {
+      return append({
         type: 'eval.request',
         expr: action.expr
       });
     case EVAL_RESPONSE:
-      return append(state, sessionId, {
+      return append({
         type: 'eval.response',
         value: action.value,
         error: action.error
       });
     case CONSOLE_RECEIVED:
-      return append(state, sessionId, {
+      return append({
         type: 'console.' + action.value.type,
         args: action.value.args
       });
     case ERROR_RECEIVED:
-      return append(state, sessionId, {
+      return append({
         type: 'error',
         error: action.error
       });

@@ -21,66 +21,85 @@ export const action = {
   }
 };
 
+// selector //
+class UiSelector {
+
+  constructor(state = {}) {
+    const {body = [], section = {}, dialog} = state;
+    this.state = Object.freeze({body, section, dialog});
+  }
+
+  get body() {
+    return this.state.body;
+  }
+
+  section(type, id) {
+    let v;
+    return (v = this.state.section[type]) && (v = v[id]) || undefined;
+  }
+
+  get dialog() {
+    return this.state.dialog;
+  }
+
+  setBody(type, id) {
+    return new UiSelector({
+      ...this.state,
+      body: [type, id]
+    });
+  }
+
+  setSection(type, id, section) {
+    return new UiSelector({
+      ...this.state,
+      section: {
+        ...this.state.section,
+        [type]: {
+          ...this.state.section[type],
+          [id]: section
+        }
+      }
+    });
+  }
+
+  setDialog(name, options) {
+    return new UiSelector({
+      ...this.state,
+      dialog: [name, options]
+    });
+  }
+
+}
+
+export const $ = state => new UiSelector(state);
+
 // initial state //
-export const initialState = {
-  body: undefined,
-  session: {},
-  rule: {},
-  dialog: undefined
-};
+export const initialState = $().state;
 
 // reducer //
 export function reducer(state = initialState, action = {}) {
-  const {body} = state;
+  const $state = $(state);
+  const {body} = $state;
+  const [bodyType, bodyId] = body;
+  // $state.body
   switch (action.type) {
     case UI_BODY_SELECT:
-      return {
-        ...state,
-        body: action.value
-      };
+      return $state.setBody(...action.value).state;
     case UI_SESSION_SECTION_SELECT:
-      return {
-        ...state,
-        session: {
-          ...state.session,
-          [action.id]: {
-            ...state.session[action.id],
-            section: action.value
-          }
-        }
-      };
+      return $state.setSection('session', action.id, action.value).state;
     case UI_RULE_SECTION_SELECT:
-      return {
-        ...state,
-        rule: {
-          ...state.rule,
-          [action.id]: {
-            ...state.rule[action.id],
-            section: action.value
-          }
-        }
-      };
+      return $state.setSection('rule', action.id, action.value).state;
     case UI_DIALOG_OPEN:
-      return {
-        ...state,
-        dialog: action.id
-      };
-
+      return $state.setDialog(action.name, action.options).state;
     // TODO: simplify
     case SESSION_DELETE_REQUEST:
-      if (body && body.type === 'session' && body.id === action.id) {
-        return {
-          ...state,
-          body: undefined
-        };
+      if (bodyType === 'session' && bodyId === action.id) {
+        return $state.setBody().state;
       }
       return state;
     case RULE_DELETE_REQUEST:
-      if (body && body.type === 'rule' && body.id === action.id) {
-        return {
-          ...state,
-          body: undefined
-        };
+      if (bodyType === 'rule' && bodyId === action.id) {
+        return $state.setBody().state;
       }
       return state;
     default:

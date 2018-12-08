@@ -29,7 +29,7 @@ export function combineIpc(obj) {
 export function duck(obj, extra = {}) {
   return {
     action: Object.assign({}, flock('action', obj), extra.action),
-    selector: Object.assign({}, flock('selector', obj), extra.selector),
+    $: Object.assign({}, flock('$', obj), extra.$),
     ipc: Object.assign({}, combineIpc(flock('ipc', obj)), extra.ipc),
     initialState: flock('initialState', obj),
     reducer: combineReducers(flock('reducer', obj))

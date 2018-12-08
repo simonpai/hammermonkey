@@ -5,9 +5,10 @@ import { compose } from 'recompose';
 
 import SessionPanel from './SessionPanel';
 import RulePanel from './RulePanel';
+import { $ } from '../store';
 
 function mapStateToProps({ui}) {
-  return {ui};
+  return {$ui: $.ui(ui)};
 }
 
 const enhance = compose(
@@ -31,9 +32,8 @@ function SelectedPanel({type}) {
   }
 }
 
-function Body({ui}) {
-  const {body} = ui;
-  const type = body && body[0];
+function Body({$ui}) {
+  const [type] = $ui.body;
   return (
     <main style={{
       flexGrow: 1,
@@ -52,7 +52,7 @@ function Body({ui}) {
 }
 
 Body.propTypes = {
-  ui: PropTypes.object.isRequired
+  $ui: PropTypes.object.isRequired
 };
 
 export default enhance(Body);

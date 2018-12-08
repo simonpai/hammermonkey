@@ -6,7 +6,7 @@ import { Header } from 'semantic-ui-react';
 
 import SessionList from '../component/session/List';
 import RuleList from '../component/rule/List';
-import { action, selector } from '../store';
+import { action, $ } from '../store';
 
 function mapStateToProps({ui, session, rule}) {
   return {ui, session, rule};
@@ -30,9 +30,9 @@ const enhance = compose(
 );
 
 function Inventory({ui, session, rule, action}) {
-  const body = ui.body;
-  const rules = selector.rule.$d(rule).items;
-  const sessions = selector.session.$d(session).items;
+  const [bodyType, bodyId] = $.ui(ui).body;
+  const rules = $.rule(rule).items;
+  const sessions = $.session(session).items;
   return (
     <div style={{
       position: 'relative'
@@ -51,7 +51,7 @@ function Inventory({ui, session, rule, action}) {
                   key: id,
                   label: id
                 }))}
-                selected={body && body.type === 'session' ? body.id : undefined}
+                selected={bodyType === 'session' ? bodyId : undefined}
                 onSelect={(id) => action.ui.selectBody('session', id)}
               />
             </div>
@@ -70,7 +70,7 @@ function Inventory({ui, session, rule, action}) {
                   key: id,
                   label: data.name || '(untitled)'
                 }))}
-                selected={body && body.type === 'rule' ? body.id : undefined}
+                selected={bodyType === 'rule' ? bodyId : undefined}
                 onSelect={(id) => action.ui.selectBody('rule', id)}
               />
             </div>

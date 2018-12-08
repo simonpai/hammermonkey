@@ -1,12 +1,17 @@
+import { identity, nullable } from './functions';
+
 class Dict {
 
-  constructor({ids = [], hash = {}}, options) {
+  constructor({ids = [], hash = {}}, options = {}) {
     this._ids = ids;
     this._hash = hash;
     this._options = options;
 
+    this._mapping = nullable(nullable)(options.mapping) || identity();
     this.get = this.get.bind(this);
     this.contains = this.contains.bind(this);
+
+    Object.freeze(this);
   }
 
   get state() {
@@ -29,7 +34,7 @@ class Dict {
   }
 
   get(id) {
-    return this._hash[id];
+    return this._mapping(this._hash[id]);
   }
 
   contains(id) {

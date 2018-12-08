@@ -5,7 +5,6 @@ import { Tab, Button } from 'semantic-ui-react';
 import Icon from '@mdi/react';
 import { mdiFloppy, mdiDelete } from '@mdi/js';
 
-import { selector } from '../../../store/rule';
 import SettingsSection from './Settings';
 import EditorSection from './Editor';
 
@@ -34,8 +33,7 @@ function sections({id, rule, action}) {
 
 function UserscriptPanel({ui = {}, rule, action}) {
   const {section = 'editor'} = ui;
-  const {id, saving} = rule;
-  const saved = selector.isSaved(rule);
+  const {id, saving, saved} = rule;
   return (
     <HotKeys
       keyMap={keyMap}

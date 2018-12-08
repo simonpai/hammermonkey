@@ -25,23 +25,21 @@ export const ipc = {
   'proxyUrl': (event, id, proxyUrl) => ({type: URL_SUCCESS, id, proxyUrl})
 };
 
-// initial state //
-const $d = createDict();
-export const initialState = $d({}).state;
-
 // selector //
-export const selector = {
-  $d: $d
-};
+export const $ = createDict();
+
+// initial state //
+export const initialState = $({}).state;
 
 // reducer //
 export function reducer(state = initialState, action = {}) {
   const {id} = action;
-  const dict = $d(state);
+  const dict = $(state);
   const session = id && dict.get(id);
+  // const session = $session && $session.state;
   switch (action.type) {
     case LOAD:
-      return $d(action.data.sessions.map(session => ([session.id, session]))).state;
+      return $(action.data.sessions.map(session => ([session.id, session]))).state;
     case OPEN_REQUEST:
       // TODO: create a placeholder session
       var newId = nanoid(ALPHABET, 8);
