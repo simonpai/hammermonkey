@@ -25,7 +25,7 @@ class Dict {
     return this._ids.sequence().map(this.get);
   }
 
-  get items() {
+  get all() {
     return this._ids.map(this.get);
   }
 

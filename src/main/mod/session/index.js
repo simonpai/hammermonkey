@@ -45,7 +45,7 @@ export default class SessionService {
   }
 
   get sessions() {
-    return this._dict.items;
+    return this._dict.all;
   }
 
   load() {

@@ -31,8 +31,8 @@ const enhance = compose(
 
 function Inventory({ui, session, rule, action}) {
   const [bodyType, bodyId] = $.ui(ui).body;
-  const rules = $.rule(rule).items;
-  const sessions = $.session(session).items;
+  const rules = $.rule(rule).all;
+  const sessions = $.session(session).all;
   return (
     <div style={{
       position: 'relative'

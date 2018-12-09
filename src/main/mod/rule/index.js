@@ -53,7 +53,7 @@ export default class RuleService {
   }
 
   get rules() {
-    return this._dict.items;
+    return this._dict.all;
   }
 
   get effects() {
