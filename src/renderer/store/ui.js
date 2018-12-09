@@ -42,14 +42,14 @@ class UiSelector {
     return this.state.dialog;
   }
 
-  setBody(type, id) {
+  _body(type, id) {
     return new UiSelector({
       ...this.state,
       body: [type, id]
     });
   }
 
-  setSection(type, id, section) {
+  _section(type, id, section) {
     return new UiSelector({
       ...this.state,
       section: {
@@ -62,7 +62,7 @@ class UiSelector {
     });
   }
 
-  setDialog(name, options) {
+  _dialog(name, options) {
     return new UiSelector({
       ...this.state,
       dialog: [name, options]
@@ -84,22 +84,22 @@ export function reducer(state = initialState, action = {}) {
   // $state.body
   switch (action.type) {
     case UI_BODY_SELECT:
-      return $state.setBody(...action.value).state;
+      return $state._body(...action.value).state;
     case UI_SESSION_SECTION_SELECT:
-      return $state.setSection('session', action.id, action.value).state;
+      return $state._section('session', action.id, action.value).state;
     case UI_RULE_SECTION_SELECT:
-      return $state.setSection('rule', action.id, action.value).state;
+      return $state._section('rule', action.id, action.value).state;
     case UI_DIALOG_OPEN:
-      return $state.setDialog(action.name, action.options).state;
+      return $state._dialog(action.name, action.options).state;
     // TODO: simplify
     case SESSION_DELETE_REQUEST:
       if (bodyType === 'session' && bodyId === action.id) {
-        return $state.setBody().state;
+        return $state._body().state;
       }
       return state;
     case RULE_DELETE_REQUEST:
       if (bodyType === 'rule' && bodyId === action.id) {
-        return $state.setBody().state;
+        return $state._body().state;
       }
       return state;
     default:

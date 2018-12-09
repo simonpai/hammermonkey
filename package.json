@@ -52,6 +52,7 @@
     "@mdi/js": "^3.0.39",
     "@mdi/react": "^1.1.0",
     "body-parser": "^1.18.3",
+    "core-decorators": "^0.20.0",
     "express": "^4.16.3",
     "fast-deep-equal": "^2.0.1",
     "history": "^4.7.2",

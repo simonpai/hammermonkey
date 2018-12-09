@@ -14,6 +14,17 @@ Array.prototype.sequence = function() {
   return asSequence(this);
 };
 
+// weakMap.computeIfAbsent()
+WeakMap.prototype.computeIfAbsent = function(key, fn) {
+  if (this.has(key)) {
+    return this.get(key);
+  }
+  const v = fn(key);
+  this.set(key, v);
+  return v;
+}
+
+// @inspect
 function _inspect(f, name, mode) {
   return function() {
     /* eslint-disable no-console */
