@@ -6,8 +6,8 @@ import { Menu, Dropdown } from 'semantic-ui-react';
 
 import { action } from '../store';
 
-function mapStateToProps({ui}) {
-  return {ui};
+function mapStateToProps() {
+  return {};
 }
 
 function mapDispatchToProps(dispatch) {
@@ -30,7 +30,7 @@ const enhance = compose(
   )
 );
 
-function AppBar({/*ui, */action}) {
+function AppBar({action}) {
   return (
     <Menu
       inverted

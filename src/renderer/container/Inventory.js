@@ -8,7 +8,8 @@ import SessionList from '../component/session/List';
 import RuleList from '../component/rule/List';
 import { action, $ } from '../store';
 
-function mapStateToProps({ui, session, rule}) {
+function mapStateToProps(state) {
+  const {ui, session, rule} = $(state);
   return {ui, session, rule};
 }
 
@@ -29,10 +30,11 @@ const enhance = compose(
   )
 );
 
-function Inventory({ui, session, rule, action}) {
-  const [bodyType, bodyId] = $.ui(ui).body;
-  const rules = $.rule(rule).all;
-  const sessions = $.session(session).all;
+function Inventory({action, ui, session, rule}) {
+  // const {ui, session, rule} = $(state);
+  const [bodyType, bodyId] = ui.body;
+  const rules = rule.all;
+  const sessions = session.all;
   return (
     <div style={{
       position: 'relative'

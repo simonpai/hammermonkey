@@ -7,8 +7,9 @@ import SessionPanel from './SessionPanel';
 import RulePanel from './RulePanel';
 import { $ } from '../store';
 
-function mapStateToProps({ui}) {
-  return {$ui: $.ui(ui)};
+function mapStateToProps(state) {
+  const {ui} = $(state);
+  return {type: ui.body[0]};
 }
 
 const enhance = compose(
@@ -32,8 +33,7 @@ function SelectedPanel({type}) {
   }
 }
 
-function Body({$ui}) {
-  const [type] = $ui.body;
+function Body({type}) {
   return (
     <main style={{
       flexGrow: 1,
@@ -52,7 +52,7 @@ function Body({$ui}) {
 }
 
 Body.propTypes = {
-  $ui: PropTypes.object.isRequired
+  type: PropTypes.string
 };
 
 export default enhance(Body);

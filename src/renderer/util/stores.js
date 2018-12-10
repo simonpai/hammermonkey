@@ -1,4 +1,5 @@
 import { combineReducers } from 'redux';
+import { memoize } from './functions';
 
 export function flock(propName, obj) {
   return Object.keys(obj)
@@ -26,10 +27,22 @@ export function combineIpc(obj) {
     .toArray());
 }
 
+const selectorCache = new WeakMap();
+
+export function combine$(obj) {
+  return state => selectorCache.computeIfAbsent(state, () => Object.entries(obj)
+    .reduce((acc, [key, $]) => {
+      Object.defineProperty(acc, key, {
+        get: memoize(key, () => $(state[key]))
+      });
+      return acc;
+    }, {}));
+}
+
 export function duck(obj, extra = {}) {
   return {
     action: Object.assign({}, flock('action', obj), extra.action),
-    $: Object.assign({}, flock('$', obj), extra.$),
+    $: combine$(flock('$', obj)),
     ipc: Object.assign({}, combineIpc(flock('ipc', obj)), extra.ipc),
     initialState: flock('initialState', obj),
     reducer: combineReducers(flock('reducer', obj))

@@ -6,13 +6,12 @@ import { compose } from 'recompose';
 import { action, $ } from '../store';
 import UserscriptPanel from '../component/rule/userscript/Panel';
 
-function mapStateToProps({ui, rule}) {
-  const id = $.ui(ui).body[1];
+function mapStateToProps(state) {
+  const {ui, rule} = $(state);
+  const id = ui.body[1];
   return {
-    rule: $.rule(rule).get(id),
-    ui: {
-      section: $.ui(ui).section('rule', id) || 'editor'
-    }
+    section: ui.section('rule', id) || 'editor',
+    rule: rule.get(id)
   };
 }
 
@@ -39,13 +38,15 @@ const enhance = compose(
   )
 );
 
-function RulePanel(props) {
+function RulePanel({action, section, rule}) {
   return (
-    <UserscriptPanel {...props} />
+    <UserscriptPanel action={action} rule={rule} ui={{section}} />
   )
 }
 
 RulePanel.propTypes = {
+  // ui: PropTypes.object.isRequired,
+  section: PropTypes.string.isRequired,
   rule: PropTypes.object.isRequired,
   action: PropTypes.object.isRequired
 };

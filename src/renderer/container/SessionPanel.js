@@ -12,14 +12,14 @@ import ConsoleSection from '../component/session/Console';
 
 import { action, $ } from '../store';
 
-function mapStateToProps({ui, session, console}) {
-  const id = $.ui(ui).body[1];
-  const section = $.ui(ui).section('session', id) || 'url';
+function mapStateToProps(state) {
+  const {ui, session, console} = $(state);
+  const id = ui.body[1];
   return {
     id,
-    section,
-    session: $.session(session).get(id),
-    console: $.console(console).get(id)
+    section: ui.section('session', id) || 'url',
+    session: session.get(id),
+    console: console.get(id)
   };
 }
 
@@ -70,7 +70,7 @@ function sections({id, session, console, action}) {
 }
 /* eslint-enable react/display-name */
 
-function SessionPanel({id, section, session, console, action}) {
+function SessionPanel({action, id, section, session, console}) {
   return (
     <Tab.View
       value={section}
@@ -93,7 +93,9 @@ function SessionPanel({id, section, session, console, action}) {
 SessionPanel.propTypes = {
   id: PropTypes.string.isRequired,
   section: PropTypes.string.isRequired,
+  // ui: PropTypes.object.isRequired,
   session: PropTypes.object.isRequired,
+  // console: PropTypes.object.isRequired,
   console: PropTypes.arrayOf(
     PropTypes.shape({
     }).isRequired
