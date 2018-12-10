@@ -9,7 +9,7 @@ const RULE_DELETE_REQUEST = 'rule.delete.request';
 
 // action //
 export const action = {
-  selectBody: (type, id) => ({type: UI_BODY_SELECT, value: [type, id]}),
+  setBody: (type, id) => ({type: UI_BODY_SELECT, value: [type, id]}),
   session: {
     selectSection: (id, value) => ({type: UI_SESSION_SECTION_SELECT, id, value})
   },

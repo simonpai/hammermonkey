@@ -9,7 +9,8 @@ import { $ } from '../store';
 
 function mapStateToProps(state) {
   const {ui} = $(state);
-  return {type: ui.body[0]};
+  const [type] = ui.body;
+  return {type};
 }
 
 const enhance = compose(

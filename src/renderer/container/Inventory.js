@@ -10,14 +10,14 @@ import { action, $ } from '../store';
 
 function mapStateToProps(state) {
   const {ui, session, rule} = $(state);
-  return {ui, session, rule};
+  return {body: ui.body, session, rule};
 }
 
 function mapDispatchToProps(dispatch) {
   return {
     action: {
       ui: {
-        selectBody: (type, id) => dispatch(action.ui.selectBody(type, id))
+        setBody: (type, id) => dispatch(action.ui.setBody(type, id))
       }
     }
   };
@@ -30,9 +30,8 @@ const enhance = compose(
   )
 );
 
-function Inventory({action, ui, session, rule}) {
-  // const {ui, session, rule} = $(state);
-  const [bodyType, bodyId] = ui.body;
+function Inventory({action, body, session, rule}) {
+  const [bodyType, bodyId] = body;
   const rules = rule.all;
   const sessions = session.all;
   return (
@@ -54,7 +53,7 @@ function Inventory({action, ui, session, rule}) {
                   label: id
                 }))}
                 selected={bodyType === 'session' ? bodyId : undefined}
-                onSelect={(id) => action.ui.selectBody('session', id)}
+                onSelect={(id) => action.ui.setBody('session', id)}
               />
             </div>
           ) : undefined
@@ -73,7 +72,7 @@ function Inventory({action, ui, session, rule}) {
                   label: data.name || '(untitled)'
                 }))}
                 selected={bodyType === 'rule' ? bodyId : undefined}
-                onSelect={(id) => action.ui.selectBody('rule', id)}
+                onSelect={(id) => action.ui.setBody('rule', id)}
               />
             </div>
           ) : undefined
@@ -84,7 +83,7 @@ function Inventory({action, ui, session, rule}) {
 }
 
 Inventory.propTypes = {
-  ui: PropTypes.object,
+  body: PropTypes.array,
   session: PropTypes.object,
   rule: PropTypes.object,
   action: PropTypes.object
