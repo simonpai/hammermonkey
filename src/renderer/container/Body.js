@@ -5,12 +5,14 @@ import { compose } from 'recompose';
 
 import SessionPanel from './SessionPanel';
 import RulePanel from './RulePanel';
+import Confirm from './Confirm';
 import { $ } from '../store';
 
 function mapStateToProps(state) {
   const {ui} = $(state);
-  const [type] = ui.body;
-  return {type};
+  return {
+    type: ui.body[0]
+  };
 }
 
 const enhance = compose(
@@ -47,6 +49,9 @@ function Body({type}) {
     }}>
       {
         type && <SelectedPanel type={type} />
+      }
+      {
+        <Confirm />
       }
     </main>
   );

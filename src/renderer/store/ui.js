@@ -2,7 +2,7 @@
 const UI_BODY_SELECT = 'ui.body.select';
 const UI_SESSION_SECTION_SELECT = 'ui.session.section.select';
 const UI_RULE_SECTION_SELECT = 'ui.rule.section.select';
-const UI_DIALOG_OPEN = 'ui.dialog.open';
+const UI_CONFIRM_OPEN = 'ui.confirm.open';
 
 const SESSION_DELETE_REQUEST = 'session.delete.request';
 const RULE_DELETE_REQUEST = 'rule.delete.request';
@@ -16,17 +16,15 @@ export const action = {
   rule: {
     selectSection: (id, value) => ({type: UI_RULE_SECTION_SELECT, id, value})
   },
-  dialog: {
-    open: id => ({type: UI_DIALOG_OPEN, id})
-  }
+  confirm: options => ({type: UI_CONFIRM_OPEN, options})
 };
 
 // selector //
 class UiSelector {
 
   constructor(state = {}) {
-    const {body = [], section = {}, dialog} = state;
-    this.state = Object.freeze({body, section, dialog});
+    const {body = [], section = {}, confirm} = state;
+    this.state = Object.freeze({body, section, confirm});
   }
 
   get body() {
@@ -38,8 +36,8 @@ class UiSelector {
     return (v = this.state.section[type]) && (v = v[id]) || undefined;
   }
 
-  get dialog() {
-    return this.state.dialog;
+  get confirm() {
+    return this.state.confirm;
   }
 
   _body(type, id) {
@@ -62,10 +60,10 @@ class UiSelector {
     });
   }
 
-  _dialog(name, options) {
+  _confirm(options) {
     return new UiSelector({
       ...this.state,
-      dialog: [name, options]
+      confirm: options
     });
   }
 
@@ -89,8 +87,8 @@ export function reducer(state = initialState, action = {}) {
       return $state._section('session', action.id, action.value).state;
     case UI_RULE_SECTION_SELECT:
       return $state._section('rule', action.id, action.value).state;
-    case UI_DIALOG_OPEN:
-      return $state._dialog(action.name, action.options).state;
+    case UI_CONFIRM_OPEN:
+      return $state._confirm(action.options).state;
     // TODO: simplify
     case SESSION_DELETE_REQUEST:
       if (bodyType === 'session' && bodyId === action.id) {
