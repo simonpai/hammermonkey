@@ -32,4 +32,8 @@ export default class Session extends hammerhead.Session {
     return this.proxy.getProxyUrl(this, url);
   }
 
+  close() {
+    this.proxy.closeSession(this);
+  }
+
 }

@@ -4,7 +4,7 @@ const UI_SESSION_SECTION_SELECT = 'ui.session.section.select';
 const UI_RULE_SECTION_SELECT = 'ui.rule.section.select';
 const UI_CONFIRM_OPEN = 'ui.confirm.open';
 
-const SESSION_DELETE_REQUEST = 'session.delete.request';
+const SESSION_CLOSE = 'session.close';
 const RULE_DELETE_REQUEST = 'rule.delete.request';
 
 // action //
@@ -90,7 +90,7 @@ export function reducer(state = initialState, action = {}) {
     case UI_CONFIRM_OPEN:
       return $state._confirm(action.options).state;
     // TODO: simplify
-    case SESSION_DELETE_REQUEST:
+    case SESSION_CLOSE:
       if (bodyType === 'session' && bodyId === action.id) {
         return $state._body().state;
       }

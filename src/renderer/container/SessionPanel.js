@@ -30,7 +30,8 @@ function mapDispatchToProps(dispatch) {
         selectSection: (id, value) => dispatch(action.ui.session.selectSection(id, value))
       },
       session: {
-        updateUrl: (id, url) => dispatch(action.session.url(id, url))
+        updateUrl: (id, url) => dispatch(action.session.url(id, url)),
+        close: (id) => dispatch(action.ui.confirm({confirm: action.session.close(id)}))
       },
       console: {
         eval: (id, value) => dispatch(action.console.eval(id, value))
@@ -80,8 +81,7 @@ function SessionPanel({action, id, section, session, console}) {
       <Tab.View.Toolbar>
         <Button.Ripple
           icon
-          // disabled={saved || saving}
-          // onClick={() => action.rule.onSave(id)}
+          onClick={() => action.session.close(id)}
         >
           <Icon path={mdiDelete} color="#666" />
         </Button.Ripple>

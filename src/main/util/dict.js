@@ -110,7 +110,7 @@ export default class DictModel {
     this._doChange();
 
     // persist
-    return Promise.all(this._saveMeta(), this._db.delete(id))
+    return Promise.all([this._saveMeta(), this._db.delete(id)])
       .then(this._doPersist.bind(this));
   }
 

@@ -9,6 +9,7 @@ const {LOAD} = rootType;
 const OPEN_REQUEST = 'session.open.request';
 const OPEN_SUCCESS = 'session.open.success';
 const OPEN_FAILURE = 'session.open.failure';
+const CLOSE = 'session.close';
 const URL_REQUEST = 'session.url.request';
 const URL_SUCCESS = 'session.url.success';
 const URL_FAILURE = 'session.url.failure';
@@ -16,6 +17,7 @@ const URL_FAILURE = 'session.url.failure';
 // action //
 export const action = {
   open: () => ({type: OPEN_REQUEST}),
+  close: (id) => ({type: CLOSE, id}),
   url: (id, url) => ({type: URL_REQUEST, id, url})
 };
 
@@ -50,6 +52,9 @@ export function reducer(state = initialState, action = {}) {
     case OPEN_FAILURE:
       // TODO
       return state;
+    case CLOSE:
+      ipcr.send('session.close', id);
+      return dict.delete(id).state;
     case URL_REQUEST:
       // TODO: rename: shall be update
       var url = action.url.trim();

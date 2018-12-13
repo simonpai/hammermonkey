@@ -19,6 +19,7 @@ export default class SessionService {
     });
 
     client.on('session.open', (event, options) => this.open(options));
+    client.on('session.close', (event, id) => this.close(id));
     client.on('session.url', (event, id, url) => this.setUrl(id, url));
   }
 
@@ -59,6 +60,15 @@ export default class SessionService {
     this._dict.upsert(id, session);
 
     this._client.send('session.open', id, serialize(session));
+  }
+
+  close(id) {
+    const session = this.get(id);
+    if (!session) {
+      return;
+    }
+    this._dict.delete(id);
+    session && session._hhs && session._hhs.close();
   }
 
   setUrl(id, url) {
