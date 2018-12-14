@@ -10,7 +10,6 @@ function mapStateToProps(state) {
   const {ui, rule} = $(state);
   const id = ui.body[1];
   return {
-    section: ui.section('rule', id) || 'editor',
     rule: rule.get(id)
   };
 }
@@ -18,14 +17,14 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     action: {
-      ui: {
-        selectSection: (id, value) => dispatch(action.ui.rule.selectSection(id, value))
-      },
       rule: {
         updateName: (id, name) => dispatch(action.rule.update(id, {name})),
         updateContent: (id, content) => dispatch(action.rule.update(id, {content})),
         save: (id) => dispatch(action.rule.save(id)),
-        delete: (id) => dispatch(action.ui.confirm({confirm: action.rule.delete(id)}))
+        delete: (id) => dispatch(action.ui.confirm({confirm: action.rule.delete(id)})),
+        ui: {
+          setSection: (id, value) => dispatch(action.rule.ui.setSection(id, value))
+        }
       }
     }
   };
@@ -38,15 +37,13 @@ const enhance = compose(
   )
 );
 
-function RulePanel({action, section, rule}) {
+function RulePanel({action, rule}) {
   return (
-    <UserscriptPanel action={action} rule={rule} ui={{section}} />
+    <UserscriptPanel action={action} rule={rule} />
   )
 }
 
 RulePanel.propTypes = {
-  // ui: PropTypes.object.isRequired,
-  section: PropTypes.string.isRequired,
   rule: PropTypes.object.isRequired,
   action: PropTypes.object.isRequired
 };

@@ -1,30 +1,25 @@
 import {ipcRenderer as ipcr} from 'electron';
 import nanoid from 'nanoid/generate';
-import {type as rootType} from './root';
 import createDict from '../util/dict';
+import { LOAD, SESSION } from './types';
+const { OPEN, CLOSE, SET_URL, UI } = SESSION;
 
 const ALPHABET = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-const {LOAD} = rootType;
-
-const OPEN_REQUEST = 'session.open.request';
-const OPEN_SUCCESS = 'session.open.success';
-const OPEN_FAILURE = 'session.open.failure';
-const CLOSE = 'session.close';
-const URL_REQUEST = 'session.url.request';
-const URL_SUCCESS = 'session.url.success';
-const URL_FAILURE = 'session.url.failure';
 
 // action //
 export const action = {
-  open: () => ({type: OPEN_REQUEST}),
+  open: () => ({type: OPEN.REQUEST}),
   close: (id) => ({type: CLOSE, id}),
-  url: (id, url) => ({type: URL_REQUEST, id, url})
+  setUrl: (id, url) => ({type: SET_URL.REQUEST, id, url}),
+  ui: {
+    setSection: (id, value) => ({type: UI.SET_SECTION, id, value})
+  }
 };
 
 // ipc //
 export const ipc = {
-  'open': (event, id, data) => ({type: OPEN_SUCCESS, id, data}),
-  'proxyUrl': (event, id, proxyUrl) => ({type: URL_SUCCESS, id, proxyUrl})
+  'open': (event, id, data) => ({type: OPEN.SUCCESS, id, data}),
+  'proxyUrl': (event, id, proxyUrl) => ({type: SET_URL.SUCCESS, id, proxyUrl})
 };
 
 // selector //
@@ -42,21 +37,20 @@ export function reducer(state = initialState, action = {}) {
   switch (action.type) {
     case LOAD:
       return $(action.data.sessions.map(session => ([session.id, session]))).state;
-    case OPEN_REQUEST:
+    case OPEN.REQUEST:
       // TODO: create a placeholder session
       var newId = nanoid(ALPHABET, 8);
       ipcr.send('session.open', {id: newId});
       return state;
-    case OPEN_SUCCESS:
+    case OPEN.SUCCESS:
       return dict.upsert(id, action.data).state;
-    case OPEN_FAILURE:
+    case OPEN.FAILURE:
       // TODO
       return state;
     case CLOSE:
       ipcr.send('session.close', id);
       return dict.delete(id).state;
-    case URL_REQUEST:
-      // TODO: rename: shall be update
+    case SET_URL.REQUEST:
       var url = action.url.trim();
       if (!url) {
         return dict.upsert(id, {
@@ -71,14 +65,22 @@ export function reducer(state = initialState, action = {}) {
         ...session,
         url: url
       }).state;
-    case URL_SUCCESS:
+    case SET_URL.SUCCESS:
       return dict.upsert(id, {
         ...session,
         proxyUrl: action.proxyUrl
       }).state;
-    case URL_FAILURE:
+    case SET_URL.FAILURE:
       // TODO
       return state;
+    case UI.SET_SECTION:
+      return dict.upsert(id, {
+        ...session,
+        ui: {
+          ...session.ui,
+          section: action.value
+        }
+      }).state;
     default:
       return state;
   }

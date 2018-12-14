@@ -1,21 +1,19 @@
 import {ipcRenderer as ipcr} from 'electron';
 import uuid from 'uuid/v1';
 
-const EVAL_REQUEST = 'console.eval.request';
-const EVAL_RESPONSE = 'console.eval.response';
-const CONSOLE_RECEIVED = 'console.console.received';
-const ERROR_RECEIVED = 'console.error.received';
+import { CONSOLE } from './types';
+const { EVAL, MESSAGE, ERROR } = CONSOLE;
 
 // action //
 export const action = {
-  eval: (sessionId, expr) => ({type: EVAL_REQUEST, sessionId, expr})
+  eval: (sessionId, expr) => ({type: EVAL.REQUEST, sessionId, expr})
 };
 
 // ipc //
 export const ipc = {
-  eval: (event, sessionId, {value, error}) => ({type: EVAL_RESPONSE, sessionId, value, error}),
-  console: (event, sessionId, value) => ({type: CONSOLE_RECEIVED, sessionId, value}),
-  error: (event, sessionId, error) => ({type: ERROR_RECEIVED, sessionId, error}),
+  eval: (event, sessionId, {value, error}) => ({type: EVAL.RESPONSE, sessionId, value, error}),
+  console: (event, sessionId, value) => ({type: MESSAGE, sessionId, value}),
+  error: (event, sessionId, error) => ({type: ERROR, sessionId, error}),
 };
 
 // selector //
@@ -62,24 +60,24 @@ export function reducer(state = initialState, action = {}) {
   const append = obj => $(state).append(sessionId, obj).state;
 
   switch (action.type) {
-    case EVAL_REQUEST:
+    case EVAL.REQUEST:
       ipcr.send('console.eval', sessionId, action.expr);
       return append({
         type: 'eval.request',
         expr: action.expr
       });
-    case EVAL_RESPONSE:
+    case EVAL.RESPONSE:
       return append({
         type: 'eval.response',
         value: action.value,
         error: action.error
       });
-    case CONSOLE_RECEIVED:
+    case MESSAGE:
       return append({
         type: 'console.' + action.value.type,
         args: action.value.args
       });
-    case ERROR_RECEIVED:
+    case ERROR:
       return append({
         type: 'error',
         error: action.error

@@ -31,9 +31,9 @@ function sections({id, rule, action}) {
 }
 /* eslint-enable react/display-name */
 
-function UserscriptPanel({ui = {}, rule, action}) {
+function UserscriptPanel({rule, action}) {
+  const {id, saving, saved, ui = {}} = rule;
   const {section = 'editor'} = ui;
-  const {id, saving, saved} = rule;
   return (
     <HotKeys
       keyMap={keyMap}
@@ -50,7 +50,7 @@ function UserscriptPanel({ui = {}, rule, action}) {
       <Tab.View
         value={section}
         sections={sections({id, rule, action})}
-        onSelect={value => action.ui.selectSection(id, value)}
+        onSelect={value => action.rule.ui.setSection(id, value)}
       >
         <Tab.View.Toolbar>
           <Button.Ripple
@@ -73,7 +73,6 @@ function UserscriptPanel({ui = {}, rule, action}) {
 }
 
 UserscriptPanel.propTypes = {
-  ui: PropTypes.object,
   rule: PropTypes.object.isRequired,
   action: PropTypes.object.isRequired
 };

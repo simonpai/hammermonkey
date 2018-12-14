@@ -17,7 +17,6 @@ function mapStateToProps(state) {
   const id = ui.body[1];
   return {
     id,
-    section: ui.section('session', id) || 'url',
     session: session.get(id),
     console: console.get(id)
   };
@@ -26,12 +25,12 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     action: {
-      ui: {
-        selectSection: (id, value) => dispatch(action.ui.session.selectSection(id, value))
-      },
       session: {
-        updateUrl: (id, url) => dispatch(action.session.url(id, url)),
-        close: (id) => dispatch(action.ui.confirm({confirm: action.session.close(id)}))
+        setUrl: (id, url) => dispatch(action.session.setUrl(id, url)),
+        close: (id) => dispatch(action.ui.confirm({confirm: action.session.close(id)})),
+        ui: {
+          setSection: (id, value) => dispatch(action.session.ui.setSection(id, value))
+        },
       },
       console: {
         eval: (id, value) => dispatch(action.console.eval(id, value))
@@ -49,7 +48,7 @@ const enhance = compose(
 
 /* eslint-disable react/display-name */
 function sections({id, session, console, action}) {
-  const onUrlChange = url => action.session.updateUrl(id, url);
+  const onUrlChange = url => action.session.setUrl(id, url);
   const onEval = value => action.console.eval(id, value);
   return [
     {
@@ -71,12 +70,14 @@ function sections({id, session, console, action}) {
 }
 /* eslint-enable react/display-name */
 
-function SessionPanel({action, id, section, session, console}) {
+function SessionPanel({action, id, session, console}) {
+  const {ui = {}} = session;
+  const {section = 'url'} = ui;
   return (
     <Tab.View
       value={section}
       sections={sections({id, session, console, action})}
-      onSelect={value => action.ui.selectSection(id, value)}
+      onSelect={value => action.session.ui.setSection(id, value)}
     >
       <Tab.View.Toolbar>
         <Button.Ripple
@@ -92,10 +93,7 @@ function SessionPanel({action, id, section, session, console}) {
 
 SessionPanel.propTypes = {
   id: PropTypes.string.isRequired,
-  section: PropTypes.string.isRequired,
-  // ui: PropTypes.object.isRequired,
   session: PropTypes.object.isRequired,
-  // console: PropTypes.object.isRequired,
   console: PropTypes.arrayOf(
     PropTypes.shape({
     }).isRequired

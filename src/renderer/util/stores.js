@@ -20,6 +20,21 @@ export function prefixKeys(prefix, obj) {
     }, {});
 }
 
+export function prefixValues(prefix, obj) {
+  switch(typeof obj) {
+    case 'string':
+      return prefix + obj;
+    case 'object':
+      var fn = t => prefixValues(prefix, t);
+      return Array.isArray(obj) ? obj.map(fn) : Object.entries(obj)
+        .reduce((acc, [key, value]) => {
+          acc[key] = fn(value);
+          return acc;
+        }, {});
+  }
+  throw new Error('Non-string value: ' + obj);
+}
+
 export function combineIpc(obj) {
   return Object.assign(...Object.entries(obj)
     .sequence()
@@ -46,5 +61,13 @@ export function duck(obj, extra = {}) {
     ipc: Object.assign({}, combineIpc(flock('ipc', obj)), extra.ipc),
     initialState: flock('initialState', obj),
     reducer: combineReducers(flock('reducer', obj))
+  };
+}
+
+export function requestTypes(name) {
+  return {
+    REQUEST: name + '.request',
+    SUCCESS: name + '.success',
+    FAILURE: name + '.failure'
   };
 }

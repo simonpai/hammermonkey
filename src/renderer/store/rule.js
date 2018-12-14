@@ -1,35 +1,27 @@
 import { ipcRenderer as ipcr } from 'electron';
 import uuid from 'uuid/v1';
 import equal from 'fast-deep-equal';
-import { type as rootType } from './root';
 import createDict from '../util/dict';
 import { augment } from '../util/objects';
 
-const {LOAD} = rootType;
-
-const CREATE = 'rule.create';
-const UPDATE = 'rule.update';
-
-const SAVE_REQUEST = 'rule.save.request';
-const SAVE_SUCCESS = 'rule.save.success';
-const SAVE_FAILURE = 'rule.save.failure';
-
-const DELETE_REQUEST = 'rule.delete.request';
-const DELETE_SUCCESS = 'rule.delete.success';
-const DELETE_FAILURE = 'rule.delete.failure';
+import { LOAD, RULE } from './types';
+const { CREATE, UPDATE, SET_ACTIVE, SAVE, DELETE, UI } = RULE;
 
 // action //
 export const action = {
   create: () => ({type: CREATE}),
   update: (id, obj) => ({type: UPDATE, id, obj}),
-  save: (id) => ({type: SAVE_REQUEST, id}),
-  delete: (id) => ({type: DELETE_REQUEST, id})
+  save: (id) => ({type: SAVE.REQUEST, id}),
+  delete: (id) => ({type: DELETE.REQUEST, id}),
+  ui: {
+    setSection: (id, value) => ({type: UI.SET_SECTION, id, value})
+  }
 };
 
 // ipc //
 export const ipc = {
-  'save.success': (event, id, updateTime) => ({type: SAVE_SUCCESS, id, updateTime}),
-  'delete.success': (event, id) => ({type: DELETE_SUCCESS, id})
+  'save.success': (event, id, updateTime) => ({type: SAVE.SUCCESS, id, updateTime}),
+  'delete.success': (event, id) => ({type: DELETE.SUCCESS, id})
 };
 
 // selector //
@@ -59,7 +51,8 @@ function create(id, currentTime) {
     type: 'userscript',
     active: true,
     updateTime: currentTime,
-    saving: false
+    saving: false,
+    ui: {}
   };
 }
 
@@ -84,7 +77,10 @@ export function reducer(state = initialState, action = {}) {
         },
         updateTime: currentTime
       }).state;
-    case SAVE_REQUEST:
+    case SET_ACTIVE:
+      // TODO
+      return state;
+    case SAVE.REQUEST:
       var {type, data, active} = rule;
       ipcr.send('rule.save', currentTime, {id, type, data, active});
       return dict.upsert(id, {
@@ -93,7 +89,7 @@ export function reducer(state = initialState, action = {}) {
         savedData: data,
         saving: true
       }).state;
-    case SAVE_SUCCESS:
+    case SAVE.SUCCESS:
       if (rule.updateTime === action.updateTime) {
         return dict.upsert(id, {
           ...rule,
@@ -102,16 +98,25 @@ export function reducer(state = initialState, action = {}) {
       } else {
         return state;
       }
-    case SAVE_FAILURE:
+    case SAVE.FAILURE:
       // TODO
       return state;
-    case DELETE_REQUEST:
+    case DELETE.REQUEST:
       ipcr.send('rule.delete', id);
       return dict.delete(id).state;
-    case DELETE_FAILURE:
+    case DELETE.FAILURE:
       // TODO
       return state;
-    case DELETE_SUCCESS: // do nothing
+    case DELETE.SUCCESS:
+      return state; // do nothing
+    case UI.SET_SECTION:
+      return dict.upsert(id, {
+        ...rule,
+        ui: {
+          ...rule.ui,
+          section: action.value
+        }
+      }).state;
     default:
       return state;
   }
