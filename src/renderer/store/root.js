@@ -1,5 +1,6 @@
+import { MTR } from '../../shared/model/ipc';
 import { LOAD } from './types';
 
 export const ipc = {
-  load: (event, data) => ({type: LOAD, data})
+  [MTR.LOAD]: (event, data) => ({type: LOAD, data})
 };

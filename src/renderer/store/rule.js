@@ -4,6 +4,7 @@ import equal from 'fast-deep-equal';
 import createDict from '../util/dict';
 import { augment } from '../util/objects';
 
+import { RTM, MTR } from '../../shared/model/ipc';
 import { LOAD, RULE } from './types';
 const { CREATE, UPDATE, SET_ACTIVE, SAVE, DELETE, UI } = RULE;
 
@@ -20,8 +21,8 @@ export const action = {
 
 // ipc //
 export const ipc = {
-  'save.success': (event, id, updateTime) => ({type: SAVE.SUCCESS, id, updateTime}),
-  'delete.success': (event, id) => ({type: DELETE.SUCCESS, id})
+  [MTR.RULE.SAVE.SUCCESS]: (event, id, updateTime) => ({type: SAVE.SUCCESS, id, updateTime}),
+  [MTR.RULE.DELETE.SUCCESS]: (event, id) => ({type: DELETE.SUCCESS, id})
 };
 
 // selector //
@@ -82,7 +83,7 @@ export function reducer(state = initialState, action = {}) {
       return state;
     case SAVE.REQUEST:
       var {type, data, active} = rule;
-      ipcr.send('rule.save', currentTime, {id, type, data, active});
+      ipcr.send(RTM.RULE.SAVE, currentTime, {id, type, data, active});
       return dict.upsert(id, {
         ...rule,
         updateTime: currentTime,
@@ -102,7 +103,7 @@ export function reducer(state = initialState, action = {}) {
       // TODO
       return state;
     case DELETE.REQUEST:
-      ipcr.send('rule.delete', id);
+      ipcr.send(RTM.RULE.DELETE, id);
       return dict.delete(id).state;
     case DELETE.FAILURE:
       // TODO

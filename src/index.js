@@ -1,4 +1,4 @@
-import './polyfill';
+import './shared/polyfill';
 import { app, BrowserWindow, screen, globalShortcut } from 'electron';
 import open from 'opn';
 import Main from './main';

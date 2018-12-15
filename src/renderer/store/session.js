@@ -1,6 +1,7 @@
 import {ipcRenderer as ipcr} from 'electron';
 import nanoid from 'nanoid/generate';
 import createDict from '../util/dict';
+import { RTM, MTR } from '../../shared/model/ipc';
 import { LOAD, SESSION } from './types';
 const { OPEN, CLOSE, SET_URL, UI } = SESSION;
 
@@ -18,8 +19,8 @@ export const action = {
 
 // ipc //
 export const ipc = {
-  'open': (event, id, data) => ({type: OPEN.SUCCESS, id, data}),
-  'proxyUrl': (event, id, proxyUrl) => ({type: SET_URL.SUCCESS, id, proxyUrl})
+  [MTR.SESSION.OPEN]: (event, id, data) => ({type: OPEN.SUCCESS, id, data}),
+  [MTR.SESSION.PROXY_URL]: (event, id, proxyUrl) => ({type: SET_URL.SUCCESS, id, proxyUrl})
 };
 
 // selector //
@@ -33,14 +34,13 @@ export function reducer(state = initialState, action = {}) {
   const {id} = action;
   const dict = $(state);
   const session = id && dict.get(id);
-  // const session = $session && $session.state;
   switch (action.type) {
     case LOAD:
       return $(action.data.sessions.map(session => ([session.id, session]))).state;
     case OPEN.REQUEST:
       // TODO: create a placeholder session
       var newId = nanoid(ALPHABET, 8);
-      ipcr.send('session.open', {id: newId});
+      ipcr.send(RTM.SESSION.OPEN, {id: newId});
       return state;
     case OPEN.SUCCESS:
       return dict.upsert(id, action.data).state;
@@ -48,7 +48,7 @@ export function reducer(state = initialState, action = {}) {
       // TODO
       return state;
     case CLOSE:
-      ipcr.send('session.close', id);
+      ipcr.send(RTM.SESSION.CLOSE, id);
       return dict.delete(id).state;
     case SET_URL.REQUEST:
       var url = action.url.trim();
@@ -60,7 +60,7 @@ export function reducer(state = initialState, action = {}) {
         }).state;
       }
       // TODO: should this be handled at main side?
-      ipcr.send('session.url', id, url.indexOf('://') < 0 ? ('http://' + url) : url);
+      ipcr.send(RTM.SESSION.URL, id, url.indexOf('://') < 0 ? ('http://' + url) : url);
       return dict.upsert(id, {
         ...session,
         url: url

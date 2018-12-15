@@ -1,6 +1,7 @@
 import {ipcRenderer as ipcr} from 'electron';
 import uuid from 'uuid/v1';
 
+import { RTM, MTR } from '../../shared/model/ipc';
 import { CONSOLE } from './types';
 const { EVAL, MESSAGE, ERROR } = CONSOLE;
 
@@ -11,9 +12,9 @@ export const action = {
 
 // ipc //
 export const ipc = {
-  eval: (event, sessionId, {value, error}) => ({type: EVAL.RESPONSE, sessionId, value, error}),
-  console: (event, sessionId, value) => ({type: MESSAGE, sessionId, value}),
-  error: (event, sessionId, error) => ({type: ERROR, sessionId, error}),
+  [MTR.CONSOLE.EVAL]: (event, sessionId, {value, error}) => ({type: EVAL.RESPONSE, sessionId, value, error}),
+  [MTR.CONSOLE.MESSAGE]: (event, sessionId, value) => ({type: MESSAGE, sessionId, value}),
+  [MTR.CONSOLE.ERROR]: (event, sessionId, error) => ({type: ERROR, sessionId, error}),
 };
 
 // selector //
@@ -61,7 +62,7 @@ export function reducer(state = initialState, action = {}) {
 
   switch (action.type) {
     case EVAL.REQUEST:
-      ipcr.send('console.eval', sessionId, action.expr);
+      ipcr.send(RTM.CONSOLE.EVAL, sessionId, action.expr);
       return append({
         type: 'eval.request',
         expr: action.expr

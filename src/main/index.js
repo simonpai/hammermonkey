@@ -6,10 +6,12 @@ import EffectEngine from './effect';
 
 import SessionService from './mod/session';
 import RuleService from './mod/rule';
-import PushService from './mod/push';
+// import PushService from './mod/push';
 import AssetService from './mod/asset';
 import InjectableService from './mod/injectable';
 import ConsoleService from './mod/console';
+
+import { MTR } from '../shared/model/ipc';
 
 function patchEvent(event) {
   const _send = event.sender.send;
@@ -101,7 +103,7 @@ export default class Main {
   }
 
   _syncToClient() {
-    this._client.send('load', {
+    this._client.send(MTR.LOAD, {
       rules: this._rules.rules,
       sessions: this._sessions.sessions
     });

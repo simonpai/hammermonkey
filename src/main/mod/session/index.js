@@ -1,4 +1,5 @@
 import DictModel from '../../util/dict';
+import { MTR, RTM } from '../../../shared/model/ipc';
 
 function serialize({_hhs, ...obj}) { // eslint-disable-line no-unused-vars
   return obj;
@@ -18,9 +19,9 @@ export default class SessionService {
       deserialize: this._deserialize.bind(this)
     });
 
-    client.on('session.open', (event, options) => this.open(options));
-    client.on('session.close', (event, id) => this.close(id));
-    client.on('session.url', (event, id, url) => this.setUrl(id, url));
+    client.on(RTM.SESSION.OPEN, (event, options) => this.open(options));
+    client.on(RTM.SESSION.CLOSE, (event, id) => this.close(id));
+    client.on(RTM.SESSION.URL, (event, id, url) => this.setUrl(id, url));
   }
 
   _inject(hammerhead) {
@@ -59,7 +60,7 @@ export default class SessionService {
     const session = this._deserialize(id, options);
     this._dict.upsert(id, session);
 
-    this._client.send('session.open', id, serialize(session));
+    this._client.send(MTR.SESSION.OPEN, id, serialize(session));
   }
 
   close(id) {
@@ -80,7 +81,7 @@ export default class SessionService {
       proxyUrl
     });
 
-    this._client.send('session.proxyUrl', id, proxyUrl);
+    this._client.send(MTR.SESSION.PROXY_URL, id, proxyUrl);
   }
 
 }

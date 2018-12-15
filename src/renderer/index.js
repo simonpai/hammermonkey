@@ -4,7 +4,7 @@ import { Provider } from 'react-redux';
 import { ConnectedRouter } from 'react-router-redux';
 import createHistory from 'history/createBrowserHistory';
 
-import '../polyfill';
+import '../shared/polyfill';
 import './semantic/shim';
 
 import routes from './routes';
