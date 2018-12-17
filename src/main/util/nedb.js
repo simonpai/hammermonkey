@@ -4,7 +4,7 @@ import _Datastore from 'nedb';
 
 const ROOT_PATH = app.getPath('userData');
 
-class Datastore {
+class DataStore {
 
   constructor(options) {
     const {filename, autoload} = options;
@@ -51,7 +51,7 @@ class Datastore {
 class Collection {
 
   constructor(filename) {
-    this._db = new Datastore({filename});
+    this._db = new DataStore({filename});
   }
 
   load() {
@@ -86,8 +86,8 @@ class Collection {
 
 }
 
-Datastore.Collection = Collection;
+DataStore.Collection = Collection;
 
-export default Datastore;
+export default DataStore;
 
 

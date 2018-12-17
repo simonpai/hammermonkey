@@ -1,6 +1,7 @@
-import {ipcRenderer as ipcr} from 'electron';
+import { ipcRenderer as ipcr } from 'electron';
 import nanoid from 'nanoid/generate';
 import createDict from '../util/dict';
+
 import { RTM, MTR } from '../../shared/model/ipc';
 import { LOAD, SESSION } from './types';
 const { OPEN, CLOSE, SET_URL, UI } = SESSION;

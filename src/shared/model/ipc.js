@@ -12,6 +12,9 @@ export const RTM = pv('rtm.', {
   }),
   CONSOLE: pv('console.', {
     EVAL: 'eval'
+  }),
+  UI: pv('ui.', {
+    BODY: 'body'
   })
 });
 

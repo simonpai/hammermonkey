@@ -10,6 +10,7 @@ import RuleService from './mod/rule';
 import AssetService from './mod/asset';
 import InjectableService from './mod/injectable';
 import ConsoleService from './mod/console';
+import SettingsService from './mod/settings';
 
 import { MTR } from '../shared/model/ipc';
 
@@ -64,18 +65,19 @@ export default class Main {
     this._assets = new AssetService(modContext);
     this._injectables = new InjectableService(modContext);
     this._consoles = new ConsoleService(modContext);
+    this._settings = new SettingsService(modContext);
   }
 
   start() {
     this._load();
     this._hammerhead.start();
-    // this._sessions.open();
   }
 
   _load() {
     return Promise.all([
       this._rules.load(),
-      this._sessions.load()
+      this._sessions.load(),
+      this._settings.load()
     ]).then(() => {
       this._loaded = true;
       if (this._syncToClientRequested) {
@@ -104,8 +106,9 @@ export default class Main {
 
   _syncToClient() {
     this._client.send(MTR.LOAD, {
-      rules: this._rules.rules,
-      sessions: this._sessions.sessions
+      rules: this._rules.state,
+      sessions: this._sessions.state,
+      settings: this._settings.state
     });
   }
 

@@ -46,6 +46,10 @@ export default class SessionService {
     return this._dict.get(id);
   }
 
+  get state() {
+    return this.sessions;
+  }
+
   get sessions() {
     return this._dict.all;
   }

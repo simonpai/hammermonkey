@@ -1,4 +1,7 @@
-import { UI, RULE, SESSION } from './types';
+import { ipcRenderer as ipcr } from 'electron';
+
+import { RTM } from '../../shared/model/ipc';
+import { LOAD, UI, RULE, SESSION } from './types';
 const { SET_BODY, CONFIRM } = UI;
 
 // action //
@@ -21,6 +24,13 @@ class UiSelector {
 
   get confirm() {
     return this.state.confirm;
+  }
+
+  _load(settings) {
+    return new UiSelector({
+      ...this.state,
+      body: settings['ui.body'] || []
+    });
   }
 
   _body(type, id) {
@@ -49,9 +59,12 @@ export function reducer(state = initialState, action = {}) {
   const $state = $(state);
   const {body} = $state;
   const [bodyType, bodyId] = body;
-  // $state.body
+
   switch (action.type) {
+    case LOAD:
+      return $state._load(action.data.settings).state;
     case SET_BODY:
+      ipcr.send(RTM.UI.BODY, action.value);
       return $state._body(...action.value).state;
     case CONFIRM:
       return $state._confirm(action.options).state;

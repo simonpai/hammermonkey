@@ -53,6 +53,10 @@ export default class RuleService {
     return this._dict.get(id);
   }
 
+  get state() {
+    return this.rules;
+  }
+
   get rules() {
     return this._dict.all;
   }
