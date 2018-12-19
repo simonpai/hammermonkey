@@ -33,18 +33,28 @@ export default class RuleService {
         .then(
           () => event.sender.send(MTR.RULE.DELETE.SUCCESS, id),
           () => event.sender.send(MTR.RULE.DELETE.FAILURE, id)));
+    client.on(RTM.RULE.ACTIVE, (event, id, value) => this.setActive(id, value));
   }
 
   load() {
     return this._dict.load();
   }
 
-  upsert({id, type, ...options}) {
-    return this._dict.upsert(id, deserialize(id, {type, ...options}), 0);
+  upsert({id, ...options}) {
+    return this._dict.upsert(id, deserialize(id, options), 0);
   }
 
   delete(id) {
     return this._dict.delete(id);
+  }
+
+  setActive(id, value) {
+    const rule = this.get(id);
+    if (!rule) {
+      return Promise.resolve();
+    }
+    rule.active = value;
+    return this._dict.save(id);
   }
 
   // TODO: update order
@@ -63,6 +73,7 @@ export default class RuleService {
 
   get effects() {
     return this._dict.sequence()
+      .filter(r => r.active)
       .map(this._effectsOfRule.bind(this))
       .fold({}, mergeBundle);
   }

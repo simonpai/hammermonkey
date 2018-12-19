@@ -8,7 +8,8 @@ export const RTM = pv('rtm.', {
   }),
   RULE: pv('rule.', {
     SAVE: 'save',
-    DELETE: 'delete'
+    DELETE: 'delete',
+    ACTIVE: 'active'
   }),
   CONSOLE: pv('console.', {
     EVAL: 'eval'

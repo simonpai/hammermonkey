@@ -68,6 +68,13 @@ export default class DictModel {
       });
   }
 
+  save(id) {
+    if (!this.contains(id)) {
+      return Promise.resolve();
+    }
+    this.upsert(id, this.get(id));
+  }
+
   upsert(id, item, index) {
     this._doBeforeChange();
 

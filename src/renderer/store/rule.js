@@ -81,12 +81,10 @@ export function reducer(state = initialState, action = {}) {
         updateTime: currentTime
       }).state;
     case SET_ACTIVE:
-      // var {type, data} = rule;
-      // TODO: ipcr.send(RTM.RULE.ACTIVE, currentTime, {id, type, data, active: action.value});
+      ipcr.send(RTM.RULE.ACTIVE, id, action.value);
       return dict.upsert(id, {
         ...rule,
-        active: action.value,
-        updateTime: currentTime
+        active: action.value
       }).state;
     case SAVE.REQUEST:
       var {type, data, active} = rule;
