@@ -11,3 +11,14 @@ textarea.hm.userscript {
   line-height: 1.5em;
   color: #333;
 }
+
+.hm.rule.item {
+  > .mui-checkbox-ripple {
+    float: right;
+    right: -20px;
+
+    > span:first-child {
+      height: auto;
+    }
+  }
+}

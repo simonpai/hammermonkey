@@ -16,6 +16,9 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     action: {
+      rule: {
+        setActive: (id, value) => dispatch(action.rule.setActive(id, value))
+      },
       ui: {
         setBody: (type, id) => dispatch(action.ui.setBody(type, id))
       }
@@ -67,12 +70,15 @@ function Inventory({action, body, session, rule}) {
                 paddingLeft: '1em'
               }}>Rules</Header>
               <RuleList
-                rules={rules.map(({id, data}) => ({
+                rules={rules.map(({id, active, data}) => ({
                   key: id,
+                  id,
+                  active: !!active,
                   label: data.name || '(untitled)'
                 }))}
                 selected={bodyType === 'rule' ? bodyId : undefined}
                 onSelect={(id) => action.ui.setBody('rule', id)}
+                onSetActive={(id, value) => action.rule.setActive(id, value)}
               />
             </div>
           ) : undefined

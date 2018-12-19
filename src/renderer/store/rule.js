@@ -14,6 +14,7 @@ export const action = {
   update: (id, obj) => ({type: UPDATE, id, obj}),
   save: (id) => ({type: SAVE.REQUEST, id}),
   delete: (id) => ({type: DELETE.REQUEST, id}),
+  setActive: (id, value) => ({type: SET_ACTIVE, id, value}),
   ui: {
     setSection: (id, value) => ({type: UI.SET_SECTION, id, value})
   }
@@ -63,6 +64,7 @@ export function reducer(state = initialState, action = {}) {
   const dict = $(state);
   const $rule = id && dict.get(id);
   const rule = $rule && $rule.state;
+
   switch (action.type) {
     case LOAD:
       return $(action.data.rules.map(rule => ([rule.id, {...rule, saving: false, savedData: rule.data}]))).state;
@@ -79,8 +81,13 @@ export function reducer(state = initialState, action = {}) {
         updateTime: currentTime
       }).state;
     case SET_ACTIVE:
-      // TODO
-      return state;
+      // var {type, data} = rule;
+      // TODO: ipcr.send(RTM.RULE.ACTIVE, currentTime, {id, type, data, active: action.value});
+      return dict.upsert(id, {
+        ...rule,
+        active: action.value,
+        updateTime: currentTime
+      }).state;
     case SAVE.REQUEST:
       var {type, data, active} = rule;
       ipcr.send(RTM.RULE.SAVE, currentTime, {id, type, data, active});

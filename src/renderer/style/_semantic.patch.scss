@@ -27,3 +27,22 @@
     }
   }
 }
+
+.ui.toggle.checkbox.teal {
+  input:checked {
+    ~ .box:before,
+    ~ label:before {
+      background-color: teal !important; // TODO: lighter teal
+    }
+    &:focus {
+      ~ .box:before,
+      ~ label:before {
+        background-color: teal !important;
+      }
+    }
+  }
+  .box:before,
+  label:before {
+    background-color: grey;
+  }
+}
