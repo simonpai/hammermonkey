@@ -15,9 +15,14 @@ function mapStateToProps(state) {
   };
 }
 
+function mapDispatchToProps() {
+  return {};
+}
+
 const enhance = compose(
   connect(
-    mapStateToProps
+    mapStateToProps,
+    mapDispatchToProps
   )
 );
 
@@ -36,22 +41,11 @@ function SelectedPanel({type}) {
   }
 }
 
-function Body({type}) {
+function Body({type, ...props}) {
   return (
-    <main style={{
-      flexGrow: 1,
-      minWidth: 0,
-      display: 'flex',
-      flexDirection: 'column',
-      padding: 30,
-      boxShadow: 'inset rgba(0, 0, 0, 0.1) 0 0 10px',
-      backgroundColor: '#EEE'
-    }}>
+    <main {...props}>
       {
         type && <SelectedPanel type={type} />
-      }
-      {
-        <Confirm />
       }
     </main>
   );

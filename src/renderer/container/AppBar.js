@@ -30,15 +30,12 @@ const enhance = compose(
   )
 );
 
-function AppBar({action}) {
+function AppBar({action, ...props}) {
   return (
     <Menu
+      {...props}
       inverted
       color="teal"
-      style={{
-        borderRadius: 0,
-        marginBottom: 0
-      }}
     >
       <Dropdown text="New" item>
         <Dropdown.Menu>

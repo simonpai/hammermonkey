@@ -33,57 +33,45 @@ const enhance = compose(
   )
 );
 
-function Inventory({action, body, session, rule}) {
+function Inventory({action, body, session, rule, ...props}) {
   const [bodyType, bodyId] = body;
   const rules = rule.all;
   const sessions = session.all;
   return (
-    <div style={{
-      position: 'relative'
-    }}>
-      <div>
-        {
-          sessions.length ? (
-            <div>
-              <Header as="h4" dividing style={{
-                marginTop: '1em',
-                marginBottom: 0,
-                paddingLeft: '1em'
-              }}>Sessions</Header>
-              <SessionList
-                sessions={sessions.map(({id}) => ({
-                  key: id,
-                  label: id
-                }))}
-                selected={bodyType === 'session' ? bodyId : undefined}
-                onSelect={(id) => action.ui.setBody('session', id)}
-              />
-            </div>
-          ) : undefined
-        }
-        {
-          rules.length ? (
-            <div>
-              <Header as="h4" dividing style={{
-                marginTop: '1em',
-                marginBottom: 0,
-                paddingLeft: '1em'
-              }}>Rules</Header>
-              <RuleList
-                rules={rules.map(({id, active, data}) => ({
-                  key: id,
-                  id,
-                  active: !!active,
-                  label: data.name || '(untitled)'
-                }))}
-                selected={bodyType === 'rule' ? bodyId : undefined}
-                onSelect={(id) => action.ui.setBody('rule', id)}
-                onSetActive={(id, value) => action.rule.setActive(id, value)}
-              />
-            </div>
-          ) : undefined
-        }
-      </div>
+    <div {...props}>
+      {
+        sessions.length ? (
+          <div>
+            <Header as="h4" className="hm" dividing>Session</Header>
+            <SessionList
+              sessions={sessions.map(({id}) => ({
+                key: id,
+                label: id
+              }))}
+              selected={bodyType === 'session' ? bodyId : undefined}
+              onSelect={(id) => action.ui.setBody('session', id)}
+            />
+          </div>
+        ) : undefined
+      }
+      {
+        rules.length ? (
+          <div>
+            <Header as="h4" className="hm" dividing>Rule</Header>
+            <RuleList
+              rules={rules.map(({id, active, data}) => ({
+                key: id,
+                id,
+                active: !!active,
+                label: data.name || '(untitled)'
+              }))}
+              selected={bodyType === 'rule' ? bodyId : undefined}
+              onSelect={(id) => action.ui.setBody('rule', id)}
+              onSetActive={(id, value) => action.rule.setActive(id, value)}
+            />
+          </div>
+        ) : undefined
+      }
     </div>
   );
 }

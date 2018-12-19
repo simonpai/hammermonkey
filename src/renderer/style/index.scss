@@ -3,6 +3,8 @@
 @import 'semantic.mui';
 @import 'component';
 
+@import 'layout';
+@import 'inventory';
 @import 'console';
 
 textarea.hm.userscript {
@@ -10,15 +12,4 @@ textarea.hm.userscript {
   padding: 0.5em;
   line-height: 1.5em;
   color: #333;
-}
-
-.hm.rule.item {
-  > .mui-checkbox-ripple {
-    float: right;
-    right: -20px;
-
-    > span:first-child {
-      height: auto;
-    }
-  }
 }
