@@ -27,7 +27,7 @@ export default class SettingsService {
 
   set(key, value) {
     this._hash[key] = value;
-    this._db.update({_id: key}, {_id: key, value: value});
+    this._db.update({_id: key}, {_id: key, value: value}, {upsert: true});
   }
 
 }
