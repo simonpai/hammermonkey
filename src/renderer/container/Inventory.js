@@ -45,7 +45,7 @@ function Inventory({action, body, session, rule, ...props}) {
             <Header as="h4" className="hm" dividing>Session</Header>
             <SessionList
               sessions={sessions.map(({id}) => ({
-                key: id,
+                id,
                 label: id
               }))}
               selected={bodyType === 'session' ? bodyId : undefined}
@@ -60,7 +60,6 @@ function Inventory({action, body, session, rule, ...props}) {
             <Header as="h4" className="hm" dividing>Rule</Header>
             <RuleList
               rules={rules.map(({id, active, data}) => ({
-                key: id,
                 id,
                 active: !!active,
                 label: data.name || '(untitled)'

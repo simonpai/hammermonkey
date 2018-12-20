@@ -1,44 +1,30 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Menu } from 'semantic-ui-react';
-import Icon from '@mdi/react';
 import { mdiMonitorCellphone } from '@mdi/js';
+
+import SideList from '../common/SideList';
 
 function SessionList({sessions, selected, onSelect}) {
   return (
-    <Menu pointing secondary vertical style={{
-      marginTop: 0
-    }}>
-      {sessions.map(({key, label}) =>
-        <Menu.Item.Ripple
-          key={key}
-          name={key}
-          active={key === selected}
-          color={key === selected ? 'teal' : 'black'}
-          onClick={() => onSelect(key)}
-        >
-          <Icon
-            path={mdiMonitorCellphone}
-            color={key === selected ? 'teal' : 'black'}
-            style={{
-              width: 16,
-              marginRight: '0.75em',
-              verticalAlign: 'sub'
-            }}
-          />
-          {
-            label
-          }
-        </Menu.Item.Ripple>
+    <SideList
+      items={sessions}
+      onSelect={onSelect}
+      selected={selected}
+      render={({color, label}) => (
+        <SideList.Item
+          icon={mdiMonitorCellphone}
+          color={color}
+          label={label}
+        />
       )}
-    </Menu>
-  )
+    />
+  );
 }
 
 SessionList.propTypes = {
   sessions: PropTypes.arrayOf(
     PropTypes.shape({
-      key: PropTypes.string.isRequired,
+      id: PropTypes.string.isRequired,
       label: PropTypes.string.isRequired
     }).isRequired
   ).isRequired,

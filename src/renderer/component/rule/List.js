@@ -1,43 +1,23 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Menu, Button } from 'semantic-ui-react';
+import { Button } from 'semantic-ui-react';
 import Icon from '@mdi/react';
 import { mdiFileDocumentOutline, mdiPowerPlug, mdiPowerPlugOff } from '@mdi/js';
 
+import SideList from '../common/SideList';
+
 function RuleList({rules, selected, onSelect, onSetActive}) {
   return (
-    <Menu pointing secondary vertical style={{
-      marginTop: 0
-    }}>
-      {rules.map(({id, ...props}) => ({
-        id,
-        selected: id === selected,
-        color: id === selected ? 'teal' : 'black',
-        ...props
-      }))
-      .map(({id, selected, active, color, label}) =>
-        <Menu.Item.Ripple
-          key={id}
-          name={id}
-          active={selected}
+    <SideList
+      items={rules}
+      onSelect={onSelect}
+      selected={selected}
+      render={({id, active, color, label}) => (
+        <SideList.Item
+          icon={mdiFileDocumentOutline}
           color={color}
-          className="hm rule"
-          style={{
-            padding: 0
-          }}
-          onClick={() => onSelect(id)}
+          label={label}
         >
-          <Icon
-            path={mdiFileDocumentOutline}
-            color={color}
-            style={{
-              float: 'left',
-              width: 16,
-              margin: 12,
-              marginRight: '0.75em',
-              verticalAlign: 'sub'
-            }}
-          />
           <Button.Ripple
             icon
             style={{
@@ -54,18 +34,10 @@ function RuleList({rules, selected, onSelect, onSetActive}) {
           >
             <Icon path={active ? mdiPowerPlug : mdiPowerPlugOff} color={color} />
           </Button.Ripple>
-          <div style={{
-            overflow: 'hidden',
-            padding: '12px 0'
-          }}>
-            {
-              label
-            }
-          </div>
-        </Menu.Item.Ripple>
+        </SideList.Item>
       )}
-    </Menu>
-  )
+    />
+  );
 }
 
 RuleList.propTypes = {
