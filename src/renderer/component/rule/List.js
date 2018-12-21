@@ -4,37 +4,34 @@ import { Button } from 'semantic-ui-react';
 import Icon from '@mdi/react';
 import { mdiFileDocumentOutline, mdiPowerPlug, mdiPowerPlugOff } from '@mdi/js';
 
-import SideList from '../common/SideList';
+import SideTabs from '../common/SideTabs';
 
 function RuleList({rules, selected, onSelect, onSetActive}) {
   return (
-    <SideList
-      items={rules}
+    <SideTabs
+      items={rules.map(({id, active, data}) => ({
+        id,
+        active,
+        name: data.name || '(untitled)'
+      }))}
       onSelect={onSelect}
       selected={selected}
-      render={({id, active, color, label}) => (
-        <SideList.Item
+      render={({id, active, color, name}) => (
+        <SideTabs.Tab
           icon={mdiFileDocumentOutline}
           color={color}
-          label={label}
+          name={name}
         >
           <Button.Ripple
             icon
-            style={{
-              float: 'right',
-              width: 40,
-              height: 40,
-              padding: 10,
-              margin: 0,
-              background: 'none'
-            }}
+            className="hm chbox"
             component="a"
             onMouseDown={event => event.stopPropagation()}
             onClick={event => event.stopPropagation() || onSetActive(id, !active)}
           >
             <Icon path={active ? mdiPowerPlug : mdiPowerPlugOff} color={color} />
           </Button.Ripple>
-        </SideList.Item>
+        </SideTabs.Tab>
       )}
     />
   );
@@ -45,7 +42,7 @@ RuleList.propTypes = {
     PropTypes.shape({
       id: PropTypes.string.isRequired,
       active: PropTypes.bool.isRequired,
-      label: PropTypes.string.isRequired
+      data: PropTypes.object.isRequired
     }).isRequired
   ).isRequired,
   selected: PropTypes.string,

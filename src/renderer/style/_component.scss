@@ -41,3 +41,32 @@
     }
   }
 }
+
+.hm.sidetabs {
+  margin-top: 0 !important;
+
+  .hm.tab {
+    padding: 0 !important;
+    
+    .hm.icon {
+      float: left;
+      width: 16px;
+      margin: 12px;
+      margin-right: 0.75em;
+      vertical-align: sub;
+    }
+    .hm.name {
+      overflow: hidden;
+      padding: 12px 0;
+    }
+    .hm.chbox {
+      float: right;
+      width: 40px;
+      height: 40px;
+      padding: 10px;
+      margin: 0;
+      background: none;
+    }
+  }
+
+}

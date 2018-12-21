@@ -2,19 +2,19 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { mdiMonitorCellphone } from '@mdi/js';
 
-import SideList from '../common/SideList';
+import SideTabs from '../common/SideTabs';
 
 function SessionList({sessions, selected, onSelect}) {
   return (
-    <SideList
-      items={sessions}
+    <SideTabs
+      items={sessions.map(({id}) => ({id}))}
       onSelect={onSelect}
       selected={selected}
-      render={({color, label}) => (
-        <SideList.Item
+      render={({id, color}) => (
+        <SideTabs.Tab
           icon={mdiMonitorCellphone}
           color={color}
-          label={label}
+          name={id}
         />
       )}
     />
@@ -24,8 +24,7 @@ function SessionList({sessions, selected, onSelect}) {
 SessionList.propTypes = {
   sessions: PropTypes.arrayOf(
     PropTypes.shape({
-      id: PropTypes.string.isRequired,
-      label: PropTypes.string.isRequired
+      id: PropTypes.string.isRequired
     }).isRequired
   ).isRequired,
   selected: PropTypes.string,

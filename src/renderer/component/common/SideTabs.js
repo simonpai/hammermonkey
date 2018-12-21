@@ -3,49 +3,38 @@ import PropTypes from 'prop-types';
 import { Menu } from 'semantic-ui-react';
 import Icon from '@mdi/react';
 
-function Item({color, icon, label, children}) {
+function Tab({color, icon, name, children}) {
   return (
     <React.Fragment>
       {
         icon && <Icon
           path={icon}
           color={color}
-          style={{
-            float: 'left',
-            width: 16,
-            margin: 12,
-            marginRight: '0.75em',
-            verticalAlign: 'sub'
-          }}
+          className="hm icon"
         />
       }
       {
         children
       }
-      <div style={{
-        overflow: 'hidden',
-        padding: '12px 0'
-      }}>
+      <div className="hm name">
         {
-          label
+          name
         }
       </div>
     </React.Fragment>
   );
 }
 
-Item.propTypes = {
+Tab.propTypes = {
   color: PropTypes.string.isRequired,
   icon: PropTypes.any,
-  label: PropTypes.string,
+  name: PropTypes.string,
   children: PropTypes.any
 };
 
-function SideList({items, render, selected, onSelect}) {
+function SideTabs({items, render, selected, onSelect}) {
   return (
-    <Menu pointing secondary vertical style={{
-      marginTop: 0
-    }}>
+    <Menu pointing secondary vertical className="hm sidetabs">
       {items.map(({id, ...props}) => ({
         id,
         selected: id === selected,
@@ -58,10 +47,7 @@ function SideList({items, render, selected, onSelect}) {
           name={id}
           active={selected}
           color={color}
-          className="hm item"
-          style={{
-            padding: 0
-          }}
+          className="hm tab"
           onClick={() => onSelect(id)}
         >
           {
@@ -73,13 +59,13 @@ function SideList({items, render, selected, onSelect}) {
   )
 }
 
-SideList.propTypes = {
+SideTabs.propTypes = {
   items: PropTypes.array.isRequired,
   render: PropTypes.func.isRequired,
   selected: PropTypes.string,
   onSelect: PropTypes.func.isRequired
 };
 
-SideList.Item = Item;
+SideTabs.Tab = Tab;
 
-export default SideList;
+export default SideTabs;
