@@ -23,11 +23,11 @@ export default class RuleService {
     });
     dict.events.on('change', effectCache.invalidate.bind(effectCache));
 
-    client.on(RTM.RULE.SAVE, (event, updateTime, rule) => 
+    client.on(RTM.RULE.COMMIT, (event, updateTime, rule) =>
       this.upsert(rule)
         .then(
-          () => event.sender.send(MTR.RULE.SAVE.SUCCESS, rule.id, updateTime),
-          () => event.sender.send(MTR.RULE.SAVE.FAILURE, rule.id, updateTime)));
+          () => event.sender.send(MTR.RULE.COMMIT.SUCCESS, rule.id, updateTime),
+          () => event.sender.send(MTR.RULE.COMMIT.FAILURE, rule.id, updateTime)));
     client.on(RTM.RULE.DELETE, (event, id) =>
       this.delete(id)
         .then(

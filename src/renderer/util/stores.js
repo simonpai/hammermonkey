@@ -56,11 +56,3 @@ export function duck(obj, extra = {}) {
     reducer: combineReducers(flock('reducer', obj))
   };
 }
-
-export function requestTypes(name) {
-  return {
-    REQUEST: name + '.request',
-    SUCCESS: name + '.success',
-    FAILURE: name + '.failure'
-  };
-}

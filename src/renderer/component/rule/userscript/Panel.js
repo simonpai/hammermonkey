@@ -32,7 +32,7 @@ function sections({id, rule, action}) {
 /* eslint-enable react/display-name */
 
 function UserscriptPanel({rule, action}) {
-  const {id, saving, saved, ui = {}} = rule;
+  const {id, committing, committed, ui = {}} = rule;
   const {section = 'editor'} = ui;
   return (
     <HotKeys
@@ -44,7 +44,7 @@ function UserscriptPanel({rule, action}) {
         outline: 0
       }}
       handlers={{
-        save: () => action.rule.save(id)
+        save: () => action.rule.commit(id)
       }}
     >
       <Tab.View
@@ -55,8 +55,8 @@ function UserscriptPanel({rule, action}) {
         <Tab.View.Toolbar>
           <Button.Ripple
             icon
-            disabled={saved || saving}
-            onClick={() => action.rule.save(id)}
+            disabled={committed || committing}
+            onClick={() => action.rule.commit(id)}
           >
             <Icon path={mdiFloppy} color="teal" />
           </Button.Ripple>

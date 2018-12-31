@@ -6,13 +6,13 @@ import { augment } from '../util/objects';
 
 import { RTM, MTR } from '../../shared/model/ipc';
 import { LOAD, RULE } from './types';
-const { CREATE, UPDATE, SET_ACTIVE, SAVE, DELETE, UI } = RULE;
+const { CREATE, UPDATE, SET_ACTIVE, COMMIT, DELETE, UI } = RULE;
 
 // action //
 export const action = {
   create: () => ({type: CREATE}),
   update: (id, obj) => ({type: UPDATE, id, obj}),
-  save: (id) => ({type: SAVE.REQUEST, id}),
+  commit: (id) => ({type: COMMIT.REQUEST, id}),
   delete: (id) => ({type: DELETE.REQUEST, id}),
   setActive: (id, value) => ({type: SET_ACTIVE, id, value}),
   ui: {
@@ -22,16 +22,16 @@ export const action = {
 
 // ipc //
 export const ipc = {
-  [MTR.RULE.SAVE.SUCCESS]: (event, id, updateTime) => ({type: SAVE.SUCCESS, id, updateTime}),
+  [MTR.RULE.COMMIT.SUCCESS]: (event, id, updateTime) => ({type: COMMIT.SUCCESS, id, updateTime}),
   [MTR.RULE.DELETE.SUCCESS]: (event, id) => ({type: DELETE.SUCCESS, id})
 };
 
 // selector //
 function $r(rule) {
   return augment(rule, {
-    get saved() {
-      const {data, savedData} = this;
-      return savedData !== undefined && equal(data, savedData);
+    get committed() {
+      const {data, committedData} = this;
+      return committedData !== undefined && equal(data, committedData);
     }
   });
 }
@@ -53,7 +53,7 @@ function create(id, currentTime) {
     type: 'userscript',
     active: true,
     updateTime: currentTime,
-    saving: false,
+    committing: false,
     ui: {}
   };
 }
@@ -67,7 +67,7 @@ export function reducer(state = initialState, action = {}) {
 
   switch (action.type) {
     case LOAD:
-      return $(action.data.rules.map(rule => ([rule.id, {...rule, saving: false, savedData: rule.data}]))).state;
+      return $(action.data.rules.map(rule => ([rule.id, {...rule, committing: false, committedData: rule.data}]))).state;
     case CREATE:
       var newId = uuid();
       return dict.upsert(newId, create(newId, currentTime), 0).state;
@@ -86,25 +86,25 @@ export function reducer(state = initialState, action = {}) {
         ...rule,
         active: action.value
       }).state;
-    case SAVE.REQUEST:
+    case COMMIT.REQUEST:
       var {type, data, active} = rule;
-      ipcr.send(RTM.RULE.SAVE, currentTime, {id, type, data, active});
+      ipcr.send(RTM.RULE.COMMIT, currentTime, {id, type, data, active});
       return dict.upsert(id, {
         ...rule,
         updateTime: currentTime,
-        savedData: data,
-        saving: true
+        committedData: data,
+        committing: true
       }).state;
-    case SAVE.SUCCESS:
+    case COMMIT.SUCCESS:
       if (rule.updateTime === action.updateTime) {
         return dict.upsert(id, {
           ...rule,
-          saving: false
+          committing: false
         }).state;
       } else {
         return state;
       }
-    case SAVE.FAILURE:
+    case COMMIT.FAILURE:
       // TODO
       return state;
     case DELETE.REQUEST:

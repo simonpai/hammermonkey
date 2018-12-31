@@ -1,41 +1,43 @@
-import { prefixValues as pv } from '../util';
+import { prefixValues } from '../util';
 
-export const RTM = pv('rtm.', {
-  SESSION: pv('session.', {
+const pv = prefixValues('.');
+
+export const RTM = pv('rtm', {
+  SESSION: pv('session', {
     OPEN: 'open',
     CLOSE: 'close',
     URL: 'url'
   }),
-  RULE: pv('rule.', {
-    SAVE: 'save',
+  RULE: pv('rule', {
+    COMMIT: 'commit',
     DELETE: 'delete',
     ACTIVE: 'active'
   }),
-  CONSOLE: pv('console.', {
+  CONSOLE: pv('console', {
     EVAL: 'eval'
   }),
-  UI: pv('ui.', {
+  UI: pv('ui', {
     BODY: 'body'
   })
 });
 
-export const MTR = pv('mtr.', {
+export const MTR = pv('mtr', {
   LOAD: 'load',
-  SESSION: pv('session.', {
+  SESSION: pv('session', {
     OPEN: 'open',
     PROXY_URL: 'proxy-url'
   }),
-  RULE: pv('rule.', {
-    SAVE: pv('save.', {
+  RULE: pv('rule', {
+    COMMIT: pv('commit', {
       SUCCESS: 'success',
       FAILURE: 'failure'
     }),
-    DELETE: pv('delete.', {
+    DELETE: pv('delete', {
       SUCCESS: 'success',
       FAILURE: 'failure'
     })
   }),
-  CONSOLE: pv('console.', {
+  CONSOLE: pv('console', {
     EVAL: 'eval',
     MESSAGE: 'message',
     ERROR: 'error'

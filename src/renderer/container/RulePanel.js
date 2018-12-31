@@ -20,7 +20,7 @@ function mapDispatchToProps(dispatch) {
       rule: {
         updateName: (id, name) => dispatch(action.rule.update(id, {name})),
         updateContent: (id, content) => dispatch(action.rule.update(id, {content})),
-        save: (id) => dispatch(action.rule.save(id)),
+        commit: (id) => dispatch(action.rule.commit(id)),
         delete: (id) => dispatch(action.ui.confirm({confirm: action.rule.delete(id)})),
         ui: {
           setSection: (id, value) => dispatch(action.rule.ui.setSection(id, value))

@@ -1,29 +1,37 @@
-import { requestTypes as rt, prefixValues as pv } from '../util/stores';
+import { prefixValues } from '../util/stores';
+
+const pv = prefixValues('.');
+
+const RQ = {
+  REQUEST: 'request',
+  SUCCESS: 'success',
+  FAILURE: 'failure'
+};
 
 export const LOAD = 'load';
 
-export const RULE = pv('rule.', {
+export const RULE = pv('rule', {
   CREATE: 'create',
   UPDATE: 'update',
   SET_ACTIVE: 'set-active',
-  SAVE: rt('save'),
-  DELETE: rt('delete'),
-  UI: pv('ui.', {
+  COMMIT: pv('commit', RQ),
+  DELETE: pv('delete', RQ),
+  UI: pv('ui', {
     SET_SECTION: 'set-section'
   })
 });
 
-export const SESSION = pv('session.', {
-  OPEN: rt('open'),
+export const SESSION = pv('session', {
+  OPEN: pv('open', RQ),
   CLOSE: 'close',
-  SET_URL: rt('url'),
-  UI: pv('ui.', {
+  SET_URL: pv('url', RQ),
+  UI: pv('ui', {
     SET_SECTION: 'set-section'
   })
 });
 
-export const CONSOLE = pv('console.', {
-  EVAL: pv('eval.', {
+export const CONSOLE = pv('console', {
+  EVAL: pv('eval', {
     REQUEST: 'request',
     RESPONSE: 'response'
   }),
@@ -31,7 +39,7 @@ export const CONSOLE = pv('console.', {
   ERROR: 'error'
 });
 
-export const UI = pv('ui.', {
+export const UI = pv('ui', {
   SET_BODY: 'set-body',
   CONFIRM: 'confirm'
 });

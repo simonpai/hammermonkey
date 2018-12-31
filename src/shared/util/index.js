@@ -1,9 +1,9 @@
-export function prefixValues(prefix, obj) {
+function _prefixValues(divider, prefix, obj) {
   switch(typeof obj) {
     case 'string':
-      return prefix + obj;
+      return prefix + divider + obj;
     case 'object':
-      var fn = t => prefixValues(prefix, t);
+      var fn = t => _prefixValues(divider, prefix, t);
       return Array.isArray(obj) ? obj.map(fn) : Object.entries(obj)
         .reduce((acc, [key, value]) => {
           acc[key] = fn(value);
@@ -11,4 +11,8 @@ export function prefixValues(prefix, obj) {
         }, {});
   }
   throw new Error('Non-string value: ' + obj);
+}
+
+export function prefixValues(divider) {
+  return (prefix, obj) => _prefixValues(divider, prefix, obj);
 }
