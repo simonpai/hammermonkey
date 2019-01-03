@@ -1,8 +1,8 @@
 {
   "name": "hammermonkey",
   "productName": "Hammermonkey",
-  "version": "0.1.0",
-  "description": "A TestCafe-Hammerhead implementation of userscript manager",
+  "version": "0.2.0",
+  "description": "A web debugger based on TestCafe Hammerhead",
   "main": "src/index.entry.js",
   "scripts": {
     "start": "npm run watch & electron -r @babel/register .",
@@ -14,7 +14,8 @@
     "watch-css": "npm run compile-css; node-sass src --output out --recursive --watch",
     "watch": "npm run watch-css",
     "pack": "npm run clean; npm run compile; electron-builder --dir",
-    "dist": "npm run clean; npm run compile; electron-builder"
+    "dist": "npm run clean; npm run compile; electron-builder",
+    "release": "npm run dist; ./script/release.sh"
   },
   "repository": {
     "type": "git",
@@ -39,7 +40,7 @@
     "babel-plugin-transform-decorators": "^6.24.1",
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "cpy-cli": "^2.0.0",
-    "electron": "^3.0.5",
+    "electron": "^3.0.13",
     "electron-builder": "^20.28.4",
     "eslint": "^5.5.0",
     "eslint-plugin-react": "^7.11.1",
