@@ -1,5 +1,5 @@
 # Overview
-I'm working on this electron app that serves as a web debugging tool based on [TestCafe's](https://devexpress.github.io/testcafe/) core: [hammerhead](https://github.com/DevExpress/testcafe-hammerhead). This tool should be able to:
+I'm working on this electron app that serves as a browser debugging tool based on [TestCafe's](https://devexpress.github.io/testcafe/) core: [hammerhead](https://github.com/DevExpress/testcafe-hammerhead). This tool should be able to:
 
 * Serve as a userscript/userstyle manager
 * Serve as a middleware manager that intercepts HTTP requests
