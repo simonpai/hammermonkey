@@ -108,7 +108,9 @@ export function reducer(state = initialState, action = {}) {
       // TODO
       return state;
     case DELETE.REQUEST:
-      ipcr.send(RTM.RULE.DELETE, id);
+      if (rule.committedData) {
+        ipcr.send(RTM.RULE.DELETE, id);
+      }
       return dict.delete(id).state;
     case DELETE.FAILURE:
       // TODO
