@@ -6,7 +6,7 @@ import { Tab, Button } from 'semantic-ui-react';
 import Icon from '@mdi/react';
 import { mdiDelete } from '@mdi/js';
 
-import SettingsSection from '../component/session/Settings';
+// import SettingsSection from '../component/session/Settings';
 import UrlSection from '../component/session/Url';
 import ConsoleSection from '../component/session/Console';
 
@@ -56,11 +56,13 @@ function sections({id, session, console, action}) {
       label: 'URL',
       render: () => <UrlSection onUrlChange={onUrlChange} {...{session}} />
     },
+    /*
     {
       name: 'settings',
       label: 'Settings',
       render: () => <SettingsSection {...{session}} />
     },
+    */
     {
       name: 'console',
       label: 'Console',
