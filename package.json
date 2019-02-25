@@ -57,14 +57,14 @@
     "express": "^4.16.3",
     "fast-deep-equal": "^2.0.1",
     "history": "^4.7.2",
-    "internal-ip": "^3.0.1",
+    "internal-ip": "^4.2.0",
     "mdi-material-ui": "^5.6.0",
     "mustache": "^3.0.0",
     "nanoid": "^2.0.0",
     "nedb": "^1.8.0",
     "opn": "^5.4.0",
-    "react": "^16.4.2",
-    "react-dom": "^16.4.2",
+    "react": "^16.8.3",
+    "react-dom": "^16.8.3",
     "react-hotkeys": "^1.1.4",
     "react-redux": "^5.0.7",
     "react-router": "^4.3.1",
@@ -74,7 +74,7 @@
     "redux-electron-ipc": "^1.1.13",
     "semantic-ui-react": "^0.83.0",
     "sequency": "^0.19.2",
-    "testcafe-hammerhead": "^14.3.0",
+    "testcafe-hammerhead": "^14.5.0",
     "uuid": "^3.3.2"
   }
 }

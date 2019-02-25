@@ -20,7 +20,7 @@ export default class Proxy extends hammerhead.Proxy {
 
   openSession(session, externalProxySettings) {
     session.proxy = this;
-    this.openSessions[session.id] = session;
+    this.openSessions.set(session.id, session);
     if (externalProxySettings) {
       session.setExternalProxySettings(externalProxySettings);
     }
