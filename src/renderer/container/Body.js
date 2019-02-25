@@ -5,14 +5,12 @@ import { compose } from 'recompose';
 
 import SessionPanel from './SessionPanel';
 import RulePanel from './RulePanel';
-import Confirm from './Confirm';
 import { $ } from '../store';
 
 function mapStateToProps(state) {
   const {ui} = $(state);
-  return {
-    type: ui.body[0]
-  };
+  const [type, uuid] = ui && ui.body;
+  return {type, uuid};
 }
 
 function mapDispatchToProps() {
@@ -41,18 +39,19 @@ function SelectedPanel({type}) {
   }
 }
 
-function Body({type, ...props}) {
+function Body({type, uuid, ...props}) {
   return (
     <main {...props}>
       {
-        type && <SelectedPanel type={type} />
+        type && <SelectedPanel key={uuid} type={type} />
       }
     </main>
   );
 }
 
 Body.propTypes = {
-  type: PropTypes.string
+  type: PropTypes.string,
+  uuid: PropTypes.string,
 };
 
 export default enhance(Body);

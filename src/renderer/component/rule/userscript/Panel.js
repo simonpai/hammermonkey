@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { HotKeys } from 'react-hotkeys';
 import { Tab, Button } from 'semantic-ui-react';
@@ -32,8 +32,8 @@ function sections({id, rule, action}) {
 /* eslint-enable react/display-name */
 
 function UserscriptPanel({rule, action}) {
-  const {id, committing, committed, ui = {}} = rule;
-  const {section = 'editor'} = ui;
+  const {id, committing, committed} = rule;
+  const [section, setSection] = useState('editor');
   return (
     <HotKeys
       keyMap={keyMap}
@@ -50,7 +50,7 @@ function UserscriptPanel({rule, action}) {
       <Tab.View
         value={section}
         sections={sections({id, rule, action})}
-        onSelect={value => action.rule.ui.setSection(id, value)}
+        onSelect={setSection}
       >
         <Tab.View.Toolbar>
           <Button.Ripple

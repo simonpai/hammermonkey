@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
@@ -27,10 +27,7 @@ function mapDispatchToProps(dispatch) {
     action: {
       session: {
         setUrl: (id, url) => dispatch(action.session.setUrl(id, url)),
-        close: (id) => dispatch(action.ui.confirm({confirm: action.session.close(id)})),
-        ui: {
-          setSection: (id, value) => dispatch(action.session.ui.setSection(id, value))
-        },
+        close: (id) => dispatch(action.ui.confirm({confirm: action.session.close(id)}))
       },
       console: {
         eval: (id, value) => dispatch(action.console.eval(id, value))
@@ -73,13 +70,12 @@ function sections({id, session, console, action}) {
 /* eslint-enable react/display-name */
 
 function SessionPanel({action, id, session, console}) {
-  const {ui = {}} = session;
-  const {section = 'url'} = ui;
+  const [section, setSection] = useState('url');
   return (
     <Tab.View
       value={section}
       sections={sections({id, session, console, action})}
-      onSelect={value => action.session.ui.setSection(id, value)}
+      onSelect={setSection}
     >
       <Tab.View.Toolbar>
         <Button.Ripple

@@ -15,19 +15,13 @@ export const RULE = pv('rule', {
   UPDATE: 'update',
   SET_ACTIVE: 'set-active',
   COMMIT: pv('commit', RQ),
-  DELETE: pv('delete', RQ),
-  UI: pv('ui', {
-    SET_SECTION: 'set-section'
-  })
+  DELETE: pv('delete', RQ)
 });
 
 export const SESSION = pv('session', {
   OPEN: pv('open', RQ),
   CLOSE: 'close',
-  SET_URL: pv('url', RQ),
-  UI: pv('ui', {
-    SET_SECTION: 'set-section'
-  })
+  SET_URL: pv('url', RQ)
 });
 
 export const CONSOLE = pv('console', {

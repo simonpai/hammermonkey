@@ -21,10 +21,7 @@ function mapDispatchToProps(dispatch) {
         updateName: (id, name) => dispatch(action.rule.update(id, {name})),
         updateContent: (id, content) => dispatch(action.rule.update(id, {content})),
         commit: (id) => dispatch(action.rule.commit(id)),
-        delete: (id) => dispatch(action.ui.confirm({confirm: action.rule.delete(id)})),
-        ui: {
-          setSection: (id, value) => dispatch(action.rule.ui.setSection(id, value))
-        }
+        delete: (id) => dispatch(action.ui.confirm({confirm: action.rule.delete(id)}))
       }
     }
   };
@@ -39,7 +36,7 @@ const enhance = compose(
 
 function RulePanel({action, rule}) {
   return (
-    <UserscriptPanel action={action} rule={rule} />
+    <UserscriptPanel key={rule.id} action={action} rule={rule} />
   )
 }
 

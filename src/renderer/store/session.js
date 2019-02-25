@@ -4,7 +4,7 @@ import createDict from '../util/dict';
 
 import { RTM, MTR } from '../../shared/model/ipc';
 import { LOAD, SESSION } from './types';
-const { OPEN, CLOSE, SET_URL, UI } = SESSION;
+const { OPEN, CLOSE, SET_URL } = SESSION;
 
 const ALPHABET = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
@@ -12,10 +12,7 @@ const ALPHABET = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 export const action = {
   open: () => ({type: OPEN.REQUEST}),
   close: (id) => ({type: CLOSE, id}),
-  setUrl: (id, url) => ({type: SET_URL.REQUEST, id, url}),
-  ui: {
-    setSection: (id, value) => ({type: UI.SET_SECTION, id, value})
-  }
+  setUrl: (id, url) => ({type: SET_URL.REQUEST, id, url})
 };
 
 // ipc //
@@ -74,14 +71,6 @@ export function reducer(state = initialState, action = {}) {
     case SET_URL.FAILURE:
       // TODO
       return state;
-    case UI.SET_SECTION:
-      return dict.upsert(id, {
-        ...session,
-        ui: {
-          ...session.ui,
-          section: action.value
-        }
-      }).state;
     default:
       return state;
   }

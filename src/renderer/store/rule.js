@@ -6,7 +6,7 @@ import { augment } from '../util/objects';
 
 import { RTM, MTR } from '../../shared/model/ipc';
 import { LOAD, RULE } from './types';
-const { CREATE, UPDATE, SET_ACTIVE, COMMIT, DELETE, UI } = RULE;
+const { CREATE, UPDATE, SET_ACTIVE, COMMIT, DELETE } = RULE;
 
 // action //
 export const action = {
@@ -14,10 +14,7 @@ export const action = {
   update: (id, obj) => ({type: UPDATE, id, obj}),
   commit: (id) => ({type: COMMIT.REQUEST, id}),
   delete: (id) => ({type: DELETE.REQUEST, id}),
-  setActive: (id, value) => ({type: SET_ACTIVE, id, value}),
-  ui: {
-    setSection: (id, value) => ({type: UI.SET_SECTION, id, value})
-  }
+  setActive: (id, value) => ({type: SET_ACTIVE, id, value})
 };
 
 // ipc //
@@ -53,8 +50,7 @@ function create(id, currentTime) {
     type: 'userscript',
     active: true,
     updateTime: currentTime,
-    committing: false,
-    ui: {}
+    committing: false
   };
 }
 
@@ -117,14 +113,6 @@ export function reducer(state = initialState, action = {}) {
       return state;
     case DELETE.SUCCESS:
       return state; // do nothing
-    case UI.SET_SECTION:
-      return dict.upsert(id, {
-        ...rule,
-        ui: {
-          ...rule.ui,
-          section: action.value
-        }
-      }).state;
     default:
       return state;
   }
