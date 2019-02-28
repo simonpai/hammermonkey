@@ -1,7 +1,7 @@
 import { ipcRenderer as ipcr } from 'electron';
 
 import { RTM } from '../../shared/model/ipc';
-import { LOAD, UI, RULE, SESSION } from './types';
+import { LOAD, UI } from './types';
 const { SET_BODY, CONFIRM } = UI;
 
 // action //
@@ -57,8 +57,6 @@ export const initialState = $().state;
 // reducer //
 export function reducer(state = initialState, action = {}) {
   const $state = $(state);
-  const {body} = $state;
-  const [bodyType, bodyId] = body;
 
   switch (action.type) {
     case LOAD:
@@ -68,17 +66,6 @@ export function reducer(state = initialState, action = {}) {
       return $state._body(...action.value).state;
     case CONFIRM:
       return $state._confirm(action.options).state;
-    // TODO: simplify
-    case SESSION.CLOSE:
-      if (bodyType === 'session' && bodyId === action.id) {
-        return $state._body().state;
-      }
-      return state;
-    case RULE.DELETE.REQUEST:
-      if (bodyType === 'rule' && bodyId === action.id) {
-        return $state._body().state;
-      }
-      return state;
     default:
       return state;
   }
