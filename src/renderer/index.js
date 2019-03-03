@@ -1,14 +1,15 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
-import { ConnectedRouter } from 'react-router-redux';
-import createHistory from 'history/createBrowserHistory';
+// import { ConnectedRouter } from 'react-router-redux';
+// import createHistory from 'history/createBrowserHistory';
 
 import '../shared/polyfill';
 import './semantic/shim';
 
-import routes from './routes';
+// import routes from './routes';
 import configureStore from './store/configure';
+import MainPage from './page/Main';
 
 /*
 const syncHistoryWithStore = (store, history) => {
@@ -17,11 +18,11 @@ const syncHistoryWithStore = (store, history) => {
     history.replace(routing.location);
   }
 };
-*/
 
 const history = createHistory({
   basename: window.location.pathname
 });
+*/
 
 const store = configureStore(history);
 
@@ -29,7 +30,12 @@ const rootElement = document.querySelector(document.currentScript.getAttribute('
 
 ReactDOM.render(
   <Provider store={store}>
-    <ConnectedRouter history={history}>{routes}</ConnectedRouter>
+    <MainPage />
+    {
+      /*
+      <ConnectedRouter history={history}>{routes}</ConnectedRouter>
+      */
+    }
   </Provider>,
   rootElement
 );

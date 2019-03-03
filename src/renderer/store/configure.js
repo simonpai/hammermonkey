@@ -1,14 +1,14 @@
 import { createStore, applyMiddleware, compose } from 'redux';
-import { routerMiddleware } from 'react-router-redux';
+// import { routerMiddleware } from 'react-router-redux';
 import createIpc from 'redux-electron-ipc';
 // import persistState from 'redux-localstorage';
 import * as store from './index';
 
-export default function configure(history) {
+export default function configure() {
   // const router = routerMiddleware(routerHistory);
 
   const middlewares = [
-    routerMiddleware(history),
+    // routerMiddleware(history),
     createIpc(store.ipc)/*, thunk, router*/
   ];
 
