@@ -3,15 +3,11 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
 
-import { action, $ } from '../store';
+import { action } from '../store';
 import UserscriptPanel from '../component/rule/userscript/Panel';
 
-function mapStateToProps(state) {
-  const {ui, rule} = $(state);
-  const id = ui.body[1];
-  return {
-    rule: rule.get(id)
-  };
+function mapStateToProps() {
+  return {};
 }
 
 function mapDispatchToProps(dispatch) {

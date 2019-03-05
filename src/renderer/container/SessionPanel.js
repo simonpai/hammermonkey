@@ -10,16 +10,10 @@ import { mdiDelete } from '@mdi/js';
 import UrlSection from '../component/session/Url';
 import ConsoleSection from '../component/session/Console';
 
-import { action, $ } from '../store';
+import { action } from '../store';
 
-function mapStateToProps(state) {
-  const {ui, session, console} = $(state);
-  const id = ui.body[1];
-  return {
-    id,
-    session: session.get(id),
-    console: console.get(id)
-  };
+function mapStateToProps() {
+  return {};
 }
 
 function mapDispatchToProps(dispatch) {
@@ -44,8 +38,9 @@ const enhance = compose(
 );
 
 /* eslint-disable react/display-name */
-function sections({id, session, console, action}) {
-  const onUrlChange = url => action.session.setUrl(id, url);
+function sections({session, console, action}) {
+  const id = session.id;
+  const onUrlChange = url => action.session.setUrl(session, url);
   const onEval = value => action.console.eval(id, value);
   return [
     {
@@ -69,12 +64,13 @@ function sections({id, session, console, action}) {
 }
 /* eslint-enable react/display-name */
 
-function SessionPanel({action, id, session, console}) {
+function SessionPanel({action, session, console}) {
   const [section, setSection] = useState('url');
+  const id = session.id;
   return (
     <Tab.View
       value={section}
-      sections={sections({id, session, console, action})}
+      sections={sections({session, console, action})}
       onSelect={setSection}
     >
       <Tab.View.Toolbar>
@@ -90,7 +86,6 @@ function SessionPanel({action, id, session, console}) {
 }
 
 SessionPanel.propTypes = {
-  id: PropTypes.string.isRequired,
   session: PropTypes.object.isRequired,
   console: PropTypes.arrayOf(
     PropTypes.shape({

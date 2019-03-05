@@ -7,21 +7,28 @@ import SessionPanel from './SessionPanel';
 import RulePanel from './RulePanel';
 import { $ } from '../store';
 
-function getItem(type, uuid, session, rule) {
+function getItem(type, uuid, session, rule, console) {
   switch (type) {
     case 'session':
-      return session.get(uuid);
+      var s = session.get(uuid);
+      return s && {
+        session: s,
+        console: console.get(uuid)
+      };
     case 'rule':
-      return rule.get(uuid);
+      var r = rule.get(uuid);
+      return r && {
+        rule: r
+      };
     default:
       return undefined;
   }
 }
 
-function mapStateToProps(state) {
-  const {ui, session, rule} = $(state);
-  const [type, uuid] = ui && ui.body;
-  const item = getItem(type, uuid, session, rule);
+function mapStateToProps(state, {subject}) {
+  const {session, rule, console} = $(state);
+  const [type, uuid] = subject;
+  const item = getItem(type, uuid, session, rule, console);
   return {type, uuid, item};
 }
 
@@ -36,15 +43,15 @@ const enhance = compose(
   )
 );
 
-function SelectedPanel({type, item}) {
+function SelectedPanel({type, uuid, item}) {
   switch (type) {
     case 'session':
       return (
-        <SessionPanel value={item} />
+        <SessionPanel uuid={uuid} session={item.session} console={item.console} />
       );
     case 'rule':
       return (
-        <RulePanel value={item} />
+        <RulePanel uuid={uuid} rule={item.rule} />
       );
     default:
       return null;
@@ -64,6 +71,7 @@ function Body({type, uuid, item, ...props}) {
 Body.propTypes = {
   type: PropTypes.string,
   uuid: PropTypes.string,
+  subject: PropTypes.array
 };
 
 export default enhance(Body);

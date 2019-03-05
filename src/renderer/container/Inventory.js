@@ -9,8 +9,8 @@ import RuleList from '../component/rule/List';
 import { action, $ } from '../store';
 
 function mapStateToProps(state) {
-  const {ui, session, rule} = $(state);
-  return {body: ui.body, session, rule};
+  const {session, rule} = $(state);
+  return {session, rule};
 }
 
 function mapDispatchToProps(dispatch) {
@@ -18,9 +18,6 @@ function mapDispatchToProps(dispatch) {
     action: {
       rule: {
         setActive: (id, value) => dispatch(action.rule.setActive(id, value))
-      },
-      ui: {
-        setBody: (type, id) => dispatch(action.ui.setBody(type, id))
       }
     }
   };
@@ -33,8 +30,8 @@ const enhance = compose(
   )
 );
 
-function Inventory({action, body, session, rule, ...props}) {
-  const [bodyType, bodyId] = body;
+function Inventory({action, subject, session, rule, onSetSubject, ...props}) {
+  const [type, uuid] = subject;
   const rules = rule.all;
   const sessions = session.all;
   return (
@@ -45,8 +42,8 @@ function Inventory({action, body, session, rule, ...props}) {
             <Header as="h4" className="hm" dividing>Session</Header>
             <SessionList
               sessions={sessions}
-              selected={bodyType === 'session' ? bodyId : undefined}
-              onSelect={(id) => action.ui.setBody('session', id)}
+              selected={type === 'session' ? uuid : undefined}
+              onSelect={(uuid) => onSetSubject(['session', uuid])}
             />
           </div>
         ) : undefined
@@ -57,9 +54,9 @@ function Inventory({action, body, session, rule, ...props}) {
             <Header as="h4" className="hm" dividing>Rule</Header>
             <RuleList
               rules={rules}
-              selected={bodyType === 'rule' ? bodyId : undefined}
-              onSelect={(id) => action.ui.setBody('rule', id)}
-              onSetActive={(id, value) => action.rule.setActive(id, value)}
+              selected={type === 'rule' ? uuid : undefined}
+              onSelect={(uuid) => onSetSubject(['rule', uuid])}
+              onSetActive={(uuid, value) => action.rule.setActive(uuid, value)}
             />
           </div>
         ) : undefined
@@ -72,7 +69,9 @@ Inventory.propTypes = {
   body: PropTypes.array,
   session: PropTypes.object,
   rule: PropTypes.object,
-  action: PropTypes.object
+  action: PropTypes.object,
+  subject: PropTypes.array,
+  onSetSubject: PropTypes.func.isRequired
 };
 
 export default enhance(Inventory);

@@ -1,12 +1,8 @@
-import { ipcRenderer as ipcr } from 'electron';
-
-import { RTM } from '../../shared/model/ipc';
 import { LOAD, UI } from './types';
-const { SET_BODY, CONFIRM } = UI;
+const { CONFIRM } = UI;
 
 // action //
 export const action = {
-  setBody: (type, id) => ({type: SET_BODY, value: [type, id]}),
   confirm: options => ({type: CONFIRM, options})
 };
 
@@ -61,9 +57,6 @@ export function reducer(state = initialState, action = {}) {
   switch (action.type) {
     case LOAD:
       return $state._load(action.data.settings).state;
-    case SET_BODY:
-      ipcr.send(RTM.UI.BODY, action.value);
-      return $state._body(...action.value).state;
     case CONFIRM:
       return $state._confirm(action.options).state;
     default:
