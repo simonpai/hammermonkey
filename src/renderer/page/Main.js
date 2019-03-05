@@ -12,7 +12,7 @@ function MainPage() {
     <div id="root">
       <AppBar id="app-bar" />
       <div className="hm">
-        <Inventory id="inventory" subject={subject} onSetSubject={setSubject} />
+        <Inventory id="inventory" subject={subject} setSubject={setSubject} />
         <Body id="body" subject={subject} />
       </div>
       <Confirm id="confirm" />

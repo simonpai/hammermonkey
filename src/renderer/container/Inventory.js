@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
@@ -30,10 +30,12 @@ const enhance = compose(
   )
 );
 
-function Inventory({action, subject, session, rule, onSetSubject, ...props}) {
+function Inventory({action, subject, session, rule, setSubject, ...props}) {
   const [type, uuid] = subject;
   const rules = rule.all;
   const sessions = session.all;
+  const setSessionSubject = useCallback(uuid => setSubject(['session', uuid]));
+  const setRuleSubject = useCallback(uuid => setSubject(['rule', uuid]));
   return (
     <div {...props}>
       {
@@ -43,7 +45,7 @@ function Inventory({action, subject, session, rule, onSetSubject, ...props}) {
             <SessionList
               sessions={sessions}
               selected={type === 'session' ? uuid : undefined}
-              onSelect={(uuid) => onSetSubject(['session', uuid])}
+              onSelect={setSessionSubject}
             />
           </div>
         ) : undefined
@@ -55,8 +57,8 @@ function Inventory({action, subject, session, rule, onSetSubject, ...props}) {
             <RuleList
               rules={rules}
               selected={type === 'rule' ? uuid : undefined}
-              onSelect={(uuid) => onSetSubject(['rule', uuid])}
-              onSetActive={(uuid, value) => action.rule.setActive(uuid, value)}
+              onSelect={setRuleSubject}
+              onSetActive={action.rule.setActive}
             />
           </div>
         ) : undefined
@@ -71,7 +73,7 @@ Inventory.propTypes = {
   rule: PropTypes.object,
   action: PropTypes.object,
   subject: PropTypes.array,
-  onSetSubject: PropTypes.func.isRequired
+  setSubject: PropTypes.func.isRequired
 };
 
 export default enhance(Inventory);
