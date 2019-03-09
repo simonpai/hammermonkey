@@ -17,7 +17,7 @@ function mapDispatchToProps(dispatch) {
         updateName: (id, name) => dispatch(action.rule.update(id, {name})),
         updateContent: (id, content) => dispatch(action.rule.update(id, {content})),
         commit: (id) => dispatch(action.rule.commit(id)),
-        delete: (id) => dispatch(action.ui.confirm({confirm: action.rule.delete(id)}))
+        delete: (id) => dispatch(action.rule.delete(id))
       }
     }
   };

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
@@ -10,6 +10,7 @@ import { mdiDelete } from '@mdi/js';
 import UrlSection from '../component/session/Url';
 import ConsoleSection from '../component/session/Console';
 
+import { useConfirm } from '../hook';
 import { action } from '../store';
 
 function mapStateToProps() {
@@ -21,7 +22,7 @@ function mapDispatchToProps(dispatch) {
     action: {
       session: {
         setUrl: (id, url) => dispatch(action.session.setUrl(id, url)),
-        close: (id) => dispatch(action.ui.confirm({confirm: action.session.close(id)}))
+        close: (id) => dispatch(action.session.close(id))
       },
       console: {
         eval: (id, value) => dispatch(action.console.eval(id, value))
@@ -67,6 +68,8 @@ function sections({session, console, action}) {
 function SessionPanel({action, session, console}) {
   const [section, setSection] = useState('url');
   const id = session.id;
+  const confirm = useConfirm();
+  const close = useCallback(() => confirm(() => action.session.close(id)), [id]);
   return (
     <Tab.View
       value={section}
@@ -76,7 +79,7 @@ function SessionPanel({action, session, console}) {
       <Tab.View.Toolbar>
         <Button.Ripple
           icon
-          onClick={() => action.session.close(id)}
+          onClick={close}
         >
           <Icon path={mdiDelete} color="#666" />
         </Button.Ripple>

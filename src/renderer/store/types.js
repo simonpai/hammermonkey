@@ -32,8 +32,3 @@ export const CONSOLE = pv('console', {
   MESSAGE: 'message',
   ERROR: 'error'
 });
-
-export const UI = pv('ui', {
-  SET_BODY: 'set-body',
-  CONFIRM: 'confirm'
-});
