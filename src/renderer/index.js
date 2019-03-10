@@ -1,41 +1,21 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Provider } from 'react-redux';
-// import { ConnectedRouter } from 'react-router-redux';
-// import createHistory from 'history/createBrowserHistory';
 
 import '../shared/polyfill';
 import './semantic/shim';
 
-// import routes from './routes';
 import configureStore from './store/configure';
+import { action } from './store';
+import ApiProvider from './component/common/ApiProvider';
 import MainPage from './page/Main';
 
-/*
-const syncHistoryWithStore = (store, history) => {
-  const { routing } = store.getState();
-  if (routing && routing.location) {
-    history.replace(routing.location);
-  }
-};
-
-const history = createHistory({
-  basename: window.location.pathname
-});
-*/
-
-const store = configureStore(history);
+const store = configureStore();
 
 const rootElement = document.querySelector(document.currentScript.getAttribute('data-container'));
 
 ReactDOM.render(
-  <Provider store={store}>
+  <ApiProvider store={store} action={action}>
     <MainPage />
-    {
-      /*
-      <ConnectedRouter history={history}>{routes}</ConnectedRouter>
-      */
-    }
-  </Provider>,
+  </ApiProvider>,
   rootElement
 );

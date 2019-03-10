@@ -42,3 +42,8 @@ export function memoize(name, fn) {
     return fn.apply(this, arguments);
   }
 }
+
+export function compose(...fns) {
+  const [fn0, ...rest] = fns.reverse();
+  return (...args) => rest.reduce((acc, fn) => fn(acc), fn0(...args));
+}

@@ -1,5 +1,6 @@
 import { combineReducers } from 'redux';
-import { memoize } from './functions';
+import { memoize, compose } from './functions';
+import { disperse } from './objects';
 
 export { prefixValues } from '../../shared/util';
 
@@ -55,4 +56,8 @@ export function duck(obj, extra = {}) {
     initialState: flock('initialState', obj),
     reducer: combineReducers(flock('reducer', obj))
   };
+}
+
+export function api(action, dispatch) {
+  return disperse(action, a => compose(dispatch, a));
 }

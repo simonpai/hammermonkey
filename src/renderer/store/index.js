@@ -1,4 +1,6 @@
-import { duck } from '../util/stores';
+import { connect as _connect } from 'react-redux';
+
+import { duck, api as _api } from '../util/stores';
 import * as session from './session';
 import * as rule from './rule';
 import * as console from './console';
@@ -11,3 +13,11 @@ export const ipc = store.ipc;
 export const $ = store.$;
 export const initialState = store.initialState;
 export const reducer = store.reducer;
+
+export function api(dispatch) {
+  return _api(action, dispatch);
+}
+
+export function connect(mapStateToProps) {
+  return _connect(mapStateToProps, () => ({}));
+}

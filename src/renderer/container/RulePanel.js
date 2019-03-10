@@ -1,44 +1,23 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import { compose } from 'recompose';
 
-import { action } from '../store';
+import { connect } from '../store';
+import { useApi } from '../hook';
 import UserscriptPanel from '../component/rule/userscript/Panel';
 
 function mapStateToProps() {
   return {};
 }
 
-function mapDispatchToProps(dispatch) {
-  return {
-    action: {
-      rule: {
-        updateName: (id, name) => dispatch(action.rule.update(id, {name})),
-        updateContent: (id, content) => dispatch(action.rule.update(id, {content})),
-        commit: (id) => dispatch(action.rule.commit(id)),
-        delete: (id) => dispatch(action.rule.delete(id))
-      }
-    }
-  };
-}
-
-const enhance = compose(
-  connect(
-    mapStateToProps,
-    mapDispatchToProps
-  )
-);
-
-function RulePanel({action, rule}) {
+function RulePanel({rule}) {
+  const api = useApi();
   return (
-    <UserscriptPanel key={rule.id} action={action} rule={rule} />
+    <UserscriptPanel key={rule.id} api={api} rule={rule} />
   )
 }
 
 RulePanel.propTypes = {
-  rule: PropTypes.object.isRequired,
-  action: PropTypes.object.isRequired
+  rule: PropTypes.object.isRequired
 };
 
-export default enhance(RulePanel);
+export default connect(mapStateToProps)(RulePanel);

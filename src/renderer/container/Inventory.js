@@ -1,41 +1,24 @@
 import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import { compose } from 'recompose';
 import { Header } from 'semantic-ui-react';
 
 import SessionList from '../component/session/List';
 import RuleList from '../component/rule/List';
-import { action, $ } from '../store';
+import { useApi } from '../hook';
+import { $, connect } from '../store';
 
 function mapStateToProps(state) {
   const {session, rule} = $(state);
   return {session, rule};
 }
 
-function mapDispatchToProps(dispatch) {
-  return {
-    action: {
-      rule: {
-        setActive: (id, value) => dispatch(action.rule.setActive(id, value))
-      }
-    }
-  };
-}
-
-const enhance = compose(
-  connect(
-    mapStateToProps,
-    mapDispatchToProps
-  )
-);
-
-function Inventory({action, subject, session, rule, setSubject, ...props}) {
+function Inventory({subject, session, rule, setSubject, ...props}) {
   const [type, uuid] = subject;
   const rules = rule.all;
   const sessions = session.all;
   const setSessionSubject = useCallback(uuid => setSubject(['session', uuid]));
   const setRuleSubject = useCallback(uuid => setSubject(['rule', uuid]));
+  const api = useApi();
   return (
     <div {...props}>
       {
@@ -58,7 +41,7 @@ function Inventory({action, subject, session, rule, setSubject, ...props}) {
               rules={rules}
               selected={type === 'rule' ? uuid : undefined}
               onSelect={setRuleSubject}
-              onSetActive={action.rule.setActive}
+              onSetActive={api.rule.setActive}
             />
           </div>
         ) : undefined
@@ -76,4 +59,4 @@ Inventory.propTypes = {
   setSubject: PropTypes.func.isRequired
 };
 
-export default enhance(Inventory);
+export default connect(mapStateToProps)(Inventory);

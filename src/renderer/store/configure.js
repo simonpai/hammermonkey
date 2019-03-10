@@ -1,15 +1,12 @@
 import { createStore, applyMiddleware, compose } from 'redux';
-// import { routerMiddleware } from 'react-router-redux';
 import createIpc from 'redux-electron-ipc';
-// import persistState from 'redux-localstorage';
+
 import * as store from './index';
 
 export default function configure() {
-  // const router = routerMiddleware(routerHistory);
 
   const middlewares = [
-    // routerMiddleware(history),
-    createIpc(store.ipc)/*, thunk, router*/
+    createIpc(store.ipc)/*, thunk*/
   ];
 
   const composeEnhancers = (() => {
@@ -22,7 +19,7 @@ export default function configure() {
     return compose;
   })();
 
-  const enhancer = composeEnhancers(applyMiddleware(...middlewares)/*, persistState()*/);
+  const enhancer = composeEnhancers(applyMiddleware(...middlewares));
 
   return createStore(store.reducer, store.initialState, enhancer);
 }

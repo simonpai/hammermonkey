@@ -1,7 +1,5 @@
 import React, { useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import { compose } from 'recompose';
 import { Tab, Button } from 'semantic-ui-react';
 import Icon from '@mdi/react';
 import { mdiDelete } from '@mdi/js';
@@ -10,39 +8,13 @@ import { mdiDelete } from '@mdi/js';
 import UrlSection from '../component/session/Url';
 import ConsoleSection from '../component/session/Console';
 
-import { useConfirm } from '../hook';
-import { action } from '../store';
-
-function mapStateToProps() {
-  return {};
-}
-
-function mapDispatchToProps(dispatch) {
-  return {
-    action: {
-      session: {
-        setUrl: (id, url) => dispatch(action.session.setUrl(id, url)),
-        close: (id) => dispatch(action.session.close(id))
-      },
-      console: {
-        eval: (id, value) => dispatch(action.console.eval(id, value))
-      }
-    }
-  };
-}
-
-const enhance = compose(
-  connect(
-    mapStateToProps,
-    mapDispatchToProps
-  )
-);
+import { useConfirm, useApi } from '../hook';
 
 /* eslint-disable react/display-name */
-function sections({session, console, action}) {
+function sections({session, console, api}) {
   const id = session.id;
-  const onUrlChange = url => action.session.setUrl(session, url);
-  const onEval = value => action.console.eval(id, value);
+  const onUrlChange = useCallback(url => api.session.setUrl(session, url), [session]);
+  const onEval = useCallback(value => api.console.eval(id, value), [id]);
   return [
     {
       name: 'url',
@@ -65,15 +37,16 @@ function sections({session, console, action}) {
 }
 /* eslint-enable react/display-name */
 
-function SessionPanel({action, session, console}) {
+function SessionPanel({session, console}) {
   const [section, setSection] = useState('url');
   const id = session.id;
+  const api = useApi();
   const confirm = useConfirm();
-  const close = useCallback(() => confirm(() => action.session.close(id)), [id]);
+  const close = useCallback(() => confirm(() => api.session.close(id)), [id]);
   return (
     <Tab.View
       value={section}
-      sections={sections({session, console, action})}
+      sections={sections({session, console, api})}
       onSelect={setSection}
     >
       <Tab.View.Toolbar>
@@ -93,8 +66,7 @@ SessionPanel.propTypes = {
   console: PropTypes.arrayOf(
     PropTypes.shape({
     }).isRequired
-  ),
-  action: PropTypes.object.isRequired
+  )
 };
 
-export default enhance(SessionPanel);
+export default SessionPanel;

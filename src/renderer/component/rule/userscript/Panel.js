@@ -14,9 +14,9 @@ const keyMap = {
 };
 
 /* eslint-disable react/display-name */
-function sections({id, rule, action}) {
-  const onContentChange = value => action.rule.updateContent(id, value);
-  const onNameChange = value => action.rule.updateName(id, value);
+function sections({id, rule, api}) {
+  const onContentChange = content => api.rule.update(id, {content});
+  const onNameChange = name => api.rule.update(id, {name});
   return [
     {
       name: 'editor',
@@ -32,11 +32,11 @@ function sections({id, rule, action}) {
 }
 /* eslint-enable react/display-name */
 
-function UserscriptPanel({rule, action}) {
+function UserscriptPanel({rule, api}) {
   const {id, committing, committed} = rule;
   const [section, setSection] = useState('editor');
   const confirm = useConfirm();
-  const delete_ = useCallback(() => confirm(() => action.rule.delete(id)), [id]);
+  const delete_ = useCallback(() => confirm(() => api.rule.delete(id)), [id]);
   return (
     <HotKeys
       keyMap={keyMap}
@@ -47,19 +47,19 @@ function UserscriptPanel({rule, action}) {
         outline: 0
       }}
       handlers={{
-        save: () => action.rule.commit(id)
+        save: () => api.rule.commit(id)
       }}
     >
       <Tab.View
         value={section}
-        sections={sections({id, rule, action})}
+        sections={sections({id, rule, api})}
         onSelect={setSection}
       >
         <Tab.View.Toolbar>
           <Button.Ripple
             icon
             disabled={committed || committing}
-            onClick={() => action.rule.commit(id)}
+            onClick={() => api.rule.commit(id)}
           >
             <Icon path={mdiFloppy} color="teal" />
           </Button.Ripple>
@@ -77,7 +77,7 @@ function UserscriptPanel({rule, action}) {
 
 UserscriptPanel.propTypes = {
   rule: PropTypes.object.isRequired,
-  action: PropTypes.object.isRequired
+  api: PropTypes.object.isRequired
 };
 
 export default UserscriptPanel;

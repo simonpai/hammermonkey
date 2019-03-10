@@ -1,11 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import { compose } from 'recompose';
 
 import SessionPanel from './SessionPanel';
 import RulePanel from './RulePanel';
-import { $ } from '../store';
+import { $, connect } from '../store';
 
 function getItem(type, uuid, session, rule, console) {
   switch (type) {
@@ -32,17 +30,6 @@ function mapStateToProps(state, {subject}) {
   return {type, uuid, item};
 }
 
-function mapDispatchToProps() {
-  return {};
-}
-
-const enhance = compose(
-  connect(
-    mapStateToProps,
-    mapDispatchToProps
-  )
-);
-
 function SelectedPanel({type, uuid, item}) {
   switch (type) {
     case 'session':
@@ -58,6 +45,12 @@ function SelectedPanel({type, uuid, item}) {
   }
 }
 
+SelectedPanel.propTypes = {
+  type: PropTypes.string,
+  uuid: PropTypes.string,
+  item: PropTypes.object
+};
+
 function Body({type, uuid, item, ...props}) {
   return (
     <main {...props}>
@@ -71,7 +64,7 @@ function Body({type, uuid, item, ...props}) {
 Body.propTypes = {
   type: PropTypes.string,
   uuid: PropTypes.string,
-  subject: PropTypes.array
+  item: PropTypes.object
 };
 
-export default enhance(Body);
+export default connect(mapStateToProps)(Body);
