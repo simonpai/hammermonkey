@@ -15,6 +15,10 @@ Array.prototype.sequence = function() {
   return asSequence(this);
 };
 
+Array.prototype.flatMap = function(callback) {
+  return this.reduce((acc, x) => acc.concat(callback(x)), []);
+};
+
 // weakMap.computeIfAbsent()
 WeakMap.prototype.computeIfAbsent = function(key, fn) {
   if (this.has(key)) {

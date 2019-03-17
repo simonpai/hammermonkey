@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Form } from 'semantic-ui-react';
 
-function UserscriptSettingsSection({rule, onNameChange}) {
+function SettingsTab({rule, onNameChange}) {
   const {data} = rule;
   return (
     <div>
@@ -22,9 +22,9 @@ function UserscriptSettingsSection({rule, onNameChange}) {
   )
 }
 
-UserscriptSettingsSection.propTypes = {
+SettingsTab.propTypes = {
   rule: PropTypes.object.isRequired,
   onNameChange: PropTypes.func.isRequired
 };
 
-export default UserscriptSettingsSection;
+export default SettingsTab;

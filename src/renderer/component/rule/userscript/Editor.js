@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { TextArea } from 'semantic-ui-react';
 
-function UserscriptEditorSection({rule, onContentChange}) {
+function EditorTab({rule, onContentChange}) {
   return (
     <TextArea
       placeholder="alert('Hello world.')"
@@ -13,9 +13,9 @@ function UserscriptEditorSection({rule, onContentChange}) {
   )
 }
 
-UserscriptEditorSection.propTypes = {
+EditorTab.propTypes = {
   rule: PropTypes.object.isRequired,
   onContentChange: PropTypes.func.isRequired
 };
 
-export default UserscriptEditorSection;
+export default EditorTab;

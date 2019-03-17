@@ -42,10 +42,12 @@ function Toolbar() {
   return undefined;
 }
 
+function normalizeChildren(children) {
+  return !Array.isArray(children) ? [children] : children.flatMap(normalizeChildren);
+}
+
 function processTabs(children) {
-  if (!Array.isArray(children)) {
-    children = [children];
-  }
+  children = normalizeChildren(children);
   let tabs = [], initialValue;
   for (let {type, props} of children) {
     switch (type) {
@@ -62,9 +64,7 @@ function processTabs(children) {
 }
 
 function processOthers(children) {
-  if (!Array.isArray(children)) {
-    children = [children];
-  }
+  children = normalizeChildren(children);
   let toolbar, panels = {};
   for (let {type, props} of children) {
     switch (type) {
