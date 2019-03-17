@@ -9,6 +9,7 @@ try {
 // expose DEV flag
 const DEV = global.DEV = !(electron.remote ? electron.remote.app : electron.app).isPackaged;
 
+// https://winterbe.github.io/sequency/interfaces/_sequence_.sequence.html
 // array.sequence()
 Array.prototype.sequence = function() {
   return asSequence(this);

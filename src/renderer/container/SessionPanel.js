@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { Tab, Button } from 'semantic-ui-react';
 import Icon from '@mdi/react';
@@ -10,45 +10,26 @@ import ConsoleSection from '../component/session/Console';
 
 import { useConfirm, useApi } from '../hook';
 
-/* eslint-disable react/display-name */
-function sections({session, console, api}) {
-  const id = session.id;
-  const onUrlChange = useCallback(url => api.session.setUrl(session, url), [session]);
-  const onEval = useCallback(value => api.console.eval(id, value), [id]);
-  return [
-    {
-      name: 'url',
-      label: 'URL',
-      render: () => <UrlSection onUrlChange={onUrlChange} {...{session}} />
-    },
-    /*
-    {
-      name: 'settings',
-      label: 'Settings',
-      render: () => <SettingsSection {...{session}} />
-    },
-    */
-    {
-      name: 'console',
-      label: 'Console',
-      render: () => <ConsoleSection onEval={onEval} {...{console}} />
-    }
-  ];
-}
-/* eslint-enable react/display-name */
-
 function SessionPanel({session, console}) {
-  const [section, setSection] = useState('url');
   const id = session.id;
   const api = useApi();
   const confirm = useConfirm();
   const close = useCallback(() => confirm(() => api.session.close(id)), [id]);
+  const onUrlChange = useCallback(url => api.session.setUrl(session, url), [session]);
+  const onEval = useCallback(value => api.console.eval(id, value), [id]);
   return (
-    <Tab.View
-      value={section}
-      sections={sections({session, console, api})}
-      onSelect={setSection}
-    >
+    <Tab.View>
+      <Tab.View.Tab value="url" label="URL" default>
+        <UrlSection onUrlChange={onUrlChange} {...{session}} />
+      </Tab.View.Tab>
+      {/*
+      <Tab.View.Tab value="settings" label="Settings" default>
+        <SettingsSection {...{session}} />
+      </Tab.View.Tab>
+      */}
+      <Tab.View.Tab value="console" label="Console">
+        <ConsoleSection onEval={onEval} {...{console}} />
+      </Tab.View.Tab>
       <Tab.View.Toolbar>
         <Button.Ripple
           icon

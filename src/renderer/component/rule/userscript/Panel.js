@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { HotKeys } from 'react-hotkeys';
 import { Tab, Button } from 'semantic-ui-react';
@@ -13,30 +13,12 @@ const keyMap = {
   save: ['command+s', 'ctrl+s']
 };
 
-/* eslint-disable react/display-name */
-function sections({id, rule, api}) {
-  const onContentChange = content => api.rule.update(id, {content});
-  const onNameChange = name => api.rule.update(id, {name});
-  return [
-    {
-      name: 'editor',
-      label: 'Editor',
-      render: () => <EditorSection {...{rule, onContentChange}} />
-    },
-    {
-      name: 'settings',
-      label: 'Settings',
-      render: () => <SettingsSection {...{rule, onNameChange}} />
-    }
-  ];
-}
-/* eslint-enable react/display-name */
-
 function UserscriptPanel({rule, api}) {
   const {id, committing, committed} = rule;
-  const [section, setSection] = useState('editor');
   const confirm = useConfirm();
   const delete_ = useCallback(() => confirm(() => api.rule.delete(id)), [id]);
+  const onContentChange = useCallback(content => api.rule.update(id, {content}), [id]);
+  const onNameChange = useCallback(name => api.rule.update(id, {name}), [id]);
   return (
     <HotKeys
       keyMap={keyMap}
@@ -50,11 +32,13 @@ function UserscriptPanel({rule, api}) {
         save: () => api.rule.commit(id)
       }}
     >
-      <Tab.View
-        value={section}
-        sections={sections({id, rule, api})}
-        onSelect={setSection}
-      >
+      <Tab.View>
+        <Tab.View.Tab value="editor" label="Editor" default>
+          <EditorSection {...{rule, onContentChange}} />
+        </Tab.View.Tab>
+        <Tab.View.Tab value="settings" label="Settings">
+          <SettingsSection {...{rule, onNameChange}} />
+        </Tab.View.Tab>
         <Tab.View.Toolbar>
           <Button.Ripple
             icon

@@ -1,110 +1,114 @@
-import React from 'react';
+import React, { useState, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { Menu, Segment } from 'semantic-ui-react';
 
-function TabMenuItem({name, label, active, onSelect}) {
+function Tabs({tabs, selectedValue, onSelect}) {
   return (
-    <Menu.Item
-      name={name}
-      active={active}
-      onClick={onSelect}
-    >
-      {label || name}
-    </Menu.Item>
+    <>
+      {
+        tabs.map(({value, label}) => (
+          <Menu.Item
+            key={value}
+            name={value}
+            active={selectedValue === value}
+            onClick={() => onSelect(value)}
+          >
+            {label || value}
+          </Menu.Item>
+        ))
+      }
+    </>
   );
 }
 
-TabMenuItem.propTypes = {
-  name: PropTypes.string.isRequired,
-  label: PropTypes.string,
-  active: PropTypes.bool.isRequired,
+Tabs.propTypes = {
+  tabs: PropTypes.arrayOf(
+    PropTypes.shape({
+      value: PropTypes.string.isRequired,
+      label: PropTypes.string
+    })
+  ).isRequired,
+  selectedValue: PropTypes.string.isRequired,
   onSelect: PropTypes.func.isRequired
 };
 
-function TabMenu({sections, value, onSelect, toolbarChildren}) {
-  return (
-    <Menu attached="top" tabular>
-      {
-        sections.map(({name, label}) => (
-          <TabMenuItem key={name} name={name} label={label} active={value === name} onSelect={() => onSelect(name)} />
-        ))
-      }
-      <Menu.Menu position='right'>
-        {
-          toolbarChildren
-        }
-      </Menu.Menu>
-    </Menu>
-  )
-}
+const PureTabs = React.memo(Tabs);
 
-TabMenu.propTypes = {
-  sections: PropTypes.arrayOf(
-    PropTypes.shape({
-      name: PropTypes.string.isRequired,
-      label: PropTypes.string
-    }).isRequired,
-  ).isRequired,
-  value: PropTypes.string.isRequired,
-  onSelect: PropTypes.func.isRequired,
-  toolbarChildren: PropTypes.any
-};
-
-function getSelectedSection({sections, value}) {
-  for (let section of sections) {
-    if (section.name === value) {
-      return section;
-    }
-  }
+function Tab() {
   return undefined;
 }
 
-function TabToolbar() {
+function Toolbar() {
   return undefined;
 }
 
-function getToolbarChildren(children) {
+function processTabs(children) {
   if (!Array.isArray(children)) {
     children = [children];
   }
+  let tabs = [], initialValue;
   for (let {type, props} of children) {
-    if (type === TabToolbar) {
-      return props.children;
+    switch (type) {
+      case Tab:
+        var {value, label, default: _default} = props;
+        tabs.push({value, label});
+        if (!initialValue && _default) {
+          initialValue = value;
+        }
+        break;
     }
   }
-  return undefined;
+  return [tabs, initialValue || tabs[0].value];
+}
+
+function processOthers(children) {
+  if (!Array.isArray(children)) {
+    children = [children];
+  }
+  let toolbar, panels = {};
+  for (let {type, props} of children) {
+    switch (type) {
+      case Tab:
+        var {value, children: tabChildren} = props;
+        panels[value] = tabChildren;
+        break;
+      case Toolbar:
+        if (!toolbar) {
+          toolbar = props;
+        }
+        break;
+    }
+  }
+  return [toolbar, panels];
 }
 
 function TabView({children, ...props}) {
-  const section = getSelectedSection(props);
-  const toolbarChildren = getToolbarChildren(children);
+  // assume tabs arrangement and default value won't change within the same body subject
+  const [tabs, initialValue] = useMemo(() => processTabs(children));
+  const [toolbar, panels] = processOthers(children);
+  const [value, setValue] = useState(initialValue);
+
   return (
-    <div className="hm tab view">
-      <TabMenu toolbarChildren={toolbarChildren} {...props} />
+    <div className="hm tab view" {...props}>
+      <Menu attached="top" tabular>
+        <PureTabs tabs={tabs} selectedValue={value} onSelect={setValue} />
+        <Menu.Menu position='right' {...toolbar} />
+      </Menu>
       <Segment
         className="pane"
         attached="bottom"
       >
         {
-          section && section.render()
+          panels[value]
         }
       </Segment>
     </div>
   )
 }
 
-TabView.propTypes = {
-  sections: PropTypes.arrayOf(
-    PropTypes.shape({
-      name: PropTypes.string.isRequired,
-      label: PropTypes.string,
-      render: PropTypes.func.isRequired
-    }).isRequired,
-  ).isRequired,
-  value: PropTypes.string.isRequired,
-  onSelect: PropTypes.func.isRequired
-};
+TabView.propTypes = {};
 
-TabView.Toolbar = TabToolbar;
+TabView.Tab = Tab;
+TabView.Toolbar = Toolbar;
 
 export default TabView;
