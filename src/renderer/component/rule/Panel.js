@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { connect } from '../store';
-import { useApi } from '../hook';
-import UserscriptPanel from '../component/rule/userscript/Panel';
+import { connect } from '../../store';
+import { useApi } from '../../hook';
+import UserscriptPanel from './userscript/Panel';
 
 function mapStateToProps() {
   return {};

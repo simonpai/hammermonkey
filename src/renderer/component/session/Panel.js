@@ -4,11 +4,11 @@ import { Tab, Button } from 'semantic-ui-react';
 import Icon from '@mdi/react';
 import { mdiDelete } from '@mdi/js';
 
-// import SettingsSection from '../component/session/Settings';
-import UrlSection from '../component/session/Url';
-import ConsoleSection from '../component/session/Console';
+// import SettingsSection from './Settings';
+import UrlSection from './Url';
+import ConsoleSection from './Console';
 
-import { useConfirm, useApi } from '../hook';
+import { useConfirm, useApi } from '../../hook';
 
 function SessionPanel({session, console}) {
   const id = session.id;

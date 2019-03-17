@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import SessionPanel from './SessionPanel';
-import RulePanel from './RulePanel';
+import SessionPanel from '../component/session/Panel';
+import RulePanel from '../component/rule/Panel';
 import { $, connect } from '../store';
 
 function getItem(type, uuid, session, rule, console) {
