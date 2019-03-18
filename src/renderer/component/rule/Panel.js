@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { HotKeys } from 'react-hotkeys';
-import { Tab, Button } from 'semantic-ui-react';
+import { Tab, Button, Input } from 'semantic-ui-react';
 import Icon from '@mdi/react';
 import { mdiFloppy, mdiDelete } from '@mdi/js';
 
@@ -14,11 +14,11 @@ const keyMap = {
 
 function RulePanel({rule}) {
   const api = useApi();
-  const {id, committing, committed} = rule;
+  const {id, data, committing, committed} = rule;
   const confirm = useConfirm();
   const commit = useCallback(() => api.rule.commit(id), [id]);
   const delete_ = useCallback(() => confirm(() => api.rule.delete(id)), [id]);
-  // const onNameChange = useCallback(name => api.rule.update(id, {name}), [id]);
+  const onNameChange = useCallback(event => api.rule.update(id, {name: event.target.value}), [id]);
   const RuleTabs = UserscriptTabs;
 
   return (
@@ -34,6 +34,13 @@ function RulePanel({rule}) {
         save: commit
       }}
     >
+      <div className="hm rule name">
+        <Input
+          placeholder="(untitled)"
+          defaultValue={data.name || ''}
+          onInput={onNameChange}
+        />
+      </div>
       <Tab.View>
         {
           RuleTabs({rule}).props.children

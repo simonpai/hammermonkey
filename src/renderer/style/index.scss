@@ -7,6 +7,33 @@
 @import 'inventory';
 @import 'console';
 
+.hm.rule.name {
+  display: flex;
+  font-size: 16px;
+  margin-top: -1em;
+  margin-bottom: 0.5em;
+
+  > .ui.input > input {
+    border: 1px dashed transparent;
+    background-color: transparent;
+    padding: 0.5em;
+    box-shadow: none;
+    border-radius: 1px;
+    color: #333;
+    cursor: pointer;
+
+    &:hover {
+      border-color: #CCC;
+      background: #FFF;
+    }
+    &:focus {
+      border-color: #AAA;
+      background: #FFF;
+      cursor: initial;
+    }
+  }
+}
+
 textarea.hm.userscript {
   border: none;
   padding: 0.5em;
